@@ -1,0 +1,15 @@
+name: Awesome-CV-CI
+
+on: [push]
+
+jobs:
+  awesome-cv-job:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: olivierodo/awesome-cv-action@0.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        FILE_NAME: 'cv.tex'
+        LATEST_TAG: 'false' # set to false if you don't want an auto tag of latest (default: true)
