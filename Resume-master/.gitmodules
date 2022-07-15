@@ -1,0 +1,3 @@
+[submodule "fontawesome-latex"]
+	path = fontawesome-latex
+	url = https://github.com/xdanaux/fontawesome-latex.git
