@@ -12,4 +12,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         FILE_NAME: 'cv.tex'
-        LATEST_TAG: 'false' # set to false if you don't want an auto tag of latest (default: true)
+        LATEST_TAG: 'true' # set to false if you don't want an auto tag of latest (default: true)
