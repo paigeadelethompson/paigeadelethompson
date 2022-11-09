@@ -106,7 +106,7 @@
   pdftitle={Resume for Paige Adele Thompson},
   pdfauthor={Paige Thompson},
   pdfsubject={paigeadele@gmail.com},
-  pdfkeywords={Paige Thompson, Seattle, 206-946-2468, Programmer, Systems Administrator}
+  pdfkeywords={Paige Thompson, Seattle, 206-946-2468, Programmer, Systems Administrator, Systems Engineer}
 }
 
 
