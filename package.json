@@ -1,0 +1,47 @@
+{
+  "author": "Paige Thompson",
+  "bugs": {
+    "url": "https://github.com/paigeadelethompson/paigeadelethompson/issues"
+  },
+  "comments": {
+    "dependencies": {
+      "emulators-ui": "project"
+    },
+    "devDependencies": {
+      "autoprefixer": "project",
+      "hugo-bin": "project",
+      "hugo-extended": "project",
+      "postcss": "project",
+      "postcss-cli": "project"
+    }
+  },
+  "dependencies": {
+    "emulators": "^0.73.8",
+    "emulators-ui": "^0.73.9"
+  },
+  "description": "Paige's Homepaige",
+  "devDependencies": {
+    "autoprefixer": "^10.4.13",
+    "hugo-bin": "^0.97.0",
+    "hugo-extended": "^0.109.0",
+    "postcss": "^8.4.21",
+    "postcss-cli": "^10.1.0"
+  },
+  "homepage": "https://github.com/paigeadelethompson/paigeadelethompson#readme",
+  "license": "UNLICENSED",
+  "main": "index.js",
+  "name": "paige.bio",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paigeadelethompson/paigeadelethompson.git"
+  },
+  "scripts": {
+    "build": "npm run hugo:build",
+    "clean": "npm run hugo:clean",
+    "hugo:build": "hugo -d build",
+    "hugo:clean": "rm -rf build resources public",
+    "hugo:serve": "hugo server",
+    "serve": "npm run hugo:serve"
+  },
+  "version": "1.0.0"
+}

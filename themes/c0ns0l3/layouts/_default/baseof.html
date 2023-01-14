@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="{{ $.Site.Language }}">
+<head>
+
+  {{ block "title" . }}
+
+    <title>{{ if .IsHome }}{{ $.Site.Title }}{{ else }}{{ .Title }} :: {{ $.Site.Title }}{{ end }}</title>
+
+  {{ end }}
+
+  {{ partial "head.html" . }}
+
+</head>
+<body>
+  <div class="body-container">
+    <div class="header-container">
+      {{ partial "header.html" . }}
+    </div>
+    <div class="content-container">
+      {{ block "main" . }}
+      {{ end }}
+    </div>
+    <div class="footer-container">
+      {{ partial "footer.html" . }}
+    </div>
+  </div>
+
+</body>
+</html>

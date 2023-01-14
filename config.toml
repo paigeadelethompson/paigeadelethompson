@@ -1,0 +1,78 @@
+baseurl      = "/"
+languageCode = "en-us"
+theme        = "c0ns0l3"
+paginate     = 5
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[params]
+  contentTypeName      = "posts"
+  showMenuItems        = 3
+  showLanguageSelector = false
+  autoCover            = true
+  showLastUpdated      = true
+
+[params.twitter]
+  creator = "IAmPaigeAT"
+  site    = ""
+
+[languages]
+  [languages.en]
+    languageName           = "English"
+    title                  = "paige.bio"
+    subtitle               = "things"
+    owner                  = "Paige Thompson"
+    keywords               = ""
+    copyright              = ""
+    menuMore               = "Show more"
+    readMore               = "Read more"
+    readOtherPosts         = "Read other posts"
+    newerPosts             = "Newer posts"
+    olderPosts             = "Older posts"
+    missingContentMessage  = "Page not found..."
+    missingBackButtonLabel = "Back to home page"
+
+    [languages.en.menu]
+      [[languages.en.menu.main]]
+        identifier = "about"
+        name       = "Resume"
+        url        = "/resume"
+
+      [[languages.en.menu.main]]
+        identifier = "showcase"
+        name       = "Posts"
+        url        = "/"
+
+      [[languages.en.menu.main]]
+        identifier = "bookmarks"
+        name       = "Bookmarks"
+        url        = "/bookmarks"
+
+#      [[languages.en.menu.main]]
+#        identifier = "Net Tools"
+#        name       = "Net Tools"
+#        url        = "/tools"
+
+#      [[languages.en.menu.main]]
+#        identifier = "Better Linux"
+#        name       = "Better Linux"
+#        url        = "/linux"
+
+      [[languages.en.menu.main]]
+        identifier = "PGP"
+        name       = "PGP"
+        url        = "/pgp"
+
+[module]
+  [[module.mounts]]
+    source = "node_modules/emulators-ui/dist"
+    target = "static/emulators-ui"
+  [[module.mounts]]
+    source = "node_modules/emulators/dist"
+    target = "static/emulators"
+  [[module.mounts]]
+    source = "static/jsdos"
+    target = "static/jsdos"
