@@ -20,4 +20,13 @@ Description = "DOS-based ACiDDraw running on JS-DOS"
 
 
 # TODO
-Currently can't save files... :(
+Currently can't save files... :( In the future this may be possible using the serial port, if not with another script along side of JS-DOS, then
+by configuring a serial port in JS-DOS to make a websocket connection to a server. Second, Alt-J will drop to a DOS prompt while running in ACiDDraw. 
+It's perhaps possible to save the file to local / ephemeral storage, drop to a DOS prompt, and run XModem send / Kermit to transfer the file out over
+serial. Something similar could possibly be done for receive as well. 
+
+- [http://www.dosdays.co.uk/topics/Software/comm_utilities.php](http://www.dosdays.co.uk/topics/Software/comm_utilities.php)
+- [https://manpages.ubuntu.com/manpages/bionic/man1/sz.1.html](https://manpages.ubuntu.com/manpages/bionic/man1/sz.1.html)
+- [http://www.columbia.edu/kermit/msk30.html](http://www.columbia.edu/kermit/msk30.html)
+- [https://people.ucalgary.ca/~wellings/tipspit/kermit.html](https://people.ucalgary.ca/~wellings/tipspit/kermit.html)
+- [https://kermitproject.org/onlinebooks/usingmsdoskermit2e.pdf](https://kermitproject.org/onlinebooks/usingmsdoskermit2e.pdf)
