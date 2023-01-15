@@ -60,16 +60,16 @@
 
 <div class="header-nav-bar">
     <nav class="navigation-menu">
-        <ul style="float: left; margin-left: 12px;" class="navigation-menu__inner menu--desktop">
+        <ul style="float: right; margin-left: 12px;" class="navigation-menu__inner menu--desktop">
             {{ if or $.Site.Params.showMenuItems ( eq .Site.Params.showMenuItems 0 ) }}
             {{ range first $.Site.Params.showMenuItems $.Site.Menus.main }}
             {{ if not .HasChildren }}
-            <li style="float: left; margin-left: 12px;"><a href="{{ .URL }}">{{ .Name }}</a></li>
+            <li style="float: right; margin-right: 12px;"><a href="{{ .URL }}">{{ .Name }}</a></li>
             {{ end }}
             {{ end }}
             {{ if gt (len $.Site.Menus.main) $.Site.Params.showMenuItems }}
-            <li style="float: left; margin-left: 12px;">
-                <ul style="float: left;" class="menu">
+            <li style="float: right;">
+                <ul style="float: left; margin-right: 8px;" class="menu">
                     <li class="menu__trigger">{{ $.Site.Params.MenuMore }}&nbsp;▾</li>
                     <li>
                         <ul class="menu__dropdown">
