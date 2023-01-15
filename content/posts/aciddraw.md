@@ -4,11 +4,6 @@ Date = "2023-01-14T07:27:20-0800"
 Author = "Paige"
 Description = "DOS-based ACiDDraw running on JS-DOS"
 +++
-# TODO
-
-- Saving (can't save files anywhere currently)
-
-# ACiDDraw
 
 <link rel="stylesheet" href="/emulators-ui/emulators-ui.css">
 <div id="dosbox-wrapper">
@@ -22,3 +17,7 @@ Description = "DOS-based ACiDDraw running on JS-DOS"
     Dos(document.getElementById("dosbox")).run("/jsdos/acid.zip");
   });
 </script>
+
+
+# TODO
+Currently can't save files... :(
