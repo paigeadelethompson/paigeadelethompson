@@ -11,6 +11,7 @@ Description = "Links"
 - [Ultimate Oldschool PC font pack: https://int10h.org/oldschool-pc-fonts/readme/](https://int10h.org/oldschool-pc-fonts/readme/)
 - [ASCII Blaster: https://asdf.us/asciiblaster/](https://asdf.us/asciiblaster/)
 - [vx-underground: https://www.vx-underground.org](https://www.vx-underground.org)
+- [ACiD Productions: https://www.acid.org/whatsnew/whatsnew.html](https://www.acid.org/whatsnew/whatsnew.html)
 ## Podcasts
 - [OffTheHook: https://www.2600.com/offthehook/](https://www.2600.com/offthehook/)
 - [Hacker and the Fed: https://podcasts.apple.com/us/podcast/hacker-and-the-fed/id1649541362](https://podcasts.apple.com/us/podcast/hacker-and-the-fed/id1649541362)
