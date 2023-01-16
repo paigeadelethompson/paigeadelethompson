@@ -71,6 +71,8 @@ From the sender's perspective, the pcap of what they're sending will look like t
 And the result is it 100% works. The recipient sees essentially the same. Modern Windows 10 and 11 machines with IPv6 enabled will have SLAAC enabled by default. The client has now
 configured the delegated prefix fc00:1d13:f001::/64 for itself and configured fe80::4398:6d2e:c5ca:cb73 as the gateway for 2000::/3.
 
+- It might be worth noting that traffic destined for ff02::1 generally specifies a destination MAC address of [33:33:00:00:00:01](https://en.wikipedia.org/wiki/Multicast_address#Ethernet)
+
 # Thrown under the IDS
 
 UDM pro has some nifty security options for detecting suspicious network activity and locking out specific client or completely locking down the network. It might be possible to influence this behavior by eliciting an ICMP reply from a target to a blacklisted address:
