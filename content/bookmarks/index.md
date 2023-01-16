@@ -6,7 +6,7 @@ Description = "Links"
 cover = "img/og.png"
 +++
 ## Programming
-- [The Rust programming lanauage - Lise Henry https://lise-henry.github.io/books/trpl2.pdf](lise-henry.github.io/books/trpl2.pdf)
+- [The Rust programming lanauage - Lise Henry https://lise-henry.github.io/books/trpl2.pdf](https://lise-henry.github.io/books/trpl2.pdf)
 - [B Flat; A golang inspired C# compiler - https://flattened.net](https://flattened.net)
 ## Art
 - [Ultimate Oldschool PC font pack: https://int10h.org/oldschool-pc-fonts/readme/](https://int10h.org/oldschool-pc-fonts/readme/)
