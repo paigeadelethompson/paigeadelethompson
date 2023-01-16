@@ -43,9 +43,7 @@
     </span>
 
     {{ end }}
-
-    {{ partial "cover.html" . }}
-
+    
     {{ if (.Params.Toc | default .Site.Params.Toc) }}
 
     <div class="table-of-contents">

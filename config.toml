@@ -17,23 +17,23 @@ paginate     = 5
 
 [params.twitter]
   creator = "IAmPaigeAT"
-  site    = ""
+  site    = "IAmPaigeAT"
 
 [languages]
   [languages.en]
     languageName           = "English"
     title                  = "paige.bio"
-    subtitle               = "things"
+    subtitle               = "Personal home page"
     owner                  = "Paige Thompson"
-    keywords               = ""
-    copyright              = ""
+    keywords               = "Computers, Programming, Paige Thompson"
+    copyright              = "2023"
     menuMore               = "Show more"
     readMore               = "Read more"
     readOtherPosts         = "Read other posts"
     newerPosts             = "Newer posts"
     olderPosts             = "Older posts"
     missingContentMessage  = "Page not found..."
-    missingBackButtonLabel = "Back to home page"
+    missingBackButtonLabel = "Back to main page"
 
     [languages.en.menu]
       [[languages.en.menu.main]]
@@ -51,16 +51,6 @@ paginate     = 5
         name       = "Bookmarks"
         url        = "/bookmarks"
 
-#      [[languages.en.menu.main]]
-#        identifier = "Net Tools"
-#        name       = "Net Tools"
-#        url        = "/tools"
-
-#      [[languages.en.menu.main]]
-#        identifier = "Better Linux"
-#        name       = "Better Linux"
-#        url        = "/linux"
-
       [[languages.en.menu.main]]
         identifier = "PGP"
         name       = "PGP"
@@ -76,3 +66,6 @@ paginate     = 5
   [[module.mounts]]
     source = "static/jsdos"
     target = "static/jsdos"
+[[module.mounts]]
+    source = "static/img"
+    target = "static/img"

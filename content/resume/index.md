@@ -3,6 +3,7 @@ title = "Paige's Resume"
 date = "2023-01-13T09:58:20-0800"
 author = "Paige"
 description = "Perhaps there is a way to embed passport.mid after all"
+cover = "img/og.png"
 +++
 
 ```                                                                                         
@@ -27,7 +28,7 @@ description = "Perhaps there is a way to embed passport.mid after all"
 - Systems Administrator/Software Developer with over 20 years of experience in the Greater Seattle Area
 
 - Interested in new job opportunities (inquiries are always welcome)
-- [Resume](https://github.com/paigeadelethompson/resume/releases/download/latest/cv.pdf)
+- Link to my [Resume](https://github.com/paigeadelethompson/resume/releases/download/latest/cv.pdf)
 
 ![Stats](https://github-readme-stats.vercel.app/api?username=paigeadelethompson&show_icons=true)
 

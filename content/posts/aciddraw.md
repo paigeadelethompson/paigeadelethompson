@@ -2,7 +2,8 @@
 Title = "ACiDDraw Web Edition"
 Date = "2023-01-14T07:27:20-0800"
 Author = "Paige"
-Description = "DOS-based ACiDDraw running on JS-DOS"
+Description = "ACiDDraw for DOS; running on JS-DOS"
+cover = "img/og.png"
 +++
 
 <link rel="stylesheet" href="/emulators-ui/emulators-ui.css">

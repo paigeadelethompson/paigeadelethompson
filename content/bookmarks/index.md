@@ -3,6 +3,7 @@ Title = "Bookmarks"
 Date = "2023-01-13T09:58:20-0800"
 Author = "Paige"
 Description = "Links"
+cover = "img/og.png"
 +++
 ## Programming
 - [The Rust programming lanauage - Lise Henry https://lise-henry.github.io/books/trpl2.pdf](lise-henry.github.io/books/trpl2.pdf)
