@@ -3,6 +3,7 @@
     line-height: 16px;
     font-size: 16px;
     font-style: normal;
+    font-weight: normal;
     margin-left: 0px;
     margin-right: 0px;
     margin-top: 0px;
@@ -30,7 +31,7 @@ a {
 }
 
 li {
-    color: lightgray;    
+    color: #CED4DA;    
 }
 
 li::before {
@@ -43,14 +44,14 @@ ul {
 }
 
 p {
-    color: lightgray;
+    color: #CED4DA;
     min-width: 768px;
     max-width: 768px;
     margin-bottom: 8px;
 }
 
 span {
-    color: lightgray;
+    color: #CED4DA;
     //overflow: hidden;
     white-space: nowrap;
     line-break:strict;
@@ -62,42 +63,52 @@ h3,
 h4,
 h5,
 h6 {
-    box-shadow: 4px 4px 0 0 dimgray;
+    box-shadow: 4px 4px 0 0 #212529;
     text-align: center;
     display: block;
     padding: 16px;
     width: 128px;
     margin-bottom: 12px;
-    color: lightgray;
     a {      
       margin-left: 8px;
+      color: #212529; 
     }
 }
 
 h1 {
-  background-color:rgb(12, 98, 12);
-  
-  margin-left: 12px;
+  background-color: #DEE2E6;
 }
 
 h2 {    
-  background-color:darkred;  
+  background-color: #CED4DA;  
 }
 
 h3 {
-    background-color: orange;
+    background-color: #ADB5BD;
 }
 
 h4 {
-    background-color: cyan;
+    background-color: #6C757D;
+    a {      
+      margin-left: 8px;
+      color: #DEE2E6;
+    }
 }
 
 h5 {
-    background-color:magenta;
+    background-color: #495057;
+    a {      
+      margin-left: 8px;
+      color: #DEE2E6;
+    }
 }
 
 h6 {
-    background-color: blue;
+    background-color: #343A40;
+    a {      
+      margin-left: 8px;
+      color: #DEE2E6;
+    }
 }
 
 div {
@@ -121,13 +132,14 @@ br {
 }
 
 pre {
-  box-shadow: 4px 4px 0 0 dimgray;
+  box-shadow: 4px 4px 0 0 #212529;
   display: block;
   padding: 8px;
   margin: 12px;
   background-color: black;
   color: limegreen;
   min-width: 768px;
+  overflow: auto;
 }
 
 blockquote {
@@ -189,14 +201,18 @@ blockquote p {
 }
 
 .menu__dropdown {
+  box-shadow: 4px 4px 0 0 #212529;
   opacity: 1.0;
-  background-color: darkred;
+  background-color: #E9ECEF;  
   position: absolute;
   width: 128px;
   padding: 8px;
   text-align: center;
   visibility: hidden;  
   z-index: 99;  
+  a {
+    color: #212529;
+  }
 }
 
 .open {
@@ -205,6 +221,15 @@ blockquote p {
 
 .content-container {
     background-color:#433a3a;
+    ul {
+      margin-bottom: 8px;
+    }
+    h1 { 
+      margin-left: 8px;
+      margin-top: 2px;
+      overflow: hidden;
+      width:208px;
+    }
 }
 
 .post {
@@ -218,7 +243,7 @@ blockquote p {
 .post-meta {
   margin-right: 12px;
   background-color: black;
-  box-shadow: 4px 4px 0 0 dimgray;
+  box-shadow: 4px 4px 0 0 #212529;
   padding: 16px;
   float: right;
   align-items: right;
@@ -252,6 +277,20 @@ blockquote p {
 .post-content {
   margin-left: 8%;
   margin-right: 8%;
+  h1 { 
+    margin-left: 0;
+    margin-top: 0;
+    overflow: auto;
+    width: 128px;
+  }
+  li {
+    margin-bottom: 12px;
+  }
+  li::before {
+    content: "►";
+    margin-right: 8px;
+    color: #F8F9FA;
+  }
 }
 
 .post-content-preview {
@@ -262,22 +301,22 @@ blockquote p {
   margin-bottom: 12px;
   float: left;
   margin-left: 12px;
-  width: 512px;
+  width: 384px;
   color: antiquewhite;
   padding-top: 4px;
   padding-left: 4px;
 }
 
 .read-more {
-  background-color: white;
-  box-shadow: 4px 4px 0 0 dimgray;
+  background-color: #F8F9FA;
+  box-shadow: 4px 4px 0 0 #212529;
     text-align: center;
     display: block;
     padding: 16px;
     width: 128px;
     margin-bottom: 12px;
     margin-right: 8px;
-    color: darkgray;
+    color: #212529  ;
     a {      
       margin-left: 8px;
     }
