@@ -14,6 +14,9 @@ paginate     = 5
   showLanguageSelector = false
   autoCover            = true
   showLastUpdated      = true
+  OGImageWidth         = 499
+  OGImageHeight        = 627
+
 
 [params.twitter]
   creator = "IAmPaigeAT"
