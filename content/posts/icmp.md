@@ -88,12 +88,10 @@ len(z)))])(sys.stdin.readlines(), "192.168.1.12", "ff:ff:ff:ff:ff:ff", "9c:b6:d0
 - Each IP in the compromised-ips.txt is paired with a unique id number (up to 10000 or less if there are fewer than 10000 IP addresses), and a packet is sent for each IP to 192.168.1.12 for each of the addresses as the source address. 
 - The client receives this and sends a reply to the spoofed address
 - The router receives the reply sent to the malicious address and locks out the client
+- This can also be accomplished with TCP SYN causing a client to ACK @ a spoofed address. The same is true for UDP.
 
 # There's a lot to think about 
-
-- This can also be accomplished with TCP SYN causing a client to ACK @ a spoofed address. 
-
-The same is true for UDP. For internet routers, networks have to implement [BCP38 practices](https://www.ietf.org/rfc/bcp/bcp38.html) to prevent packet spoofing but is often overlooked or in-actionable due to [scalability problems](https://ripe58.ripe.net/content/presentations/bgp-scaling-considerations.pdf). To be fair, the problem arises when a user decides to send a packet with the target of an attack's IP address specified as the source address to a large number of hosts; a small UDP packet it sent with a spoofed address to a destination and the destination sends a much larger response UDP packet to the specified source address--amplification attacks. 
+For internet routers, networks have to implement [BCP38 practices](https://www.ietf.org/rfc/bcp/bcp38.html) to prevent packet spoofing but is often overlooked or in-actionable due to [scalability problems](https://ripe58.ripe.net/content/presentations/bgp-scaling-considerations.pdf). To be fair, the problem arises when a user decides to send a packet with the target of an attack's IP address specified as the source address to a large number of hosts; a small UDP packet it sent with a spoofed address to a destination and the destination sends a much larger response UDP packet to the specified source address--amplification attacks. 
 
 - Global Unicast Addresses (GUAs) in IPv6 are "globally scoped" addresses. 
 
