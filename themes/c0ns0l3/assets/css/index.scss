@@ -46,7 +46,6 @@ ul {
 p {
     color: #CED4DA;
     min-width: 768px;
-    max-width: 768px;
     margin-bottom: 8px;
 }
 
@@ -138,7 +137,8 @@ pre {
   margin: 12px;
   background-color: black;
   color: limegreen;
-  min-width: 768px;
+  min-width: 768x;
+  max-width:896px;
   overflow: auto;
 }
 
@@ -345,6 +345,22 @@ blockquote p {
 
 .read-more-button {
 
+}
+
+.pagination { 
+  h1 { 
+    margin-left: 2px;
+
+  }
+}
+
+.pagination__buttons {
+  h6 { 
+    float: left;
+    margin-right: 12px;
+    width: auto;
+    cursor: pointer;
+  }
 }
 
 .footer-container {

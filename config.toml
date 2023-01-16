@@ -66,6 +66,9 @@ paginate     = 5
 
 [module]
   [[module.mounts]]
+    source = "node_modules/stockfish/src/stockfish.js"
+    target = "static/stockfish/stockfish.js"
+  [[module.mounts]]
     source = "node_modules/emulators-ui/dist"
     target = "static/emulators-ui"
   [[module.mounts]]
