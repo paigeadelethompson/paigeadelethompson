@@ -14,7 +14,7 @@ Awhile ago I read an article called [Should I block ICMP](http://shouldiblockicm
 
 # IPv6 ND_RA
 
-This one has been the most interesting to me for awhile. Router advertisements are really useful, but the deployment of IPv6 and it's reception has met with strong resistance and a disjointed comprehension of the theory behind things like router advertisements. Here is an example of how to abuse it using the scapy framework in python:
+I have been most interested in this one for awhile. Router advertisements are really useful, but the deployment of IPv6 and it's reception has met with strong resistance and a disjointed comprehension of the theory behind things like router advertisements. Here is an example of how to abuse it using the scapy framework in python:
 
 {{< highlight python >}}
 from scapy.all import *
