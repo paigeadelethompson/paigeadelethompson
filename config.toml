@@ -59,6 +59,11 @@ paginate     = 5
         name       = "PGP"
         url        = "/pgp"
 
+      [[languages.en.menu.main]]
+        identifier = "NFTablesPresentation"
+        name       = "NFTables Presentation"
+        url        = "/nftables_presentation"
+
 [module]
   [[module.mounts]]
     source = "node_modules/emulators-ui/dist"

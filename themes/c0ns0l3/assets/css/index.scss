@@ -198,6 +198,13 @@ blockquote p {
 
 .header-nav-bar  {
   height: 16px;
+  a { 
+    text-decoration: underline;
+  }
+}
+
+.menu__trigger {
+  cursor: pointer;
 }
 
 .menu__dropdown {
@@ -210,6 +217,10 @@ blockquote p {
   text-align: center;
   visibility: hidden;  
   z-index: 99;  
+  li { 
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
   a {
     color: #212529;
   }
