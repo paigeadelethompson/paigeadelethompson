@@ -63,20 +63,32 @@ paginate     = 5
         identifier = "NFTablesPresentation"
         name       = "NFTables Presentation"
         url        = "/nftables_presentation"
-
+        
 [module]
   [[module.mounts]]
     source = "node_modules/stockfish/src/stockfish.js"
     target = "static/stockfish/stockfish.js"
+
   [[module.mounts]]
     source = "node_modules/emulators-ui/dist"
     target = "static/emulators-ui"
+
   [[module.mounts]]
     source = "node_modules/emulators/dist"
     target = "static/emulators"
+
   [[module.mounts]]
     source = "static/jsdos"
     target = "static/jsdos"
-[[module.mounts]]
+
+  [[module.mounts]]
     source = "static/img"
     target = "static/img"
+  
+  [[module.mounts]]
+    source = "node_modules/webamp/built"
+    target = "static/webamp"
+
+  [[module.mounts]]
+    source = "static/webamp_theme"
+    target = "static/webamp_theme"

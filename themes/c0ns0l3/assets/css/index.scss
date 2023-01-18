@@ -376,3 +376,25 @@ blockquote p {
   margin-right: 8%;
   text-align: center;
 }
+
+#webamp {
+  * {
+    font-family: unset;
+    font-size: unset;
+  }
+  div {
+  border-style: unset;
+  border-width: unset;
+  border-color: unset;
+  border-style: unset;
+  margin-left: unset;
+  margin-right: unset;
+  margin-top: unset;
+  margin-bottom: unset;
+  padding-left: unset;
+  padding-right: unset;
+  padding-top: unset;
+  padding-bottom: unset;
+  overflow: unset;
+  }
+}
