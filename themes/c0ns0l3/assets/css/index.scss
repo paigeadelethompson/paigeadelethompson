@@ -34,13 +34,13 @@ li {
     color: #CED4DA;    
 }
 
-li::before {
-  text-decoration: none;
-  content: "";
-}
-
 ul {
   list-style-type: none;
+
+  li::before {
+    text-decoration: none;
+    content: "";
+  }
 }
 
 p {
@@ -297,11 +297,18 @@ blockquote p {
   li {
     margin-bottom: 12px;
   }
-  li::before {
-    content: "►";
-    margin-right: 8px;
-    color: #F8F9FA;
-    float: left;
+  ul { 
+    li::before {
+      content: "►";
+      margin-right: 8px;
+      color: #F8F9FA;
+      float: left;
+    }
+  }
+
+  ol {
+    list-style: none;
+    counter-reset: none;
   }
 }
 
@@ -328,10 +335,12 @@ blockquote p {
     width: 128px;
     margin-bottom: 12px;
     margin-right: 8px;
-    color: #212529  ;
+    color: #212529;
+
     a {      
       margin-left: 8px;
     }
+
     float: right;
 }
 
@@ -382,6 +391,7 @@ blockquote p {
     font-family: unset;
     font-size: unset;
   }
+
   div {
   border-style: unset;
   border-width: unset;

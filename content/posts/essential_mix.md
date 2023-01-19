@@ -5,29 +5,30 @@ Author = "Paige"
 Description = "Essential mixes in WebAmp"
 cover = "img/og.png"
 +++
-
-Courtesy [Internet Archive](https://archive.org)
+Courtesy of [Internet Archive](https://archive.org)
 
 # Favorites
 
-- 148.  1993-12-04 - Future Sound Of London 
-- 124.  1998-07-12 - Deep Dish *
-- 470.  1999-10-03 - Nick Warren
-- 616.  2002-03-17 - James Zabiela
-- 554.  2002-18    - Scott Bond
-- 722.  2004-02-22 - James Zabiela
-- 748.  2004-08-22 - Scratch Perverts
-- 762.  2004-11-18 - Blackstrobe
-- 789.  2005-06-19 - Deep Dish
-- 923.  2007-06-17 - Skream
-- 956.  2008-02-22 - Benga
-- 963.  2008-03-29 - Deep Dish & Cedric Gervais
-- 1008. 2008-12-13 - Rusko
-- 1039. 2009-07-11 - Caspa
-- 1077. 2010-04-03 - James Zabiela
+<div style="float: left;">
 
+- 148  - 1993-12-04 - Future Sound Of London 
+- 124  - 1998-07-12 - Deep Dish *
+- 470  - 1999-10-03 - Nick Warren
+- 616  - 2002-03-17 - James Zabiela
+- 554  - 2002-18    - Scott Bond
+- 722  - 2004-02-22 - James Zabiela
+- 748  - 2004-08-22 - Scratch Perverts
+- 762  - 2004-11-18 - Blackstrobe
+- 789  - 2005-06-19 - Deep Dish
+- 923  - 2007-06-17 - Skream
+- 956  - 2008-02-22 - Benga
+- 963  - 2008-03-29 - Deep Dish & Cedric Gervais
+- 1008 - 2008-12-13 - Rusko
+- 1039 - 2009-07-11 - Caspa
+- 1077 - 2010-04-03 - James Zabiela
+</div>
 
- <div id="app"></div>
+<div id="app" style="margin-top: 168px; float: left; margin-left: 72px;"></div>
 
 <script src="/webamp/webamp.bundle.min.js"></script>
 <script type="text/javascript">
