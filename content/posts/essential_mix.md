@@ -53,6 +53,30 @@ open("tracks.json", 'w').write(json.dumps({"initialTracks": [(lambda a, b: {"url
 The file 'raw' is just a list of urls, eg: 
 https://archive.org/download/BBC_Essential_Mix_Collection/01-Paul%20Kalkbrenner%20-%20Essential%20Mix-Sat-07-30-2011-Talion.mp3
 
+## Ranged requests
+
+WebAmp wouldn't be so bad if it did ranged fetches to get the IDv3 tag header, instead of fetching the whole file, but the offset of the header is not entirely trivial either: 
+
+- Let OFFSET = 0.
+- Read and remember the first 10 bytes of the file.
+- If bytes 0-2 are not ASCII "ID3", stop. An ID3v2 segment is not present.
+- Let OFFSET = 10 (for the 10-byte header).
+- Decode bytes 6-9 as a 32-bit "synchsafe int" (refer to any ID3v2 spec). Let OFFSET = OFFSET + this decoded int.
+- If the 0x10 bit of byte 5 is set, let OFFSET = OFFSET + 10 (for the footer).
+
+Of course it needs to do this asynchronously. Looks like archive.org supports ranged requests, too: 
+
+```
+curl -H 'Range: bytes=0-1' -s -L -k https://archive.org/download/hardcore.-techno.-collection.-flac.-2010/VA-Vet_Hard_Ultimate_Collection_Vol_01-3CD-FLAC-2010-JLM/324-qatja_s-krak.mp3 | hexdump -C
+00000000  49 44                                             |ID|
+00000002
+```
+
+- https://developer.mozilla.org/en-US/docs/Web/HTTP/Range_requests
+
+### IPFS 
+I know for a fact the HTTP gateways support ranged requests.
+
 <script src="/webamp/webamp.bundle.min.js"></script>
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function(event) {
