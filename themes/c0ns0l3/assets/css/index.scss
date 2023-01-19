@@ -38,6 +38,7 @@ ul {
   list-style-type: none;
 
   li::before {
+    color: #212529;
     text-decoration: none;
     content: "";
   }
@@ -54,6 +55,10 @@ span {
     //overflow: hidden;
     white-space: nowrap;
     line-break:strict;
+}
+
+em { 
+  color: white;
 }
 
 h1,
@@ -297,11 +302,12 @@ blockquote p {
   li {
     margin-bottom: 12px;
   }
+  
   ul { 
     li::before {
+      color: #212529;
       content: "►";
-      margin-right: 8px;
-      color: #F8F9FA;
+      margin-right: 8px;      
       float: left;
     }
   }

@@ -6,8 +6,13 @@ Description = "Links"
 cover = "img/og.png"
 +++
 ## Programming
-- [The Rust programming language - Lise Henry https://lise-henry.github.io/books/trpl2.pdf](https://lise-henry.github.io/books/trpl2.pdf)
-- [B Flat; A golang inspired C# compiler - https://flattened.net](https://flattened.net)
+- [The Rust programming language - Lise Henry: https://lise-henry.github.io/books/trpl2.pdf](https://lise-henry.github.io/books/trpl2.pdf)
+- [B Flat; A golang inspired C# compiler: https://flattened.net](https://flattened.net)
+### Web Development
+- [traviso.js; An isometric 3D game engine written in javascript: https://www.travisojs.com](https://www.travisojs.com)
+- [babylon.js; A 3D engine with WebGPU and WebGL2 support: https://doc.babylonjs.com/journey](https://doc.babylonjs.com/journey)
+- [ClojureScript; Clojure LISP dialect for Javascript: https://clojurescript.org](https://clojurescript.org)
+- [cube-test; Babylon CLJ VR game example: https://github.com/vt5491/cube-test](https://github.com/vt5491/cube-test)
 ## Art
 - [Ultimate Oldschool PC font pack: https://int10h.org/oldschool-pc-fonts/readme/](https://int10h.org/oldschool-pc-fonts/readme/)
 - [ASCII Blaster: https://asdf.us/asciiblaster/](https://asdf.us/asciiblaster/)
@@ -28,3 +33,5 @@ cover = "img/og.png"
 - [Linux system keyring; trusted and encrypted keys - https://www.kernel.org/doc/html/v5.0/security/keys/trusted-encrypted.html](https://www.kernel.org/doc/html/v5.0/security/keys/trusted-encrypted.html)
 ## Radio
 - [Groove Salad SomaFM https://somafm.com/groovesalad/](https://somafm.com/groovesalad/)
+## Audio Production 
+- [Adlib Tracker II http://www.adlibtracker.net](http://www.adlibtracker.net)

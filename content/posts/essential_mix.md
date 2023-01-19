@@ -2,17 +2,20 @@
 Title = "Essential Mix Player"
 Date = "2023-01-18T18:00:20-0800"
 Author = "Paige"
-Description = "Essential mixes in WebAmp"
+Description = "A collection of Essential Mixes in WebAmp"
 cover = "img/og.png"
 +++
-Courtesy of [Internet Archive](https://archive.org)
+
+> What about mobile support?
+
+lolz, it works.. sorta? But good luck moving / resizing the playlist around. I don't know maybe just grab the [m3u](https://ia903107.us.archive.org/20/items/BBC_Essential_Mix_Collection/BBC_Essential_Mix_Collection_vbr.m3u) from [Internet Archive](https://archive.org) or something.
 
 # Favorites
 
 <div style="float: left;">
 
 - 148  - 1993-12-04 - Future Sound Of London 
-- 124  - 1998-07-12 - Deep Dish *
+- *124  - 1998-07-12 - Deep Dish*
 - 470  - 1999-10-03 - Nick Warren
 - 616  - 2002-03-17 - James Zabiela
 - 554  - 2002-18    - Scott Bond
@@ -33,9 +36,9 @@ Courtesy of [Internet Archive](https://archive.org)
 <br />
 
 # Missing Favorites
-- [Tiesto 2001-09-09 https://www.youtube.com/watch?v=zJhB4O6IoqU](https://www.youtube.com/watch?v=zJhB4O6IoqU)
-- [Daft Punk New Years 1998-12-31 https://www.youtube.com/watch?v=P7osBEqJLN8](https://www.youtube.com/watch?v=P7osBEqJLN8)
-- [Agnelli & Nelson 2001-04-29](https://www.youtube.com/watch?v=gINps59afn8)
+- Tiesto 2001-09-09 [https://www.youtube.com/watch?v=zJhB4O6IoqU](https://www.youtube.com/watch?v=zJhB4O6IoqU)
+- Daft Punk New Years 1998-12-31 [https://www.youtube.com/watch?v=P7osBEqJLN8](https://www.youtube.com/watch?v=P7osBEqJLN8)
+- Agnelli & Nelson 2001-04-29 [https://www.youtube.com/watch?v=gINps59afn8](https://www.youtube.com/watch?v=gINps59afn8)
 
 # Notes 
 It looks like all of 2001 is missing, sadly. But if I find a collection on archive I'll append it to the end of the playlist so as not to change the existing track order.
