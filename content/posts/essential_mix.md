@@ -30,6 +30,29 @@ Courtesy of [Internet Archive](https://archive.org)
 
 <div id="app" style="margin-top: 168px; float: left; margin-left: 72px;"></div>
 
+<br />
+
+# Missing Favorites
+- [Tiesto 2001-09-09 https://www.youtube.com/watch?v=zJhB4O6IoqU](https://www.youtube.com/watch?v=zJhB4O6IoqU)
+- [Daft Punk New Years 1998-12-31 https://www.youtube.com/watch?v=P7osBEqJLN8](https://www.youtube.com/watch?v=P7osBEqJLN8)
+- [Agnelli & Nelson 2001-04-29](https://www.youtube.com/watch?v=gINps59afn8)
+
+# Notes 
+It looks like all of 2001 is missing, sadly. But if I find a collection on archive I'll append it to the end of the playlist so as not to change the existing track order.
+I had to generate the playlist to stop it from trying to load each track to get the metadata when the page loads: 
+
+{{< highlight python >}}
+import json
+import urllib.parse
+open("tracks.json", 'w').write(json.dumps({"initialTracks": [(lambda a, b: {"url": b.strip(), 
+"duration": 99999, "metaData": {"title": a, "artist": a}})(urllib.parse.unquote(x)
+.strip().split("/")[-1].replace(".mp3", "").replace(".", " ").replace("  ", " ")
+.replace("01-", "").replace("Essential Mix", ""), x) for x in open("raw").readlines()]}))
+{{< / highlight >}}
+
+The file 'raw' is just a list of urls, eg: 
+https://archive.org/download/BBC_Essential_Mix_Collection/01-Paul%20Kalkbrenner%20-%20Essential%20Mix-Sat-07-30-2011-Talion.mp3
+
 <script src="/webamp/webamp.bundle.min.js"></script>
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function(event) {
