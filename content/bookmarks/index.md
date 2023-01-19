@@ -26,3 +26,5 @@ cover = "img/og.png"
 - [RedHat intro to IMA/EVM - https://www.redhat.com/en/blog/how-use-linux-kernels-integrity-measurement-architecture](https://www.redhat.com/en/blog/how-use-linux-kernels-integrity-measurement-architecture)
 - [Redhat intro to UEFI / Secureboot - https://access.redhat.com/articles/5254641](https://access.redhat.com/articles/5254641)
 - [Linux system keyring; trusted and encrypted keys - https://www.kernel.org/doc/html/v5.0/security/keys/trusted-encrypted.html](https://www.kernel.org/doc/html/v5.0/security/keys/trusted-encrypted.html)
+## Radio
+- [Groove Salad SomaFM https://somafm.com/groovesalad/](https://somafm.com/groovesalad/)
