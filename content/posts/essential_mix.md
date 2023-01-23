@@ -18,11 +18,14 @@ lolz, it works.. sorta? But good luck moving / resizing the playlist around. I d
 - *124  - 1998-07-12 - Deep Dish*
 - 470  - 1999-10-03 - Nick Warren
 - 616  - 2002-03-17 - James Zabiela
+- 552  - 2002-04    - Jan Driver
 - 554  - 2002-18    - Scott Bond
 - 722  - 2004-02-22 - James Zabiela
+- 732  - 2004-05-02 - Rob da bank
 - 748  - 2004-08-22 - Scratch Perverts
 - 762  - 2004-11-18 - Blackstrobe
 - 789  - 2005-06-19 - Deep Dish
+- 825  - 2005-12-18 - DJ Hell
 - 923  - 2007-06-17 - Skream
 - 956  - 2008-02-22 - Benga
 - 963  - 2008-03-29 - Deep Dish & Cedric Gervais
@@ -41,8 +44,7 @@ lolz, it works.. sorta? But good luck moving / resizing the playlist around. I d
 - Agnelli & Nelson 2001-04-29 [https://www.youtube.com/watch?v=gINps59afn8](https://www.youtube.com/watch?v=gINps59afn8)
 
 # Notes 
-It looks like all of 2001 is missing, sadly. But if I find a collection on archive I'll append it to the end of the playlist so as not to change the existing track order.
-I had to generate the playlist to stop it from trying to load each track to get the metadata when the page loads: 
+It looks like all of 2001 is missing, sadly. But if I find a collection on archive I'll append it to the end of the playlist so as not to change the existing track order. I had to generate the playlist to stop it from trying to load each track to get the metadata when the page loads: 
 
 {{< highlight python >}}
 import json

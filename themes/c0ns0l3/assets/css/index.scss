@@ -12,7 +12,25 @@
     padding-right: 0px;
     padding-top: 0px; 
     padding-bottom: 0px;
-    cursor:default;
+    cursor: default;  
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: black;
+    }
+    
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: #DEE2E6; 
+    }
+    
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #433a3a; 
+    }
 }
 
 body {
@@ -48,6 +66,7 @@ p {
     color: #CED4DA;
     min-width: 768px;
     margin-bottom: 8px;
+    line-height: 24px;
 }
 
 span {
@@ -84,15 +103,19 @@ h1 {
 }
 
 h2 {    
-  background-color: #CED4DA;  
+  background-color: #CED4DA;
+  margin-left: 8px;
 }
 
 h3 {
     background-color: #ADB5BD;
+    margin-left: 16px;
 }
 
 h4 {
     background-color: #6C757D;
+    color: #DEE2E6;
+    margin-left: 24px;
     a {      
       margin-left: 8px;
       color: #DEE2E6;
@@ -101,6 +124,7 @@ h4 {
 
 h5 {
     background-color: #495057;
+    margin-left: 32px;
     a {      
       margin-left: 8px;
       color: #DEE2E6;
@@ -109,6 +133,7 @@ h5 {
 
 h6 {
     background-color: #343A40;
+    margin-left: 40px;
     a {      
       margin-left: 8px;
       color: #DEE2E6;
@@ -135,7 +160,26 @@ br {
   clear: both;
 }
 
+code { 
+  background-color: #343A40;
+  color: white;
+  box-shadow: 2px 2px 0 0 #212529;
+  padding-left: 4px;
+  padding-right: 4px; 
+  padding-top:2px;
+  padding-bottom:2px;
+}
+
 pre {
+  code {
+    box-shadow: unset;
+    display: unset;
+    background-color: unset;
+    padding: unset;
+    margin: unset;
+    color: unset;
+  }
+
   box-shadow: 4px 4px 0 0 #212529;
   display: block;
   padding: 8px;
@@ -151,6 +195,9 @@ blockquote {
   color: antiquewhite;
   margin-bottom: 8px;
   margin-left: 4px;
+  p {
+    line-height: unset;
+  }
 }
 
 blockquote::before {
@@ -173,8 +220,8 @@ blockquote p {
 }
 
 .header-photo {
-  margin-top: -96px;
-  margin-left: -64px;
+  margin-top: -68px;
+  margin-left: -40px;
   width: 294px;
   float: left;
   font-weight: bold;
@@ -188,8 +235,7 @@ blockquote p {
   -webkit-text-fill-color: transparent;
   text-align: center;
   line-height: 16px;
-  height:192px;
-  opacity: 0.7;
+  opacity: 0.8;
   max-width: 1024px;
 }
 
@@ -246,6 +292,25 @@ blockquote p {
       overflow: hidden;
       width:208px;
     }
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: black; 
+    }
+    
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background:  darkgreen;
+    }
+    
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: limegreen;
+    }
 }
 
 .post {
@@ -288,6 +353,31 @@ blockquote p {
 
 .table-of-contents {
 
+}
+
+.highlight { 
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #433a3a;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #343A40;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #CED4DA;
+  }
+  span { 
+    white-space: unset;
+    line-break: unset;
+  }
 }
 
 .post-content {
@@ -365,16 +455,16 @@ blockquote p {
 .pagination { 
   h1 { 
     margin-left: 2px;
-
+    color: black;
   }
 }
 
 .pagination__buttons {
   h6 { 
+    margin-left: unset;
     float: left;
     margin-right: 12px;
     width: auto;
-    cursor: pointer;
   }
 }
 
