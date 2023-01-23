@@ -1,6 +1,6 @@
 +++
 Title = "Should I enable ICMP? (Pt. 2)"
-Date = "2023-01-15T23:20:20-0800"
+Date = "2023-01-23T23:20:20-0800"
 Author = "Paige"
 Description = "Setting up NFTables"
 cover = "img/og.png"
