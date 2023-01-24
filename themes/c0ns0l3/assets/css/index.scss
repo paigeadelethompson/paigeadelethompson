@@ -228,16 +228,14 @@ blockquote p {
   height: 384px;
   white-space: nowrap;
   overflow: hidden;
-  position: absolute;
 }
 
 .header-calling-card {
   background: linear-gradient(to right, rgb(217, 0, 255), rgb(255, 255, 255), rgb(127, 121, 127), rgb(181, 181, 171), rgb(255, 255, 255), rgb(217, 0, 255));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-align: right;
+  text-align: left;
   line-height: 16px;
-  float: right;
 }
 
 .logo-contact {
