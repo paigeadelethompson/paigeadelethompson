@@ -219,11 +219,12 @@ blockquote p {
   min-width: 1024px;
 }
 
+.header-inner { 
+  
+}
+
 .header-photo {
- 
-  width: 294px;
   float: left;
-  font-weight: bold;
   white-space: nowrap;
   overflow: hidden;
   padding-bottom: 0;
@@ -259,7 +260,6 @@ blockquote p {
   @media (max-width: 767px) {
     display: none;
   }
-  float: right;
 }
 
 .header-nav-bar  {
