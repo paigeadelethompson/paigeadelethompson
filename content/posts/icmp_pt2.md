@@ -1034,8 +1034,10 @@ table inet filter {
 ```
 
 To insert a rule before `Handle 97`:
-- `nft insert rule inet filter ether_forward handle 97 ip saddr . ip daddr . ct state vmap @docker_forward_map4`
-- Then just verify that it was added correctly `nft -a list chain inet filter ether_forward`:
+```
+nft insert rule inet filter ether_forward handle 97 ip saddr . ip daddr . ct state vmap @docker_forward_map4
+```
+Then just verify that it was added correctly `nft -a list chain inet filter ether_forward`:
 ```
 table inet filter {
 	chain ether_forward { # handle 6

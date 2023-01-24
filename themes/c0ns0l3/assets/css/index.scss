@@ -216,12 +216,12 @@ blockquote p {
 }
 
 .header-container {
-  min-width: 1110px;
+  min-width: 1024px;
 }
 
 .header-photo {
   margin-top: -78px;
-  margin-left: -16px;
+  margin-left: -8px;
   width: 294px;
   float: left;
   font-weight: bold;
@@ -237,8 +237,6 @@ blockquote p {
   -webkit-text-fill-color: transparent;
   text-align: right;
   line-height: 16px;
-  min-width: 832px;
-  max-width: 832px;
   float: right;
 }
 
