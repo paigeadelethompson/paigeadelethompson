@@ -220,17 +220,23 @@ blockquote p {
 }
 
 .header-photo {
-  margin-top: -78px;
-  margin-left: -8px;
+ 
   width: 294px;
   float: left;
   font-weight: bold;
-  height: 384px;
   white-space: nowrap;
   overflow: hidden;
+  padding-bottom: 0;
+}
+
+.photo-border { 
+  background: linear-gradient(to left,rgb(127, 121, 127), rgb(181, 181, 171), rgb(255, 255, 255));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .header-calling-card {
+  padding-bottom: 0;
   background: linear-gradient(to right, rgb(217, 0, 255), rgb(255, 255, 255), rgb(127, 121, 127), rgb(181, 181, 171), rgb(255, 255, 255), rgb(217, 0, 255));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -239,6 +245,7 @@ blockquote p {
 }
 
 .logo-contact {
+  line-height: 0px;
 }
 
 .logo-right { 
@@ -256,6 +263,8 @@ blockquote p {
 }
 
 .header-nav-bar  {
+  padding: 0;
+  margin: 0;
   height: 16px;
   a { 
     text-decoration: underline;
