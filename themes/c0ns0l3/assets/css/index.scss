@@ -239,11 +239,13 @@ blockquote p {
 }
 
 .logo-contact {
-  
 }
 
 .logo-right { 
-  
+  @media (max-width: 767px) {
+    display: unset;
+  }
+  display: none;
 }
 
 .logo-end {
