@@ -6,6 +6,18 @@ Description = "Setting up NFTables"
 cover = "img/og.png"
 +++
 
+# Intro 
+This page is still under construction, check back later for the complete release of this part 2. 
+
+# Preparation
+This demo uses Debian on Parallels, updated from `bullseye` to `bookworm`:
+```
+sed -i 's/http:\/\//https:\/\//g' /etc/apt/sources.list
+sed -i 's/bullseye/bookworm/g' apt/sources.list
+apt update && apt -y dist-upgrade
+apt -y install nftables chrony && reboot
+```
+
 # Creating the default table
 {{< highlight bash >}}
 nft flush ruleset
@@ -37,7 +49,7 @@ nft add set inet filter icmp_egress_meter4 '{ type ipv4_addr; size 8; flags time
 nft add set inet filter icmp_egress_meter6 '{ type ipv6_addr; size 8; flags timeout, dynamic; }'
 {{< / highlight >}}
 
-## Maps
+## Verdict maps
 ### IPv4 bogons
 {{< highlight bash >}}
 nft add map inet filter drop_bogons4 '{ type ipv4_addr : verdict; flags interval; }'
@@ -46,7 +58,7 @@ nft add element inet filter drop_bogons4 '{ 192.168.0.0/16  : continue }'
 nft add element inet filter drop_bogons4 '{ 10.0.0.0/8      : continue }'
 nft add element inet filter drop_bogons4 '{ 172.16.0.0/12   : continue }' 
 nft add element inet filter drop_bogons4 '{ 169.254.0.0/16  : continue }'
-nft add element inet filter drop_bogons4 '{ 100.64.0.0/10   : continue }' 
+nft add element inet filter drop_bogons4 '{ 100.64.0.0/10   : drop     }' 
 nft add element inet filter drop_bogons4 '{ 0.0.0.0/8       : drop     }'
 nft add element inet filter drop_bogons4 '{ 127.0.0.0/8     : drop     }'
 nft add element inet filter drop_bogons4 '{ 192.0.0.0/24    : drop     }'
@@ -177,6 +189,40 @@ nft add map inet filter udp_ports_in6 '{ typeof ip6 saddr . ip6 daddr . udp dpor
 nft add element inet filter udp_ports_in6 '{ fe80::/10 . ff00::/8 . 546   : accept }'
 nft add element inet filter udp_ports_in6 '{ fe80::/10 . ff00::/8 . 5353  : accept }'
 nft add element inet filter udp_ports_in6 '{ fc00::/7  . ff00::/8 . 5353  : accept }'
+{{< / highlight >}}
+
+### IPv4 default forward networks
+{{< highlight bash >}}
+nft add map inet filter default_forward4 '{ typeof ip saddr . ip daddr . ct state : verdict; flags interval; }'
+nft add element inet filter default_forward4 '{ 169.254.0.0/16 . 0.0.0.0/0      . new         : drop }'
+nft add element inet filter default_forward4 '{ 0.0.0.0/0      . 169.254.0.0/16 . new         : drop }'
+nft add element inet filter default_forward4 '{ 10.0.0.0/8     . 172.16.0.0/12  . new         : drop }'
+nft add element inet filter default_forward4 '{ 10.0.0.0/8     . 192.168.0.0/16 . new         : drop }'
+nft add element inet filter default_forward4 '{ 172.16.0.0/12  . 10.0.0.0/8     . new         : drop }'
+nft add element inet filter default_forward4 '{ 172.16.0.0/12  . 192.168.0.0/16 . new         : drop }'
+nft add element inet filter default_forward4 '{ 192.168.0.0/16 . 10.0.0.0/8     . new         : drop }'
+nft add element inet filter default_forward4 '{ 192.168.0.0/16 . 172.16.0.0/12  . new         : drop }'
+nft add element inet filter default_forward4 '{ 10.0.0.0/8     . 10.0.0.0/8     . new         : accept }'
+nft add element inet filter default_forward4 '{ 10.0.0.0/8     . 10.0.0.0/8     . established : accept }'
+nft add element inet filter default_forward4 '{ 172.16.0.0/12  . 172.16.0.0/12  . new         : accept }'
+nft add element inet filter default_forward4 '{ 172.16.0.0/12  . 172.16.0.0/12  . established : accept }'
+nft add element inet filter default_forward4 '{ 192.168.0.0/16 . 192.168.0.0/16 . new         : accept }'
+nft add element inet filter default_forward4 '{ 192.168.0.0/16 . 192.168.0.0/16 . established : accept }'
+nft add element inet filter default_forward4 '{ 10.0.0.0/8     . 0.0.0.0/0      . new         : accept }'
+nft add element inet filter default_forward4 '{ 172.16.0.0/12  . 0.0.0.0/0      . new         : accept }'
+nft add element inet filter default_forward4 '{ 192.168.0.0/16 . 0.0.0.0/0      . new         : accept }'
+nft add element inet filter default_forward4 '{ 0.0.0.0/0      . 10.0.0.0/8     . established : accept }'
+nft add element inet filter default_forward4 '{ 0.0.0.0/0      . 172.16.0.0/12  . established : accept }'
+nft add element inet filter default_forward4 '{ 0.0.0.0/0      . 192.168.0.0/16 . established : accept }'
+{{< / highlight >}}
+
+### IPv6 default forward networks
+{{< highlight bash >}}
+nft add map inet filter default_forward6 '{ typeof ip6 saddr . ip6 daddr . ct state : verdict; flags interval; }'
+nft add element inet filter default_forward6 '{ fe80::/10 . ::/0      . new : drop }'
+nft add element inet filter default_forward6 '{ ::/0      . fe80::/10 . new : drop }'
+nft add element inet filter default_forward6 '{ fc00::/7  . fc00::/7  . new : accept }'
+nft add element inet filter default_forward6 '{ fc00::/7  . fc00::/7  . new : accept }'
 {{< / highlight >}}
 
 ### IPv4 egress ICMP types
@@ -346,6 +392,19 @@ nft add rule inet filter input ip6 saddr vmap @drop_bogons6 counter
 nft add rule inet filter input meta iiftype vmap '{ ether: jump ether_in }'
 {{< / highlight >}}
 
+### ether_forward
+{{< highlight bash >}}
+nft add rule inet filter ether_forward ip saddr . ip daddr . ct state vmap @default_forward4
+nft add rule inet filter ether_forward ip6 saddr . ip6 daddr . ct state vmap @default_forward6
+{{< / highlight >}}
+
+### forward
+{{< highlight bash >}}
+nft add rule inet filter forward ip saddr vmap @drop_bogons4 counter
+nft add rule inet filter forward ip6 saddr vmap @drop_bogons6 counter
+nft add rule inet filter forward meta oiftype vmap '{ ether: jump ether_forward }'
+{{< / highlight >}}
+
 ### ICMP echo-reply rate limit
 {{< highlight bash >}}
 nft add rule inet filter icmp_echo_reply_rate_limit add @icmp_egress_meter4 '{ ip saddr timeout 4s limit rate 3/second }' counter accept
@@ -459,6 +518,12 @@ nft add rule inet filter ether_in log prefix "ether_in" group 1
 nft add rule inet filter ether_in counter drop
 {{< / highlight >}}
 
+#### Forward Ether
+{{< highlight bash >}}
+nft add rule inet filter ether_forward log prefix "ether_forward" group 1
+nft add rule inet filter ether_forward counter drop
+{{< / highlight >}}
+
 #### Egress ICMP echo replies
 {{< highlight bash >}}
 nft add rule inet filter icmp_echo_reply_rate_limit log prefix "icmp_echo_reply_rate_limit" group 1
@@ -493,7 +558,7 @@ nft add rule inet filter ether_out counter drop
 `nft -a -s list ruleset | tee /etc/nftables.conf`
 
 {{< highlight bash >}}
-table inet filter { # handle 126
+table inet filter { # handle 129
 	set icmp_egress_meter4 { # handle 16
 		type ipv4_addr
 		size 8
@@ -707,18 +772,6 @@ table inet filter { # handle 126
 	map tcp_ports_out6 { # handle 31
 		typeof ip6 saddr . ip6 daddr . tcp dport : verdict
 		flags interval
-		elements = { fc00::/7 . fc00::/7 . 21 : accept,
-			     fc00::/7 . fc00::/7 . 23 : accept,
-			     fc00::/7 . fc00::/7 . 25 : accept,
-			     fc00::/7 . fc00::/7 . 53 : accept,
-			     fc00::/7 . fc00::/7 . 443 : accept,
-			     fc00::/7 . fc00::/7 . 853 : accept,
-			     fc00::/7 . fc00::/7 . 4460 : accept,
-			     fc00::/7 . fc00::/7 . 5349 : accept,
-			     2000::/3 . 2000::/3 . 443 : accept,
-			     2000::/3 . 2000::/3 . 853 : accept,
-			     2000::/3 . 2000::/3 . 4460 : accept,
-			     2000::/3 . 2000::/3 . 5349 : accept }
 	}
 
 	map udp_ports_out4 { # handle 32
@@ -754,99 +807,243 @@ table inet filter { # handle 126
 			     fc00::/7 . ff00::/8 . 5353 : accept }
 	}
 
+	map default_forward4 { # handle 85
+		typeof ip saddr . ip daddr . ct state : verdict
+		flags interval
+		elements = { 169.254.0.0/16 . 0.0.0.0/0 . new : drop,
+			     0.0.0.0/0 . 169.254.0.0/16 . new : drop,
+			     10.0.0.0/8 . 172.16.0.0/12 . new : drop,
+			     10.0.0.0/8 . 192.168.0.0/16 . new : drop,
+			     172.16.0.0/12 . 10.0.0.0/8 . new : drop,
+			     172.16.0.0/12 . 192.168.0.0/16 . new : drop,
+			     192.168.0.0/16 . 10.0.0.0/8 . new : drop,
+			     192.168.0.0/16 . 172.16.0.0/12 . new : drop,
+			     10.0.0.0/8 . 10.0.0.0/8 . new : accept,
+			     10.0.0.0/8 . 10.0.0.0/8 . established : accept,
+			     172.16.0.0/12 . 172.16.0.0/12 . new : accept,
+			     172.16.0.0/12 . 172.16.0.0/12 . established : accept,
+			     192.168.0.0/16 . 192.168.0.0/16 . new : accept,
+			     192.168.0.0/16 . 192.168.0.0/16 . established : accept,
+			     10.0.0.0/8 . 0.0.0.0/0 . new : accept,
+			     172.16.0.0/12 . 0.0.0.0/0 . new : accept,
+			     192.168.0.0/16 . 0.0.0.0/0 . new : accept,
+			     0.0.0.0/0 . 10.0.0.0/8 . established : accept,
+			     0.0.0.0/0 . 172.16.0.0/12 . established : accept,
+			     0.0.0.0/0 . 192.168.0.0/16 . established : accept }
+	}
+
+	map default_forward6 { # handle 86
+		typeof ip6 saddr . ip6 daddr . ct state : verdict
+		flags interval
+		elements = { fe80::/10 . ::/0 . new : drop,
+			     ::/0 . fe80::/10 . new : drop,
+			     fc00::/7 . fc00::/7 . new : accept }
+	}
+
 	chain input { # handle 1
 		type filter hook input priority filter; policy drop;
-		meta iiftype vmap { loopback : accept } # handle 56
-		ip saddr vmap @drop_bogons4 counter # handle 57
-		ip6 saddr vmap @drop_bogons6 counter # handle 58
-		meta iiftype vmap { ether : jump ether_in } # handle 60
-		log prefix "input" group 1 # handle 81
-		counter # handle 82
+		meta iiftype vmap { loopback : accept } # handle 42
+		ip saddr vmap @drop_bogons4 counter # handle 43
+		ip6 saddr vmap @drop_bogons6 counter # handle 44
+		meta iiftype vmap { ether : jump ether_in } # handle 45
+		log prefix "input" group 1 # handle 46
+		counter # handle 47
 	}
 
 	chain forward { # handle 2
-		type filter hook forward priority filter; policy drop;
-		log prefix "forward" group 1 # handle 83
-		counter # handle 84
+		ip saddr vmap @drop_bogons4 counter # handle 89
+		ip6 saddr vmap @drop_bogons6 counter # handle 90
+		meta oiftype vmap { ether : jump ether_forward } # handle 92
+		log prefix "forward" group 1 # handle 93
+		counter # handle 94
 	}
 
 	chain output { # handle 3
 		type filter hook output priority filter; policy drop;
-		meta oiftype vmap { loopback : accept } # handle 76
-		ip daddr vmap @drop_bogons4 counter # handle 77
-		ip6 daddr vmap @drop_bogons6 counter # handle 78
-		meta oiftype vmap { ether : jump ether_out } # handle 80
-		log prefix "output" group 1 # handle 85
-		counter # handle 86
+		meta oiftype vmap { loopback : accept } # handle 48
+		ip daddr vmap @drop_bogons4 counter # handle 49
+		ip6 daddr vmap @drop_bogons6 counter # handle 50
+		meta oiftype vmap { ether : jump ether_out } # handle 51
+		log prefix "output" group 1 # handle 52
+		counter # handle 53
 	}
 
 	chain ether_in { # handle 4
-		ip protocol vmap { icmp : jump icmp_in, tcp : jump tcp_in, udp : jump udp_in } counter # handle 52
-		ip6 nexthdr vmap { tcp : jump tcp_in, udp : jump udp_in, ipv6-icmp : jump icmp_in } counter # handle 54
+		ip protocol vmap { icmp : jump icmp_in, tcp : jump tcp_in, udp : jump udp_in } counter # handle 54
+		ip6 nexthdr vmap { tcp : jump tcp_in, udp : jump udp_in, ipv6-icmp : jump icmp_in } counter # handle 55
 	}
 
 	chain ether_out { # handle 5
-		ip protocol vmap { icmp : jump icmp_out, tcp : jump tcp_out, udp : jump udp_out } # handle 72
-		ip6 nexthdr vmap { tcp : jump tcp_out, udp : jump udp_out, ipv6-icmp : jump icmp_out } # handle 74
+		ip protocol vmap { icmp : jump icmp_out, tcp : jump tcp_out, udp : jump udp_out } # handle 56
+		ip6 nexthdr vmap { tcp : jump tcp_out, udp : jump udp_out, ipv6-icmp : jump icmp_out } # handle 57
+		log prefix "ether_forward" group 1 # handle 95
+		counter drop # handle 96
 	}
 
 	chain ether_forward { # handle 6
+		ip saddr . ip daddr . ct state vmap @default_forward4 # handle 87
+		ip6 saddr . ip6 daddr . ct state vmap @default_forward6 # handle 88
 	}
 
 	chain icmp_in { # handle 7
-		ip saddr . ip daddr . icmp type vmap @icmp_types_in4 counter # handle 37
-		ip6 saddr . ip6 daddr . icmpv6 type vmap @icmp_types_in6 counter # handle 38
+		ip saddr . ip daddr . icmp type vmap @icmp_types_in4 counter # handle 58
+		ip6 saddr . ip6 daddr . icmpv6 type vmap @icmp_types_in6 counter # handle 59
 	}
 
 	chain icmp_out { # handle 8
-		ip saddr . ip daddr . icmp type vmap @icmp_types_out4 counter # handle 63
-		ip6 saddr . ip6 daddr . icmpv6 type vmap @icmp_types_out6 counter # handle 64
+		ip saddr . ip daddr . icmp type vmap @icmp_types_out4 counter # handle 60
+		ip6 saddr . ip6 daddr . icmpv6 type vmap @icmp_types_out6 counter # handle 61
 	}
 
 	chain icmp_echo_reply_rate_limit { # handle 9
-		add @icmp_egress_meter4 { ip saddr timeout 4s limit rate 3/second } counter accept # handle 61
-		add @icmp_egress_meter6 { ip6 saddr timeout 4s limit rate 3/second } counter accept # handle 62
+		add @icmp_egress_meter4 { ip saddr timeout 4s limit rate 3/second } counter accept # handle 62
+		add @icmp_egress_meter6 { ip6 saddr timeout 4s limit rate 3/second } counter accept # handle 63
 	}
 
 	chain reject_with_icmp_port_unreachable_metered { # handle 10
-		add @icmp_egress_meter4 { ip daddr timeout 4s limit rate 3/second } counter reject # handle 34
-		add @icmp_egress_meter6 { ip6 daddr timeout 4s limit rate 3/second } counter reject # handle 35
+		add @icmp_egress_meter4 { ip daddr timeout 4s limit rate 3/second } counter reject with icmp port-unreachable # handle 64
+		add @icmp_egress_meter6 { ip6 daddr timeout 4s limit rate 3/second } counter reject with icmpv6 port-unreachable # handle 65
 	}
 
 	chain reject_with_icmp_port_unreachable { # handle 11
-		reject # handle 36
+		reject # handle 66
 	}
 
 	chain tcp_in { # handle 12
-		ct state established counter accept # handle 39
-		ip saddr . ip daddr . tcp dport vmap @tcp_ports_in4 counter # handle 40
-		ip6 saddr . ip6 daddr . tcp dport vmap @tcp_ports_in6 counter # handle 41
-		log prefix "tcp_in" group 1 # handle 42
-		ip saddr . ip daddr vmap @reject_or_drop_port4 # handle 43
-		ip6 saddr . ip6 daddr vmap @reject_or_drop_port6 # handle 44
+		ct state established counter accept # handle 67
+		ip saddr . ip daddr . tcp dport vmap @tcp_ports_in4 counter # handle 68
+		ip6 saddr . ip6 daddr . tcp dport vmap @tcp_ports_in6 counter # handle 69
+		log prefix "tcp_in" group 1 # handle 70
+		ip saddr . ip daddr vmap @reject_or_drop_port4 # handle 71
+		ip6 saddr . ip6 daddr vmap @reject_or_drop_port6 # handle 72
 	}
 
 	chain tcp_out { # handle 13
-		ct state established counter accept # handle 65
-		ip saddr . ip daddr . tcp dport vmap @tcp_ports_out4 counter # handle 66
-		ip6 saddr . ip6 daddr . tcp dport vmap @tcp_ports_out6 counter # handle 67
+		ct state established counter accept # handle 73
+		ip saddr . ip daddr . tcp dport vmap @tcp_ports_out4 counter # handle 74
+		ip6 saddr . ip6 daddr . tcp dport vmap @tcp_ports_out6 counter # handle 75
 	}
 
 	chain udp_in { # handle 14
-		ct state established counter accept # handle 45
-		ip saddr . ip daddr . udp dport vmap @udp_ports_in4 counter # handle 46
-		ip6 saddr . ip6 daddr . udp dport vmap @udp_ports_in6 counter # handle 47
-		log prefix "udp_in" group 1 # handle 48
-		ip saddr . ip daddr vmap @reject_or_drop_port4 # handle 49
-		ip6 saddr . ip6 daddr vmap @reject_or_drop_port6 # handle 50
+		ct state established counter accept # handle 76
+		ip saddr . ip daddr . udp dport vmap @udp_ports_in4 counter # handle 77
+		ip6 saddr . ip6 daddr . udp dport vmap @udp_ports_in6 counter # handle 78
+		log prefix "udp_in" group 1 # handle 79
+		ip saddr . ip daddr vmap @reject_or_drop_port4 # handle 80
+		ip6 saddr . ip6 daddr vmap @reject_or_drop_port6 # handle 81
 	}
 
 	chain udp_out { # handle 15
-		ct state established counter accept # handle 68
-		ip saddr . ip daddr . udp dport vmap @udp_ports_out4 counter # handle 69
-		ip6 saddr . ip6 daddr . udp dport vmap @udp_ports_out6 counter # handle 70
+		ct state established counter accept # handle 82
+		ip saddr . ip daddr . udp dport vmap @udp_ports_out4 counter # handle 83
+		ip6 saddr . ip6 daddr . udp dport vmap @udp_ports_out6 counter # handle 84
 	}
 }
 {{< / highlight >}}
 ## flush ruleset 
 Something that helps me is adding `flush ruleset` to the beginning of the new `/etc/nftables.conf` file so that the existing state is flushed before loading the file. 
+
+# Custom Docker support
+## Preparation
+```
+apt -y install docker.io 
+systemctl stop docker
+rm -rf /var/lib/docker/*
+rm /etc/docker/key.json
+echo DOCKER_OPTS="-H unix:///var/run/docker.sock --iptables=false --ip-masq=false --userns-remap=default --bip=100.64.80.1/20 --default-address-pool='base=100.64.96.0/20,size=28'" > /etc/default/docker
+```
+
+## Custom prefix
+This example will use the `100.64.0.0/17` prefix for docker. Earlier that prefix was marked to be discarded as a bogon, that 
+can be changed easily: 
+
+```
+nft delete element inet filter drop_bogons4 '{ 100.64.0.0/10 : drop }'
+nft add element inet filter drop_bogons4 '{ 100.64.0.0/17 : continue }'
+nft add element inet filter drop_bogons4 '{ 100.64.128.0/17 : drop }'
+nft add element inet filter drop_bogons4 '{ 100.65.0.0/16 : drop }'
+nft add element inet filter drop_bogons4 '{ 100.66.0.0/15 : drop }'
+nft add element inet filter drop_bogons4 '{ 100.68.0.0/15 : drop }'
+nft add element inet filter drop_bogons4 '{ 100.70.0.0/15 : drop }'
+nft add element inet filter drop_bogons4 '{ 100.72.0.0/15 : drop }'
+nft add element inet filter drop_bogons4 '{ 100.74.0.0/15 : drop }'
+nft add element inet filter drop_bogons4 '{ 100.76.0.0/15 : drop }'
+nft add element inet filter drop_bogons4 '{ 100.78.0.0/15 : drop }'
+nft add element inet filter drop_bogons4 '{ 100.80.0.0/15 : drop }'
+nft add element inet filter drop_bogons4 '{ 100.82.0.0/15 : drop }'
+nft add element inet filter drop_bogons4 '{ 100.84.0.0/15 : drop }'
+nft add element inet filter drop_bogons4 '{ 100.86.0.0/15 : drop }'
+nft add element inet filter drop_bogons4 '{ 100.88.0.0/15 : drop }'
+nft add element inet filter drop_bogons4 '{ 100.90.0.0/15 : drop }'
+nft add element inet filter drop_bogons4 '{ 100.92.0.0/15 : drop }'
+nft add element inet filter drop_bogons4 '{ 100.94.0.0/15 : drop }'
+nft add element inet filter drop_bogons4 '{ 100.96.0.0/11 : drop }'
+
+```
+Verify this with the `nft list map inet filter drop_bogons4` command:
+
+```
+table inet filter {
+	map drop_bogons4 {
+		type ipv4_addr : verdict
+		flags interval
+		elements = { 0.0.0.0/8 : drop, 10.0.0.0/8 : continue,
+			     100.64.0.0/10 : continue, 127.0.0.0/8 : drop,
+			     169.254.0.0/16 : continue, 172.16.0.0/12 : continue,
+			     192.0.0.0/24 : drop, 192.0.2.0/24 : drop,
+			     192.168.0.0/16 : continue, 198.18.0.0/15 : drop,
+			     198.51.100.0/24 : drop, 203.0.113.0/24 : drop,
+			     224.0.0.0/4 : continue, 240.0.0.0/4 : drop }
+	}
+}
+```
+
+## Forward verdict map
+{{< highlight bash >}}
+nft add map inet filter docker_forward_map4 '{ typeof ip saddr . ip daddr . ct state : verdict; flags interval; }'
+nft add element inet filter docker_forward_map4 '{ 100.64.0.0/20  . 0.0.0.0/0      . new         : drop   }'
+nft add element inet filter docker_forward_map4 '{ 100.64.16.0/20 . 100.64.32.0/20 . new         : accept }'
+nft add element inet filter docker_forward_map4 '{ 100.64.32.0/20 . 100.64.16.0/20 . established : accept }'
+nft add element inet filter docker_forward_map4 '{ 100.64.48.0/20 . 100.64.0.0/17  . new         : drop   }'
+nft add element inet filter docker_forward_map4 '{ 100.64.80.0/20 . 100.64.0.0/17  . new         : drop   }'
+nft add element inet filter docker_forward_map4 '{ 100.64.48.0/20 . 0.0.0.0/0      . new         : accept }'
+nft add element inet filter docker_forward_map4 '{ 100.64.80.0/20 . 0.0.0.0/0      . new         : accept }'
+nft add element inet filter docker_forward_map4 '{ 0.0.0.0/0      . 100.64.48.0/20 . established : accept }'
+nft add element inet filter docker_forward_map4 '{ 0.0.0.0/0      . 100.64.80.0/20 . established : accept }'
+nft add element inet filter docker_forward_map4 '{ 100.64.64.0/20 . 100.64.64.0/20 . new         : accept }'
+nft add element inet filter docker_forward_map4 '{ 100.64.96.0/20 . 100.64.96.0/20 . new         : accept }'
+nft add element inet filter docker_forward_map4 '{ 100.64.64.0/20 . 100.64.64.0/20 . established : accept }'
+nft add element inet filter docker_forward_map4 '{ 100.64.96.0/20 . 100.64.96.0/20 . established : accept }'
+nft add element inet filter docker_forward_map4 '{ 169.254.0.0/16 . 100.64.0.0/17  . new         : drop   }'
+nft add element inet filter docker_forward_map4 '{ 10.0.0.0/8     . 100.64.0.0/17  . new         : drop   }'
+nft add element inet filter docker_forward_map4 '{ 172.16.0.0/12  . 100.64.0.0/17  . new         : drop   }'
+nft add element inet filter docker_forward_map4 '{ 192.168.0.0/16 . 100.64.0.0/17  . new         : drop   }'
+{{< / highlight >}}
+
+## Forward chain 
+Rules can be inserted at a specific offset, `nft -a list chain inet filter ether_forward`:
+```
+table inet filter {
+	chain ether_forward { # handle 6
+		ip saddr . ip daddr . ct state vmap @default_forward4 # handle 87
+		ip6 saddr . ip6 daddr . ct state vmap @default_forward6 # handle 88
+		log prefix "ether_forward" group 1 # handle 97
+		counter packets 0 bytes 0 drop # handle 98
+	}
+}
+```
+
+To insert a rule before `Handle 97`:
+- `nft insert rule inet filter ether_forward handle 97 ip saddr . ip daddr . ct state vmap @docker_forward_map4`
+- Then just verify that it was added correctly `nft -a list chain inet filter ether_forward`:
+```
+table inet filter {
+	chain ether_forward { # handle 6
+		ip saddr . ip daddr . ct state vmap @default_forward4 # handle 87
+		ip6 saddr . ip6 daddr . ct state vmap @default_forward6 # handle 88
+		ip saddr . ip daddr . ct state vmap @docker_forward_map4 # handle 100
+		log prefix "ether_forward" group 1 # handle 97
+		counter packets 0 bytes 0 drop # handle 98
+	}
+}
+```
