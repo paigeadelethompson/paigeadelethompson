@@ -246,7 +246,10 @@ blockquote p {
   
 }
 
-.logo-end { 
+.logo-end {
+  @media (max-width: 767px) {
+    display: none;
+  }
   float: right;
 }
 
