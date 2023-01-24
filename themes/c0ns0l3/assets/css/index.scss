@@ -216,27 +216,19 @@ blockquote p {
 }
 
 .header-container {
-  min-width: 1024px;
+  min-width: 1110px;
 }
 
 .header-photo {
-  margin-top: -68px;
-  margin-left: -40px;
+  margin-top: -78px;
+  margin-left: -16px;
   width: 294px;
   float: left;
   font-weight: bold;
   height: 384px;
   white-space: nowrap;
   overflow: hidden;
-}
-.header-banner {
-  background: linear-gradient(to right, rgb(127, 121, 127),rgb(255, 255, 255), rgb(217, 0, 255), rgb(255, 255, 255), rgb(217, 0, 255), rgb(181, 181, 171));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-align: center;
-  line-height: 16px;
-  opacity: 0.8;
-  max-width: 1024px;
+  position: absolute;
 }
 
 .header-calling-card {
@@ -245,6 +237,21 @@ blockquote p {
   -webkit-text-fill-color: transparent;
   text-align: right;
   line-height: 16px;
+  min-width: 832px;
+  max-width: 832px;
+  float: right;
+}
+
+.logo-contact {
+  
+}
+
+.logo-right { 
+  
+}
+
+.logo-end { 
+  float: right;
 }
 
 .header-nav-bar  {
@@ -275,6 +282,19 @@ blockquote p {
   a {
     color: #212529;
   }
+}
+
+.menu-item { 
+  float: left;
+  margin-right: 64px;
+}
+
+.menu {
+  float: left;
+}
+
+.navigation-menu__inner menu--desktop {
+  float: left;
 }
 
 .open {
@@ -504,3 +524,4 @@ blockquote p {
   overflow: unset;
   }
 }
+
