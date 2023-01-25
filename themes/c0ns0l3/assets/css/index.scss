@@ -31,6 +31,7 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #433a3a; 
     }
+    -webkit-font-smoothing: none;
 }
 
 body {
@@ -306,9 +307,11 @@ blockquote p {
 }
 
 .header-nav-bar  {
+  display: flex;
+  justify-content: center;
+  width:100%;
   padding: 0;
   margin: 0;
-  height: 16px;
   a {
     text-decoration: underline;
   }
