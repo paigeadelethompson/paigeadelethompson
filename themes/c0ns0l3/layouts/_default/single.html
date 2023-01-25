@@ -59,7 +59,7 @@
 
         {{- with .Content -}}
 
-        <div>
+        <div class="post-inner">
             {{ . | replaceRE "(<h[1-9] id=\"([^\"]+)\".+)(</h[1-9]+>)" `${1}<a href="#${2}" class="hanchor" ariaLabel="Anchor">¶</a> ${3}` | safeHTML }}
 
         </div>

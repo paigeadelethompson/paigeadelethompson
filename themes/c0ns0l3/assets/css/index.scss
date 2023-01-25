@@ -219,15 +219,21 @@ blockquote p {
   min-width: 1024px;
 }
 
-.header-inner { 
-  
+.header-inner {
+  display: flex;
+  justify-content: center; 
+  padding:0;
+  margin:0;
+  @media (max-width: 767px) {
+    display: unset;
+    justify-content: unset;
+  }
 }
 
 .header-photo {
+  padding:0;
+  margin:0;
   float: left;
-  white-space: nowrap;
-  overflow: hidden;
-  padding-bottom: 0;
 }
 
 .photo-border { 
@@ -237,38 +243,70 @@ blockquote p {
 }
 
 .header-calling-card {
-  padding-bottom: 0;
+  padding:0;
+  margin:0;
   background: linear-gradient(to right, rgb(217, 0, 255), rgb(255, 255, 255), rgb(127, 121, 127), rgb(181, 181, 171), rgb(255, 255, 255), rgb(217, 0, 255));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-align: left;
-  line-height: 16px;
 }
 
-.logo-contact {
-  line-height: 0px;
+.header-left {
+  padding:0;
+  margin:0;
+  width:272px;
+  float: left;
+  overflow: hidden;
 }
 
-.logo-right { 
+.header-middle {
+  padding:0;
+  margin:0;
+  margin-left: 8px;
+  float: left;
+  width: 408px;
+  overflow: hidden;
   @media (max-width: 767px) {
-    display: unset;
+    width: 744px;
+
   }
-  display: none;
 }
 
-.logo-end {
+.header-right {
+  background: linear-gradient(to left, rgb(61, 249, 61), rgb(0, 238, 255), rgb(255, 255, 255), rgb(217, 0, 255));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding:0;
+  margin:0;
+  margin-left: 8px;
+  width: 294px;
   @media (max-width: 767px) {
     display: none;
   }
+}
+
+.logo-contact {
+  padding:0;
+  margin:0;
+}
+
+.logo-right {
+  padding:0;
+  margin:0;
+}
+
+.logo-end {
+  padding:0;
+  margin:0;
 }
 
 .header-nav-bar  {
   padding: 0;
   margin: 0;
   height: 16px;
-  a { 
+  a {
     text-decoration: underline;
   }
+  float: left;
 }
 
 .menu__trigger {
@@ -378,6 +416,9 @@ blockquote p {
 }
 
 .footer-container {
+  @media (max-width: 767px) {
+    display: none;
+  }
 
 }
 
@@ -409,10 +450,13 @@ blockquote p {
     line-break: unset;
   }
 }
+.post-inner {
+  max-width: 75%;
+}
 
 .post-content {
-  margin-left: 8%;
-  margin-right: 8%;
+  display: flex;
+  justify-content: center;
   h1 { 
     margin-left: 0;
     margin-top: 0;
@@ -496,10 +540,6 @@ blockquote p {
     margin-right: 12px;
     width: auto;
   }
-}
-
-.footer-container {
-
 }
 
 .footer-rainbow {
