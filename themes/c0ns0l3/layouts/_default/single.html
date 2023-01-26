@@ -45,15 +45,13 @@
     {{ end }}
     
     {{ if (.Params.Toc | default .Site.Params.Toc) }}
-
     <div class="table-of-contents">
-        <h2>
-            {{ (.Params.TocTitle | default .Site.Params.TocTitle) | default "Table of Contents" }}
-        </h2>
         {{ .TableOfContents }}
     </div>
 
     {{ end }}
+
+    <br />
 
     <div class="post-content">
 

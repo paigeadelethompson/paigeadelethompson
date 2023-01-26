@@ -6,10 +6,10 @@ Description = "Setting up NFTables"
 cover = "img/og.png"
 +++
 
-# Intro 
+## Intro 
 This page is still under construction, check back later for the complete release of this part 2. 
 
-# Preparation
+## Preparation
 This demo uses Debian on Parallels, updated from `bullseye` to `bookworm`:
 ```
 sed -i 's/http:\/\//https:\/\//g' /etc/apt/sources.list
@@ -18,13 +18,13 @@ apt update && apt -y dist-upgrade
 apt -y install nftables chrony && reboot
 ```
 
-# Creating the default table
+## Creating the default table
 {{< highlight bash >}}
 nft flush ruleset
 nft add table inet filter
 {{< / highlight >}}
 
-## Chains
+### Chains
 {{< highlight bash >}}
 nft add chain inet filter input '{ type filter hook input priority filter; policy accept; }'
 nft add chain inet filter forward '{ type filter hook forward priority filter; policy accept; }'
@@ -43,14 +43,14 @@ nft add chain inet filter udp_in
 nft add chain inet filter udp_out
 {{< / highlight >}}
 
-## Meter sets
+### Meter sets
 {{< highlight bash >}}
 nft add set inet filter icmp_egress_meter4 '{ type ipv4_addr; size 8; flags timeout, dynamic; }'
 nft add set inet filter icmp_egress_meter6 '{ type ipv6_addr; size 8; flags timeout, dynamic; }'
 {{< / highlight >}}
 
-## Verdict maps
-### IPv4 bogons
+### Verdict maps
+#### IPv4 bogons
 {{< highlight bash >}}
 nft add map inet filter drop_bogons4 '{ type ipv4_addr : verdict; flags interval; }'
 nft add element inet filter drop_bogons4 '{ 224.0.0.0/4     : continue }'
@@ -69,7 +69,7 @@ nft add element inet filter drop_bogons4 '{ 203.0.113.0/24  : drop     }'
 nft add element inet filter drop_bogons4 '{ 240.0.0.0/4     : drop     }'
 {{< / highlight >}}
 
-### IPv6 bogons
+#### IPv6 bogons
 {{< highlight bash >}}
 nft add map inet filter drop_bogons6 '{ type ipv6_addr : verdict; flags interval; }'
 nft add element inet filter drop_bogons6 '{ fe80::/10             : continue }'
@@ -109,7 +109,7 @@ nft add element inet filter drop_bogons6 '{ 2001:0:e000::/36      : drop }'
 nft add element inet filter drop_bogons6 '{ 2001:0:f000::/36      : drop }'
 {{< / highlight >}}
 
-### IPv4 reject or drop
+#### IPv4 reject or drop
 {{< highlight bash >}}
 nft add map inet filter reject_or_drop_port4 '{ typeof ip saddr . ip daddr : verdict; flags interval; }'
 nft add element inet filter reject_or_drop_port4 '{ 10.0.0.0/8     . 10.0.0.0/8     : jump reject_with_icmp_port_unreachable         }'
@@ -119,7 +119,7 @@ nft add element inet filter reject_or_drop_port4 '{ 169.254.0.0/16 . 169.254.0.0
 nft add element inet filter reject_or_drop_port4 '{ 0.0.0.0/0      . 0.0.0.0/0      : jump reject_with_icmp_port_unreachable_metered }'
 {{< / highlight >}}
 
-### IPv6 reject or drop
+#### IPv6 reject or drop
 {{< highlight bash >}}
 nft add map inet filter reject_or_drop_port6 '{ typeof ip6 saddr . ip6 daddr : verdict; flags interval; }'
 nft add element inet filter reject_or_drop_port6 '{ fe80::/10 . fe80::/10 : jump reject_with_icmp_port_unreachable         }'
@@ -127,7 +127,7 @@ nft add element inet filter reject_or_drop_port6 '{ fc00::/7  . fc00::/7  : jump
 nft add element inet filter reject_or_drop_port6 '{ ::/0      . ::/0      : jump reject_with_icmp_port_unreachable_metered }'
 {{< / highlight >}}
 
-### IPv4 ingress ICMP types
+#### IPv4 ingress ICMP types
 {{< highlight bash >}}
 nft add map inet filter icmp_types_in4 '{ typeof ip saddr . ip daddr . icmp type : verdict; flags interval; }'
 nft add element inet filter icmp_types_in4 '{ 0.0.0.0/0 . 0.0.0.0/0 . echo-request            : accept }'
@@ -135,7 +135,7 @@ nft add element inet filter icmp_types_in4 '{ 0.0.0.0/0 . 0.0.0.0/0 . echo-reply
 nft add element inet filter icmp_types_in4 '{ 0.0.0.0/0 . 0.0.0.0/0 . destination-unreachable : accept }'
 {{< / highlight >}}
 
-### IPv6 ingress ICMP types
+#### IPv6 ingress ICMP types
 {{< highlight bash >}}
 nft add map inet filter icmp_types_in6 '{ typeof ip6 saddr . ip6 daddr . icmpv6 type : verdict; flags interval; }'
 nft add element inet filter icmp_types_in6 '{ fe80::/10 . fe80::/10 . echo-request        : accept }'
@@ -153,19 +153,19 @@ nft add element inet filter icmp_types_in6 '{ fe80::/10 . ff00::/8  . nd-router-
 nft add element inet filter icmp_types_in6 '{ fe80::/10 . fe80::/10 . nd-router-advert    : accept }'
 {{< / highlight >}}
 
-### IPv4 ingress TCP ports
+#### IPv4 ingress TCP ports
 {{< highlight bash >}}
 nft add map inet filter tcp_ports_in4 '{ typeof ip saddr . ip daddr . tcp dport : verdict; flags interval; }'
 nft add element inet filter tcp_ports_in4 '{ 0.0.0.0/0 . 0.0.0.0/0 . 22 : accept }'
 {{< / highlight >}}
 
-### IPv6 ingress TCP ports
+#### IPv6 ingress TCP ports
 {{< highlight bash >}}
 nft add map inet filter tcp_ports_in6 '{ typeof ip6 saddr . ip6 daddr . tcp dport : verdict; flags interval; }'
 nft add element inet filter tcp_ports_in6 '{ ::/0 . ::/0 . 22 : accept }'
 {{< / highlight >}}
 
-### IPv4 ingress UDP ports
+#### IPv4 ingress UDP ports
 {{< highlight bash >}}
 nft add map inet filter udp_ports_in4 '{ typeof ip saddr . ip daddr . udp dport : verdict; flags interval; }'
 nft add element inet filter udp_ports_in4 '{ 169.254.0.0/16 . 169.254.0.0/16 . 68   : accept }'
@@ -183,7 +183,7 @@ nft add element inet filter udp_ports_in4 '{ 172.16.0.0/12  . 224.0.0.0/4    . 5
 nft add element inet filter udp_ports_in4 '{ 192.168.0.0/12 . 224.0.0.0/4    . 5353 : accept }'
 {{< / highlight >}}
 
-### IPv6 ingress UDP ports
+#### IPv6 ingress UDP ports
 {{< highlight bash >}}
 nft add map inet filter udp_ports_in6 '{ typeof ip6 saddr . ip6 daddr . udp dport : verdict; flags interval; }'
 nft add element inet filter udp_ports_in6 '{ fe80::/10 . ff00::/8 . 546   : accept }'
@@ -191,7 +191,7 @@ nft add element inet filter udp_ports_in6 '{ fe80::/10 . ff00::/8 . 5353  : acce
 nft add element inet filter udp_ports_in6 '{ fc00::/7  . ff00::/8 . 5353  : accept }'
 {{< / highlight >}}
 
-### IPv4 default forward networks
+#### IPv4 default forward networks
 {{< highlight bash >}}
 nft add map inet filter default_forward4 '{ typeof ip saddr . ip daddr . ct state : verdict; flags interval; }'
 nft add element inet filter default_forward4 '{ 169.254.0.0/16 . 0.0.0.0/0      . new         : drop }'
@@ -216,7 +216,7 @@ nft add element inet filter default_forward4 '{ 0.0.0.0/0      . 172.16.0.0/12  
 nft add element inet filter default_forward4 '{ 0.0.0.0/0      . 192.168.0.0/16 . established : accept }'
 {{< / highlight >}}
 
-### IPv6 default forward networks
+#### IPv6 default forward networks
 {{< highlight bash >}}
 nft add map inet filter default_forward6 '{ typeof ip6 saddr . ip6 daddr . ct state : verdict; flags interval; }'
 nft add element inet filter default_forward6 '{ fe80::/10 . ::/0      . new : drop }'
@@ -225,7 +225,7 @@ nft add element inet filter default_forward6 '{ fc00::/7  . fc00::/7  . new : ac
 nft add element inet filter default_forward6 '{ fc00::/7  . fc00::/7  . new : accept }'
 {{< / highlight >}}
 
-### IPv4 egress ICMP types
+#### IPv4 egress ICMP types
 {{< highlight bash >}}
 nft add map inet filter icmp_types_out4 '{ typeof ip saddr . ip daddr . icmp type : verdict; flags interval; }'
 nft add element inet filter icmp_types_out4 '{ 10.0.0.0/8     . 0.0.0.0/0      . echo-request            : accept }'
@@ -240,7 +240,7 @@ nft add element inet filter icmp_types_out4 '{ 192.168.0.0/16 . 192.168.0.0/16 .
 nft add element inet filter icmp_types_out4 '{ 10.0.0.0/8     . 0.0.0.0/0      . echo-reply              : jump icmp_echo_reply_rate_limit }'
 {{< / highlight >}}
 
-### IPv6 egress ICMP types 
+#### IPv6 egress ICMP types 
 {{< highlight bash >}}
 nft add map inet filter icmp_types_out6 '{ typeof ip6 saddr . ip6 daddr . icmpv6 type : verdict; flags interval; }'
 nft add element inet filter icmp_types_out6 '{ fe80::/10 . ff00::/8  . echo-request        : accept }'
@@ -254,7 +254,7 @@ nft add element inet filter icmp_types_out6 '{ fe80::/10 . fe80::/10 . nd-neighb
 nft add element inet filter icmp_types_out6 '{ fe80::/10 . ff00::/8  . nd-router-solicit   : accept }'
 {{< / highlight >}}
 
-### IPv4 egress TCP ports 
+#### IPv4 egress TCP ports 
 {{< highlight bash >}}
 nft add map inet filter tcp_ports_out4 '{ typeof ip saddr . ip daddr . tcp dport : verdict; flags interval; }'
 nft add element inet filter tcp_ports_out4 '{ 10.0.0.0/8     . 10.0.0.0/8     . 21   : accept }'
@@ -289,7 +289,7 @@ nft add element inet filter tcp_ports_out4 '{ 172.16.0.0/12  . 0.0.0.0/0      . 
 nft add element inet filter tcp_ports_out4 '{ 192.168.0.0/16 . 0.0.0.0/0      . 5349 : accept }'
 {{< / highlight >}}
 
-### IPv6 egress TCP ports
+#### IPv6 egress TCP ports
 {{< highlight bash >}}
 nft add map inet filter tcp_ports_out6 '{ typeof ip6 saddr . ip6 daddr . tcp dport : verdict; flags interval; }'
 nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 21     : accept }'
@@ -306,7 +306,7 @@ nft add element inet filter tcp_ports_out6 '{ 2000::/3 . 2000::/3 . 4460   : acc
 nft add element inet filter tcp_ports_out6 '{ 2000::/3 . 2000::/3 . 5349   : accept }'
 {{< / highlight >}}
 
-### IPv4 egress UDP ports 
+#### IPv4 egress UDP ports 
 {{< highlight bash >}}
 nft add map inet filter udp_ports_out4 '{ typeof ip saddr . ip daddr . udp dport : verdict; flags interval; }'
 nft add element inet filter udp_ports_out4 '{ 10.0.0.0/8     . 10.0.0.0/8     . 67   : accept }'
@@ -331,7 +331,7 @@ nft add element inet filter udp_ports_out4 '{ 172.16.0.0/12  . 0.0.0.0/0      . 
 nft add element inet filter udp_ports_out4 '{ 192.168.0.0/16 . 0.0.0.0/0      . 1194 : accept }'
 {{< / highlight >}}
 
-### IPv6 egress UDP ports
+#### IPv6 egress UDP ports
 {{< highlight bash >}}
 nft add map inet filter udp_ports_out6 '{ typeof ip6 saddr . ip6 daddr . udp dport : verdict; flags interval; }'
 nft add element inet filter udp_ports_out6 '{ fe80::/10 . ff00::/8 . 547 : accept }'
@@ -339,26 +339,26 @@ nft add element inet filter udp_ports_out6 '{ 2000::/3 . ::/0 . 443 : accept }'
 nft add element inet filter udp_ports_out6 '{ fc00::/7  . ff00::/8 . 5353  : accept }'
 {{< / highlight >}}
 
-## Rules
+### Rules
 
-### Metered ICMP unreachable
+#### Metered ICMP unreachable
 {{< highlight bash >}}
 nft add rule inet filter reject_with_icmp_port_unreachable_metered add @icmp_egress_meter4 '{ ip daddr timeout 4s limit rate 3/second }' counter reject with icmpx type port-unreachable
 nft add rule inet filter reject_with_icmp_port_unreachable_metered add @icmp_egress_meter6 '{ ip6 daddr timeout 4s limit rate 3/second }' counter reject with icmpx type port-unreachable
 {{< / highlight >}}
 
-### Un-metered ICMP unreachable
+#### Un-metered ICMP unreachable
 {{< highlight bash >}}
 nft add rule inet filter reject_with_icmp_port_unreachable reject with icmpx type port-unreachable
 {{< / highlight >}}
 
-### icmp_in
+#### icmp_in
 {{< highlight bash >}}
 nft add rule inet filter icmp_in ip saddr . ip daddr . icmp type vmap @icmp_types_in4 counter
 nft add rule inet filter icmp_in ip6 saddr . ip6 daddr . icmpv6 type vmap @icmp_types_in6 counter
 {{< / highlight >}}
 
-### tcp_in
+#### tcp_in
 {{< highlight bash >}}
 nft add rule inet filter tcp_in ct state established counter accept
 nft add rule inet filter tcp_in ip saddr . ip daddr . tcp dport vmap @tcp_ports_in4 counter
@@ -368,7 +368,7 @@ nft add rule inet filter tcp_in ip saddr . ip daddr vmap @reject_or_drop_port4
 nft add rule inet filter tcp_in ip6 saddr . ip6 daddr vmap @reject_or_drop_port6
 {{< / highlight >}}
 
-### udp_in
+#### udp_in
 {{< highlight bash >}}
 nft add rule inet filter udp_in ct state established counter accept
 nft add rule inet filter udp_in ip saddr . ip daddr . udp dport vmap @udp_ports_in4 counter
@@ -378,13 +378,13 @@ nft add rule inet filter udp_in ip saddr . ip daddr vmap @reject_or_drop_port4
 nft add rule inet filter udp_in ip6 saddr . ip6 daddr vmap @reject_or_drop_port6
 {{< / highlight >}}
 
-### ether_in
+#### ether_in
 {{< highlight bash >}}
 nft add rule inet filter ether_in ip protocol vmap '{ tcp : jump tcp_in, udp : jump udp_in , icmp : jump icmp_in }' counter
 nft add rule inet filter ether_in ip6 nexthdr vmap '{ tcp : jump tcp_in, udp : jump udp_in , icmpv6 : jump icmp_in, ipv6-icmp: jump icmp_in }' counter
 {{< / highlight >}}
 
-### input
+#### input
 {{< highlight bash >}}
 nft add rule inet filter input meta iiftype vmap '{ loopback: accept }'
 nft add rule inet filter input ip saddr vmap @drop_bogons4 counter
@@ -392,52 +392,52 @@ nft add rule inet filter input ip6 saddr vmap @drop_bogons6 counter
 nft add rule inet filter input meta iiftype vmap '{ ether: jump ether_in }'
 {{< / highlight >}}
 
-### ether_forward
+#### ether_forward
 {{< highlight bash >}}
 nft add rule inet filter ether_forward ip saddr . ip daddr . ct state vmap @default_forward4
 nft add rule inet filter ether_forward ip6 saddr . ip6 daddr . ct state vmap @default_forward6
 {{< / highlight >}}
 
-### forward
+#### forward
 {{< highlight bash >}}
 nft add rule inet filter forward ip saddr vmap @drop_bogons4 counter
 nft add rule inet filter forward ip6 saddr vmap @drop_bogons6 counter
 nft add rule inet filter forward meta oiftype vmap '{ ether: jump ether_forward }'
 {{< / highlight >}}
 
-### ICMP echo-reply rate limit
+#### ICMP echo-reply rate limit
 {{< highlight bash >}}
 nft add rule inet filter icmp_echo_reply_rate_limit add @icmp_egress_meter4 '{ ip saddr timeout 4s limit rate 3/second }' counter accept
 nft add rule inet filter icmp_echo_reply_rate_limit add @icmp_egress_meter6 '{ ip6 saddr timeout 4s limit rate 3/second }' counter accept
 {{< / highlight >}}
 
-### icmp_out
+#### icmp_out
 {{< highlight bash >}}
 nft add rule inet filter icmp_out ip saddr . ip daddr . icmp type vmap @icmp_types_out4 counter
 nft add rule inet filter icmp_out ip6 saddr . ip6 daddr . icmpv6 type vmap @icmp_types_out6 counter
 {{< / highlight >}}
 
-### tcp_out
+#### tcp_out
 {{< highlight bash >}}
 nft add rule inet filter tcp_out ct state established counter accept
 nft add rule inet filter tcp_out ip saddr . ip daddr . tcp dport vmap @tcp_ports_out4 counter
 nft add rule inet filter tcp_out ip6 saddr . ip6 daddr . tcp dport vmap @tcp_ports_out6 counter
 {{< / highlight >}}
 
-### udp_out
+#### udp_out
 {{< highlight bash >}}
 nft add rule inet filter udp_out ct state established counter accept
 nft add rule inet filter udp_out ip saddr . ip daddr . udp dport vmap @udp_ports_out4 counter
 nft add rule inet filter udp_out ip6 saddr . ip6 daddr . udp dport vmap @udp_ports_out6 counter
 {{< / highlight >}}
 
-### ether_out
+#### ether_out
 {{< highlight bash >}}
 nft add rule inet filter ether_out ip protocol vmap { tcp : jump tcp_out, udp : jump udp_out, icmp : jump icmp_out }
 nft add rule inet filter ether_out ip6 nexthdr vmap { tcp : jump tcp_out, udp : jump udp_out, icmpv6 : jump icmp_out, ipv6-icmp: jump icmp_out }
 {{< / highlight >}}
 
-### output
+#### output
 {{< highlight bash >}}
 nft add rule inet filter output meta oiftype vmap '{ loopback: accept }'
 nft add rule inet filter output ip daddr vmap @drop_bogons4 counter
@@ -445,14 +445,14 @@ nft add rule inet filter output ip6 daddr vmap @drop_bogons6 counter
 nft add rule inet filter output meta oiftype vmap '{ ether: jump ether_out }'
 {{< / highlight >}}
 
-## Default chain policies 
+### Default chain policies 
 {{< highlight bash >}}
 nft add chain inet filter input '{ policy drop; }'
 nft add chain inet filter forward '{ policy drop; }'
 nft add chain inet filter output '{ policy drop; }'
 {{< / highlight >}}
 
-## Logging
+### Logging
 {{< highlight bash >}}
 nft add rule inet filter input log prefix "input" group 1
 nft add rule inet filter input counter
@@ -464,7 +464,7 @@ nft add rule inet filter output log prefix "output" group 1
 nft add rule inet filter output counter
 {{< / highlight >}}
 
-### Viewing logged packets
+#### Viewing logged packets
 Dropped packets are logged in pcap format: `tcpdump -vvv -n -e -ttt -i nflog:1 -XX`
 ```
  00:00:00.000207 version 0, resource ID 1, family IPv4 (2), length 128: (tos 0x10, ttl 64, id 39694, offset 0, flags [DF], proto UDP (17), length 76)
@@ -487,74 +487,74 @@ Dropped packets are logged in pcap format: `tcpdump -vvv -n -e -ttt -i nflog:1 -
 	0x0070:  0000 0000 0000 0000 e778 6f53 0824 ab92  .........xoS.$..
 ```
 
-### Per-chain logging
-#### Metered ICMP unreachable
+#### Per-chain logging
+##### Metered ICMP unreachable
 {{< highlight bash >}}
 nft add rule inet filter reject_with_icmp_port_unreachable_metered log prefix "reject_with_icmp_port_unreachable_metered" group 1
 nft add rule inet filter reject_with_icmp_port_unreachable_metered counter drop
 {{< / highlight >}}
 
-#### Ingress ICMP
+##### Ingress ICMP
 {{< highlight bash >}}
 nft add rule inet filter icmp_in log prefix "icmp_in" group 1
 nft add rule inet filter icmp_in counter drop
 {{< / highlight >}}
 
-#### Ingress TCP
+##### Ingress TCP
 {{< highlight bash >}}
 nft add rule inet filter tcp_in log prefix "tcp_in" group 1
 nft add rule inet filter tcp_in counter drop
 {{< / highlight >}}
 
-#### Ingress UDP
+##### Ingress UDP
 {{< highlight bash >}}
 nft add rule inet filter udp_in log prefix "udp_in" group 1
 nft add rule inet filter udp_in counter drop
 {{< / highlight >}}
 
-#### Ingress Ether
+##### Ingress Ether
 {{< highlight bash >}}
 nft add rule inet filter ether_in log prefix "ether_in" group 1
 nft add rule inet filter ether_in counter drop
 {{< / highlight >}}
 
-#### Forward Ether
+##### Forward Ether
 {{< highlight bash >}}
 nft add rule inet filter ether_forward log prefix "ether_forward" group 1
 nft add rule inet filter ether_forward counter drop
 {{< / highlight >}}
 
-#### Egress ICMP echo replies
+##### Egress ICMP echo replies
 {{< highlight bash >}}
 nft add rule inet filter icmp_echo_reply_rate_limit log prefix "icmp_echo_reply_rate_limit" group 1
 nft add rule inet filter icmp_echo_reply_rate_limit counter drop
 {{< / highlight >}}
 
-#### Egress ICMP
+##### Egress ICMP
 {{< highlight bash >}}
 nft add rule inet filter icmp_out log prefix "icmp_out" group 1
 nft add rule inet filter icmp_out counter drop
 {{< / highlight >}}
 
-#### Egress TCP
+##### Egress TCP
 {{< highlight bash >}}
 nft add rule inet filter tcp_out log prefix "tcp_out" group 1
 nft add rule inet filter tcp_out counter drop
 {{< / highlight >}}
 
-#### Egress UDP
+##### Egress UDP
 {{< highlight bash >}}
 nft add rule inet filter udp_out log prefix "udp_out" group 1
 nft add rule inet filter udp_out counter drop
 {{< / highlight >}}
 
-#### Egress Ether
+##### Egress Ether
 {{< highlight bash >}}
 nft add rule inet filter ether_out log prefix "ether_out" group 1
 nft add rule inet filter ether_out counter drop
 {{< / highlight >}}
 
-# Filter state
+## Filter state
 `nft -a -s list ruleset | tee /etc/nftables.conf`
 
 {{< highlight bash >}}
@@ -940,11 +940,11 @@ table inet filter { # handle 129
 	}
 }
 {{< / highlight >}}
-## flush ruleset 
+### flush ruleset 
 Something that helps me is adding `flush ruleset` to the beginning of the new `/etc/nftables.conf` file so that the existing state is flushed before loading the file. 
 
-# Custom Docker support
-## Preparation
+## Custom Docker support
+### Preparation
 ```
 apt -y install docker.io 
 systemctl stop docker
@@ -953,7 +953,7 @@ rm /etc/docker/key.json
 echo DOCKER_OPTS="-H unix:///var/run/docker.sock --iptables=false --ip-masq=false --userns-remap=default --bip=100.64.80.1/20 --default-address-pool='base=100.64.96.0/20,size=28'" > /etc/default/docker
 ```
 
-## Custom prefix
+### Custom prefix
 This example will use the `100.64.0.0/17` prefix for docker. Earlier that prefix was marked to be discarded as a bogon, that 
 can be changed easily: 
 
@@ -998,7 +998,7 @@ table inet filter {
 }
 ```
 
-## Forward verdict map
+### Forward verdict map
 {{< highlight bash >}}
 nft add map inet filter docker_forward_map4 '{ typeof ip saddr . ip daddr . ct state : verdict; flags interval; }'
 nft add element inet filter docker_forward_map4 '{ 100.64.0.0/20  . 0.0.0.0/0      . new         : drop   }'
@@ -1020,7 +1020,7 @@ nft add element inet filter docker_forward_map4 '{ 172.16.0.0/12  . 100.64.0.0/1
 nft add element inet filter docker_forward_map4 '{ 192.168.0.0/16 . 100.64.0.0/17  . new         : drop   }'
 {{< / highlight >}}
 
-## Forward chain 
+### Forward chain 
 Rules can be inserted at a specific offset, `nft -a list chain inet filter ether_forward`:
 ```
 table inet filter {

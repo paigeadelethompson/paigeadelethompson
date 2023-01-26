@@ -10,7 +10,7 @@ cover = "img/og.png"
 
 lolz, it works.. sorta? But good luck moving / resizing the playlist around. I don't know maybe just grab the [m3u](https://ia903107.us.archive.org/20/items/BBC_Essential_Mix_Collection/BBC_Essential_Mix_Collection_vbr.m3u) from [Internet Archive](https://archive.org) or something.
 
-# Favorites
+## Favorites
 
 <div style="float: left;">
 
@@ -38,12 +38,12 @@ lolz, it works.. sorta? But good luck moving / resizing the playlist around. I d
 
 <br />
 
-# Missing Favorites
+## Missing Favorites
 - Tiesto 2001-09-09 [https://www.youtube.com/watch?v=zJhB4O6IoqU](https://www.youtube.com/watch?v=zJhB4O6IoqU)
 - Daft Punk New Years 1998-12-31 [https://www.youtube.com/watch?v=P7osBEqJLN8](https://www.youtube.com/watch?v=P7osBEqJLN8)
 - Agnelli & Nelson 2001-04-29 [https://www.youtube.com/watch?v=gINps59afn8](https://www.youtube.com/watch?v=gINps59afn8)
 
-# Notes 
+## Notes 
 It looks like all of 2001 is missing, sadly. But if I find a collection on archive I'll append it to the end of the playlist so as not to change the existing track order. I had to generate the playlist to stop it from trying to load each track to get the metadata when the page loads: 
 
 {{< highlight python >}}
@@ -58,7 +58,7 @@ open("tracks.json", 'w').write(json.dumps({"initialTracks": [(lambda a, b: {"url
 The file 'raw' is just a list of urls, eg: 
 https://archive.org/download/BBC_Essential_Mix_Collection/01-Paul%20Kalkbrenner%20-%20Essential%20Mix-Sat-07-30-2011-Talion.mp3
 
-## Ranged requests
+### Ranged requests
 
 WebAmp wouldn't be so bad if it did ranged fetches to get the IDv3 tag header, instead of fetching the whole file, but the offset of the header is not entirely trivial either: 
 
@@ -79,7 +79,7 @@ curl -H 'Range: bytes=0-1' -s -L -k https://archive.org/download/hardcore.-techn
 
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Range_requests
 
-### IPFS 
+#### IPFS 
 I know for a fact the HTTP gateways support ranged requests.
 
 <script src="/webamp/webamp.bundle.min.js"></script>

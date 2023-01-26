@@ -16,6 +16,7 @@ paginate     = 8
   showLastUpdated      = true
   OGImageWidth         = 499
   OGImageHeight        = 627
+  toc                  = true
 
 
 [params.twitter]

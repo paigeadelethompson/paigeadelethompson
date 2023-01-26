@@ -111,6 +111,7 @@ h4 {
     background-color: #6C757D;
     color: #DEE2E6;
     margin-left: 24px;
+
     a {      
       margin-left: 8px;
       color: #DEE2E6;
@@ -120,6 +121,7 @@ h4 {
 h5 {
     background-color: #495057;
     margin-left: 32px;
+    color: #DEE2E6;
     a {      
       margin-left: 8px;
       color: #DEE2E6;
@@ -129,6 +131,7 @@ h5 {
 h6 {
     background-color: #343A40;
     margin-left: 40px;
+
     a {      
       margin-left: 8px;
       color: #DEE2E6;
@@ -190,6 +193,7 @@ blockquote {
   color: antiquewhite;
   margin-bottom: 8px;
   margin-left: 4px;
+
   p {
     line-height: unset;
   }
@@ -219,10 +223,12 @@ blockquote p {
   justify-content: center; 
   padding:0;
   margin:0;
+
   span {
     white-space: nowrap;
     line-break: strict;
   }
+  
   @media (max-width: 767px) {
     display: unset;
     justify-content: unset;
@@ -255,6 +261,7 @@ blockquote p {
   width:272px;
   float: left;
   overflow: hidden;
+
   @media (max-width: 375px) {
     display: none;
   }
@@ -267,10 +274,12 @@ blockquote p {
   float: left;
   width: 408px;
   overflow: hidden;
+  
   @media (max-width: 767px) {
     width: 744px;
 
   }
+
   @media (max-width: 375px) {
     width: 100%;
   }
@@ -284,6 +293,7 @@ blockquote p {
   margin:0;
   margin-left: 8px;
   width: 294px;
+  
   @media (max-width: 767px) {
     display: none;
   }
@@ -329,11 +339,13 @@ blockquote p {
   padding: 8px;
   text-align: center;
   visibility: hidden;  
-  z-index: 99;  
+  z-index: 99;
+
   li { 
     margin-top: 8px;
     margin-bottom: 8px;
   }
+  
   a {
     color: #212529;
   }
@@ -357,16 +369,20 @@ blockquote p {
 }
 
 .content-container {
+    margin-top: 0;
     background-color:#433a3a;
+    
     ul {
       margin-bottom: 8px;
     }
+    
     h1 { 
       margin-left: 8px;
       margin-top: 2px;
       overflow: hidden;
       width:208px;
     }
+
     ::-webkit-scrollbar {
       width: 8px;
       height: 8px;
@@ -390,6 +406,69 @@ blockquote p {
 
 .post {
 
+}
+
+.table-of-contents {
+  display: flex;
+  justify-content: center;
+  box-shadow: 4px 4px 0 0 #212529;
+  background-color: #6C757D;
+  padding: 0;
+  margin-left: 128px;
+  margin-right:128px;
+}
+
+#TableOfContents {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  
+  a {
+    color: white;
+    text-decoration: underline;
+  }
+  li {
+    margin: 0;
+  }
+  li::before {
+    color: #CED4DA;
+  }
+  a::after {
+    content: "";    
+    color: #CED4DA;
+    
+  } 
+  ul {    
+    margin:0;
+    
+    li:first-child::before {
+      content: "├─";
+    }
+    
+    li:last-child::before {
+      content: "├─";
+    }
+    
+    li::before {
+      content: "├─";
+    }
+
+    li {
+      ul {
+        li:first-child::before {
+          content: "│├─";
+        }
+        
+        li:last-child::before {
+          content: "│├─";
+        }
+        
+        li::before {
+          content: "│├─";
+        }
+      }
+    }
+  }
 }
 
 .post-title {
@@ -426,10 +505,6 @@ blockquote p {
   @media (max-width: 375px) {
     display: none;
   }
-
-}
-
-.table-of-contents {
 
 }
 
@@ -486,6 +561,11 @@ blockquote p {
   ol {
     list-style: none;
     counter-reset: none;
+  }
+  p { 
+    a {
+      text-decoration: underline;
+    }
   }
 }
 

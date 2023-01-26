@@ -6,7 +6,7 @@ description = "My PGP key"
 cover = "img/og.png"
 +++
 
-## Disclaimer
+# Disclaimer
 Please do not use this key to contact me about illegal activities. My communications are subject to monitoring and I'm not interested. I also will not be able to communicate with you going forward if you do this. If you need to use it to contact me for professional reasons, feel free but otherwise just contact me as you normally would. 
 
 ```
