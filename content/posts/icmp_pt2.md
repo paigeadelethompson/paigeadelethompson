@@ -8,7 +8,7 @@ cover = "img/og.png"
 
 ## Intro 
 The goals of this firewall ruleset are as follows: 
-- Enforce sane limits over the number of automated ICMP responses that can be illicited by sources on the internet
+- Enforce sane limits over the number of automated ICMP responses that can be illicited by sources on the internet; mitigating ICMP amplification while still allowing some symbolance of networking mechenisms that rely on ICMP to function. 
 - Establish the basis for a "zero trust" model by ensuring the use of end-to-end encrypted protocols for necessary egress traffic (primarily NTPSEC and DoTLS.) This is necessary in an environment where protocols like `NDP-RA` are in use because of the possibility that other users on a network can advertise routes themselves which can potentially be used to hijack another user's traffic.
 - 1/26/2023 if you're seeing this message, parts of this post are still under construction, check back for the complete release later.
 ## Preparation
@@ -303,6 +303,11 @@ nft add element inet filter icmp_types_out6 '{ fe80::/10 . ff00::/8  . nd-router
 {{< / highlight >}}
 
 #### IPv4 egress TCP ports 
+Ports `21`, `23`, `25`, `53`, and `80` can be omitted if the point is to ensure that no egress traffic will ever be destined unencrypted protocols. With this particular ruleset they are limited to the following destinations: 
+- `169.254.0.0/16`
+- `10.0.0.0/8` 
+- `172.16.0.0/12`
+- `192.168.0.0/16`
 {{< highlight bash >}}
 nft add map inet filter tcp_ports_out4 '{ typeof ip saddr . ip daddr . tcp dport : verdict; flags interval; }'
 nft add element inet filter tcp_ports_out4 '{ 10.0.0.0/8     . 10.0.0.0/8     . 21   : accept }'
@@ -338,12 +343,15 @@ nft add element inet filter tcp_ports_out4 '{ 192.168.0.0/16 . 0.0.0.0/0      . 
 {{< / highlight >}}
 
 #### IPv6 egress TCP ports
+Ports `21`, `23`, `25`, `53`, and `80` can be omitted if the point is to ensure that no egress traffic will ever be destined unencrypted protocols. With this particular ruleset they are limited to the following destinations: 
+- `fc00::/7` (ULA)
 {{< highlight bash >}}
 nft add map inet filter tcp_ports_out6 '{ typeof ip6 saddr . ip6 daddr . tcp dport : verdict; flags interval; }'
 nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 21     : accept }'
 nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 23     : accept }'
 nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 25     : accept }'
 nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 53     : accept }'
+nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 80     : accept }'
 nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 443    : accept }'
 nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 853    : accept }'
 nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 4460   : accept }'
@@ -355,6 +363,13 @@ nft add element inet filter tcp_ports_out6 '{ 2000::/3 . 2000::/3 . 5349   : acc
 {{< / highlight >}}
 
 #### IPv4 egress UDP ports 
+Ports `67`, `53`, `137` can be omitted if the point is to ensure that no egress traffic will ever be destined unencrypted protocols. With this particular ruleset they are limited to the following destinations: 
+- `169.254.0.0/16`
+- `10.0.0.0/8` 
+- `172.16.0.0/12`
+- `192.168.0.0/16`
+
+Port `5353` is used for `mDNS`. It can be safely omitted, but it is useful for enumeration of hostnames on local networks (zeroconf). Currently mDNS doesn't use any encryption as of 1-26-2023, and I would say it should be omitted in environments that use `NDP-RA`. For more information on mDNS, refer to: [https://datatracker.ietf.org/doc/html/draft-rafiee-dnssd-mdns-threatmodel-01](https://datatracker.ietf.org/doc/html/draft-rafiee-dnssd-mdns-threatmodel-01)
 {{< highlight bash >}}
 nft add map inet filter udp_ports_out4 '{ typeof ip saddr . ip daddr . udp dport : verdict; flags interval; }'
 nft add element inet filter udp_ports_out4 '{ 10.0.0.0/8     . 10.0.0.0/8     . 67   : accept }'
@@ -864,7 +879,8 @@ table inet filter { # handle 131
 			     2000::/3 . 2000::/3 . 443 : accept,
 			     2000::/3 . 2000::/3 . 853 : accept,
 			     2000::/3 . 2000::/3 . 4460 : accept,
-			     2000::/3 . 2000::/3 . 5349 : accept }
+			     2000::/3 . 2000::/3 . 5349 : accept,
+			     fc00::/7 . fc00::/7 . 80 : accept }
 	}
 
 	map udp_ports_out4 { # handle 34
