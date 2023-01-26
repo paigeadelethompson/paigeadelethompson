@@ -53,6 +53,13 @@ cover = "img/og.png"
         width: 0;
         visibility: hidden;
     }
+    .table-of-contents { 
+        box-shadow: none;
+    }
+    nav {
+        box-shadow: none;
+        background-color: black;
+    }
     
 </style>
 ```
