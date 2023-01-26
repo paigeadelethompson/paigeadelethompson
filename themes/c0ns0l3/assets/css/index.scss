@@ -247,9 +247,6 @@ blockquote p {
   background: linear-gradient(to right, rgb(217, 0, 255), rgb(255, 255, 255), rgb(127, 121, 127), rgb(181, 181, 171), rgb(255, 255, 255), rgb(217, 0, 255));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  @media (max-width: 375px) {
-    width: unset;
-  }
 }
 
 .header-left {
@@ -258,7 +255,7 @@ blockquote p {
   width:272px;
   float: left;
   overflow: hidden;
-  @media (max-width: 375px) {
+  @media (max-width: 374px) {
     display: none;
   }
 }
@@ -273,6 +270,9 @@ blockquote p {
   @media (max-width: 767px) {
     width: 744px;
 
+  }
+  @media (max-width: 375px) {
+    width: 100%;
   }
 }
 
