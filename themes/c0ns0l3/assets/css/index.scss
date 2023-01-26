@@ -13,25 +13,22 @@
     padding-top: 0px; 
     padding-bottom: 0px;
     cursor: default;  
+
     ::-webkit-scrollbar {
       width: 8px;
     }
     
-    /* Track */
     ::-webkit-scrollbar-track {
       background: black;
     }
     
-    /* Handle */
     ::-webkit-scrollbar-thumb {
       background: #DEE2E6; 
     }
     
-    /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {
       background: #433a3a; 
     }
-    -webkit-font-smoothing: none;
 }
 
 body {
@@ -64,23 +61,14 @@ ul {
 }
 
 p {
-    font-size: 16px;
-    font-style: normal;
-    font-weight: normal;
     color: #CED4DA;
-    min-width: 768px;
+    min-width: 760px;
     margin-bottom: 8px;
     line-height: 24px;
 }
 
 span {
     color: #CED4DA;
-    white-space: nowrap;
-    line-break:strict;
-    line-height: 16px;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: normal;
 }
 
 em { 
@@ -231,6 +219,10 @@ blockquote p {
   justify-content: center; 
   padding:0;
   margin:0;
+  span {
+    white-space: nowrap;
+    line-break: strict;
+  }
   @media (max-width: 767px) {
     display: unset;
     justify-content: unset;
@@ -255,6 +247,9 @@ blockquote p {
   background: linear-gradient(to right, rgb(217, 0, 255), rgb(255, 255, 255), rgb(127, 121, 127), rgb(181, 181, 171), rgb(255, 255, 255), rgb(217, 0, 255));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  @media (max-width: 375px) {
+    width: 373px;
+  }
 }
 
 .header-left {
@@ -263,6 +258,9 @@ blockquote p {
   width:272px;
   float: left;
   overflow: hidden;
+  @media (max-width: 375px) {
+    display: none;
+  }
 }
 
 .header-middle {
