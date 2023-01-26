@@ -7,15 +7,63 @@ cover = "img/og.png"
 +++
 
 ## Intro 
-This page is still under construction, check back later for the complete release of this part 2. 
-
+The goals of this firewall ruleset are as follows: 
+- Enforce sane limits over the number of automated ICMP responses that can be illicited by sources on the internet
+- Establish the basis for a "zero trust" model by ensuring the use of end-to-end encrypted protocols for necessary egress traffic (primarily NTPSEC and DoTLS.) This is necessary in an environment where protocols like `NDP-RA` are in use because of the possibility that other users on a network can advertise routes themselves which can potentially be used to hijack another user's traffic.
+- 1/26/2023 if you're seeing this message, parts of this post are still under construction, check back for the complete release later.
 ## Preparation
 This demo uses Debian on Parallels, updated from `bullseye` to `bookworm`:
 ```
 sed -i 's/http:\/\//https:\/\//g' /etc/apt/sources.list
 sed -i 's/bullseye/bookworm/g' apt/sources.list
 apt update && apt -y dist-upgrade
-apt -y install nftables chrony && reboot
+apt -y install nftables chrony systemd-resolved && reboot
+```
+### Chrony (NTPSEC)
+Unencrypted NTP (UDP 123) destinations will only be permitted in the NFTables ruleset if they are local networks, if you need internet time setup `chrony`
+Disable `systemd-timesyncd` if it is enabled:
+
+```
+sudo systemctl stop systemd-timesyncd.service
+sudo systemctl disable systemd-timesyncd.service
+```
+
+replace `/etc/chrony.conf` with: 
+```
+confdir       /etc/chrony/conf.d
+server        time.cloudflare.com nts iburst
+sourcedir     /run/chrony-dhcp
+sourcedir     /etc/chrony/sources.d
+keyfile       /etc/chrony/chrony.keys
+driftfile     /var/lib/chrony/chrony.drift
+ntsdumpdir    /var/lib/chrony
+logdir        /var/log/chrony
+maxupdateskew 100.0
+rtcsync
+makestep      1 3
+leapsectz     right/UTC
+```
+Enable the `Chrony` service: 
+```
+systemctl enable chrony
+systemctl start chrony 
+```
+(a list of [other NTS-enabled NTP servers](https://gist.github.com/jauderho/2ad0d441760fc5ed69d8d4e2d6b35f8d) is available.)
+
+### DNSoTLS
+Unencrypted DNS (UDP 53) destinations will only be permitted in the NFTables ruleset if they are local networks, if you need internet DNS setup `systemd-resolved` with `DoTLS` then
+replace the contents of `/etc/systemd/resolved.conf` with:
+```
+[Resolve]
+DNS=1.1.1.1,1.0.0.1,2606:4700:4700::1111,2606:4700:4700::1001
+DNSSEC=yes
+DNSOverTLS=yes
+```
+
+start `systemd-resolved`:
+```
+systemctl enable systemd-resolved
+systemctl start systemd-resolved
 ```
 
 ## Creating the default table
@@ -558,7 +606,7 @@ nft add rule inet filter ether_out counter drop
 `nft -a -s list ruleset | tee /etc/nftables.conf`
 
 {{< highlight bash >}}
-table inet filter { # handle 129
+table inet filter { # handle 131
 	set icmp_egress_meter4 { # handle 16
 		type ipv4_addr
 		size 8
@@ -575,7 +623,7 @@ table inet filter { # handle 129
 		type ipv4_addr : verdict
 		flags interval
 		elements = { 0.0.0.0/8 : drop, 10.0.0.0/8 : continue,
-			     100.64.0.0/10 : continue, 127.0.0.0/8 : drop,
+			     100.64.0.0/10 : drop, 127.0.0.0/8 : drop,
 			     169.254.0.0/16 : continue, 172.16.0.0/12 : continue,
 			     192.0.0.0/24 : drop, 192.0.2.0/24 : drop,
 			     192.168.0.0/16 : continue, 198.18.0.0/15 : drop,
@@ -705,7 +753,40 @@ table inet filter { # handle 129
 			     fc00::/7 . ff00::/8 . 5353 : accept }
 	}
 
-	map icmp_types_out4 { # handle 28
+	map default_forward4 { # handle 28
+		typeof ip saddr . ip daddr . ct state : verdict
+		flags interval
+		elements = { 169.254.0.0/16 . 0.0.0.0/0 . new : drop,
+			     0.0.0.0/0 . 169.254.0.0/16 . new : drop,
+			     10.0.0.0/8 . 172.16.0.0/12 . new : drop,
+			     10.0.0.0/8 . 192.168.0.0/16 . new : drop,
+			     172.16.0.0/12 . 10.0.0.0/8 . new : drop,
+			     172.16.0.0/12 . 192.168.0.0/16 . new : drop,
+			     192.168.0.0/16 . 10.0.0.0/8 . new : drop,
+			     192.168.0.0/16 . 172.16.0.0/12 . new : drop,
+			     10.0.0.0/8 . 10.0.0.0/8 . new : accept,
+			     10.0.0.0/8 . 10.0.0.0/8 . established : accept,
+			     172.16.0.0/12 . 172.16.0.0/12 . new : accept,
+			     172.16.0.0/12 . 172.16.0.0/12 . established : accept,
+			     192.168.0.0/16 . 192.168.0.0/16 . new : accept,
+			     192.168.0.0/16 . 192.168.0.0/16 . established : accept,
+			     10.0.0.0/8 . 0.0.0.0/0 . new : accept,
+			     172.16.0.0/12 . 0.0.0.0/0 . new : accept,
+			     192.168.0.0/16 . 0.0.0.0/0 . new : accept,
+			     0.0.0.0/0 . 10.0.0.0/8 . established : accept,
+			     0.0.0.0/0 . 172.16.0.0/12 . established : accept,
+			     0.0.0.0/0 . 192.168.0.0/16 . established : accept }
+	}
+
+	map default_forward6 { # handle 29
+		typeof ip6 saddr . ip6 daddr . ct state : verdict
+		flags interval
+		elements = { fe80::/10 . ::/0 . new : drop,
+			     ::/0 . fe80::/10 . new : drop,
+			     fc00::/7 . fc00::/7 . new : accept }
+	}
+
+	map icmp_types_out4 { # handle 30
 		typeof ip saddr . ip daddr . icmp type : verdict
 		flags interval
 		elements = { 10.0.0.0/8 . 0.0.0.0/0 . echo-request : accept,
@@ -720,7 +801,7 @@ table inet filter { # handle 129
 			     10.0.0.0/8 . 0.0.0.0/0 . echo-reply : jump icmp_echo_reply_rate_limit }
 	}
 
-	map icmp_types_out6 { # handle 29
+	map icmp_types_out6 { # handle 31
 		typeof ip6 saddr . ip6 daddr . icmpv6 type : verdict
 		flags interval
 		elements = { fe80::/10 . ff00::/8 . echo-request : accept,
@@ -734,7 +815,7 @@ table inet filter { # handle 129
 			     fe80::/10 . ff00::/8 . nd-router-solicit : accept }
 	}
 
-	map tcp_ports_out4 { # handle 30
+	map tcp_ports_out4 { # handle 32
 		typeof ip saddr . ip daddr . tcp dport : verdict
 		flags interval
 		elements = { 10.0.0.0/8 . 10.0.0.0/8 . 21 : accept,
@@ -769,12 +850,24 @@ table inet filter { # handle 129
 			     192.168.0.0/16 . 0.0.0.0/0 . 5349 : accept }
 	}
 
-	map tcp_ports_out6 { # handle 31
+	map tcp_ports_out6 { # handle 33
 		typeof ip6 saddr . ip6 daddr . tcp dport : verdict
 		flags interval
+		elements = { fc00::/7 . fc00::/7 . 21 : accept,
+			     fc00::/7 . fc00::/7 . 23 : accept,
+			     fc00::/7 . fc00::/7 . 25 : accept,
+			     fc00::/7 . fc00::/7 . 53 : accept,
+			     fc00::/7 . fc00::/7 . 443 : accept,
+			     fc00::/7 . fc00::/7 . 853 : accept,
+			     fc00::/7 . fc00::/7 . 4460 : accept,
+			     fc00::/7 . fc00::/7 . 5349 : accept,
+			     2000::/3 . 2000::/3 . 443 : accept,
+			     2000::/3 . 2000::/3 . 853 : accept,
+			     2000::/3 . 2000::/3 . 4460 : accept,
+			     2000::/3 . 2000::/3 . 5349 : accept }
 	}
 
-	map udp_ports_out4 { # handle 32
+	map udp_ports_out4 { # handle 34
 		typeof ip saddr . ip daddr . udp dport : verdict
 		flags interval
 		elements = { 10.0.0.0/8 . 10.0.0.0/8 . 67 : accept,
@@ -799,7 +892,7 @@ table inet filter { # handle 129
 			     192.168.0.0/16 . 0.0.0.0/0 . 1194 : accept }
 	}
 
-	map udp_ports_out6 { # handle 33
+	map udp_ports_out6 { # handle 35
 		typeof ip6 saddr . ip6 daddr . udp dport : verdict
 		flags interval
 		elements = { fe80::/10 . ff00::/8 . 547 : accept,
@@ -807,136 +900,124 @@ table inet filter { # handle 129
 			     fc00::/7 . ff00::/8 . 5353 : accept }
 	}
 
-	map default_forward4 { # handle 85
-		typeof ip saddr . ip daddr . ct state : verdict
-		flags interval
-		elements = { 169.254.0.0/16 . 0.0.0.0/0 . new : drop,
-			     0.0.0.0/0 . 169.254.0.0/16 . new : drop,
-			     10.0.0.0/8 . 172.16.0.0/12 . new : drop,
-			     10.0.0.0/8 . 192.168.0.0/16 . new : drop,
-			     172.16.0.0/12 . 10.0.0.0/8 . new : drop,
-			     172.16.0.0/12 . 192.168.0.0/16 . new : drop,
-			     192.168.0.0/16 . 10.0.0.0/8 . new : drop,
-			     192.168.0.0/16 . 172.16.0.0/12 . new : drop,
-			     10.0.0.0/8 . 10.0.0.0/8 . new : accept,
-			     10.0.0.0/8 . 10.0.0.0/8 . established : accept,
-			     172.16.0.0/12 . 172.16.0.0/12 . new : accept,
-			     172.16.0.0/12 . 172.16.0.0/12 . established : accept,
-			     192.168.0.0/16 . 192.168.0.0/16 . new : accept,
-			     192.168.0.0/16 . 192.168.0.0/16 . established : accept,
-			     10.0.0.0/8 . 0.0.0.0/0 . new : accept,
-			     172.16.0.0/12 . 0.0.0.0/0 . new : accept,
-			     192.168.0.0/16 . 0.0.0.0/0 . new : accept,
-			     0.0.0.0/0 . 10.0.0.0/8 . established : accept,
-			     0.0.0.0/0 . 172.16.0.0/12 . established : accept,
-			     0.0.0.0/0 . 192.168.0.0/16 . established : accept }
-	}
-
-	map default_forward6 { # handle 86
-		typeof ip6 saddr . ip6 daddr . ct state : verdict
-		flags interval
-		elements = { fe80::/10 . ::/0 . new : drop,
-			     ::/0 . fe80::/10 . new : drop,
-			     fc00::/7 . fc00::/7 . new : accept }
-	}
-
 	chain input { # handle 1
 		type filter hook input priority filter; policy drop;
-		meta iiftype vmap { loopback : accept } # handle 42
-		ip saddr vmap @drop_bogons4 counter # handle 43
-		ip6 saddr vmap @drop_bogons6 counter # handle 44
-		meta iiftype vmap { ether : jump ether_in } # handle 45
-		log prefix "input" group 1 # handle 46
-		counter # handle 47
+		meta iiftype vmap { loopback : accept } # handle 58
+		ip saddr vmap @drop_bogons4 counter # handle 59
+		ip6 saddr vmap @drop_bogons6 counter # handle 60
+		meta iiftype vmap { ether : jump ether_in } # handle 62
+		log prefix "input" group 1 # handle 89
+		counter # handle 90
 	}
 
 	chain forward { # handle 2
-		ip saddr vmap @drop_bogons4 counter # handle 89
-		ip6 saddr vmap @drop_bogons6 counter # handle 90
-		meta oiftype vmap { ether : jump ether_forward } # handle 92
-		log prefix "forward" group 1 # handle 93
-		counter # handle 94
+		type filter hook forward priority filter; policy drop;
+		ip saddr vmap @drop_bogons4 counter # handle 65
+		ip6 saddr vmap @drop_bogons6 counter # handle 66
+		meta oiftype vmap { ether : jump ether_forward } # handle 68
+		log prefix "forward" group 1 # handle 91
+		counter # handle 92
 	}
 
 	chain output { # handle 3
 		type filter hook output priority filter; policy drop;
-		meta oiftype vmap { loopback : accept } # handle 48
-		ip daddr vmap @drop_bogons4 counter # handle 49
-		ip6 daddr vmap @drop_bogons6 counter # handle 50
-		meta oiftype vmap { ether : jump ether_out } # handle 51
-		log prefix "output" group 1 # handle 52
-		counter # handle 53
+		meta oiftype vmap { loopback : accept } # handle 84
+		ip daddr vmap @drop_bogons4 counter # handle 85
+		ip6 daddr vmap @drop_bogons6 counter # handle 86
+		meta oiftype vmap { ether : jump ether_out } # handle 88
+		log prefix "output" group 1 # handle 93
+		counter # handle 94
 	}
 
 	chain ether_in { # handle 4
 		ip protocol vmap { icmp : jump icmp_in, tcp : jump tcp_in, udp : jump udp_in } counter # handle 54
-		ip6 nexthdr vmap { tcp : jump tcp_in, udp : jump udp_in, ipv6-icmp : jump icmp_in } counter # handle 55
+		ip6 nexthdr vmap { tcp : jump tcp_in, udp : jump udp_in, ipv6-icmp : jump icmp_in } counter # handle 56
+		log prefix "ether_in" group 1 # handle 103
+		counter drop # handle 104
 	}
 
 	chain ether_out { # handle 5
-		ip protocol vmap { icmp : jump icmp_out, tcp : jump tcp_out, udp : jump udp_out } # handle 56
-		ip6 nexthdr vmap { tcp : jump tcp_out, udp : jump udp_out, ipv6-icmp : jump icmp_out } # handle 57
-		log prefix "ether_forward" group 1 # handle 95
-		counter drop # handle 96
+		ip protocol vmap { icmp : jump icmp_out, tcp : jump tcp_out, udp : jump udp_out } # handle 80
+		ip6 nexthdr vmap { tcp : jump tcp_out, udp : jump udp_out, ipv6-icmp : jump icmp_out } # handle 82
+		log prefix "ether_out" group 1 # handle 115
+		counter drop # handle 116
 	}
 
 	chain ether_forward { # handle 6
-		ip saddr . ip daddr . ct state vmap @default_forward4 # handle 87
-		ip6 saddr . ip6 daddr . ct state vmap @default_forward6 # handle 88
+		ip saddr . ip daddr . ct state vmap @default_forward4 # handle 63
+		ip6 saddr . ip6 daddr . ct state vmap @default_forward6 # handle 64
+		log prefix "ether_forward" group 1 # handle 105
+		counter drop # handle 106
 	}
 
 	chain icmp_in { # handle 7
-		ip saddr . ip daddr . icmp type vmap @icmp_types_in4 counter # handle 58
-		ip6 saddr . ip6 daddr . icmpv6 type vmap @icmp_types_in6 counter # handle 59
+		ip saddr . ip daddr . icmp type vmap @icmp_types_in4 counter # handle 39
+		ip6 saddr . ip6 daddr . icmpv6 type vmap @icmp_types_in6 counter # handle 40
+		log prefix "icmp_in" group 1 # handle 97
+		counter drop # handle 98
 	}
 
 	chain icmp_out { # handle 8
-		ip saddr . ip daddr . icmp type vmap @icmp_types_out4 counter # handle 60
-		ip6 saddr . ip6 daddr . icmpv6 type vmap @icmp_types_out6 counter # handle 61
+		ip saddr . ip daddr . icmp type vmap @icmp_types_out4 counter # handle 71
+		ip6 saddr . ip6 daddr . icmpv6 type vmap @icmp_types_out6 counter # handle 72
+		log prefix "icmp_out" group 1 # handle 109
+		counter drop # handle 110
 	}
 
 	chain icmp_echo_reply_rate_limit { # handle 9
-		add @icmp_egress_meter4 { ip saddr timeout 4s limit rate 3/second } counter accept # handle 62
-		add @icmp_egress_meter6 { ip6 saddr timeout 4s limit rate 3/second } counter accept # handle 63
+		add @icmp_egress_meter4 { ip saddr timeout 4s limit rate 3/second } counter accept # handle 69
+		add @icmp_egress_meter6 { ip6 saddr timeout 4s limit rate 3/second } counter accept # handle 70
+		log prefix "icmp_echo_reply_rate_limit" group 1 # handle 107
+		counter drop # handle 108
 	}
 
 	chain reject_with_icmp_port_unreachable_metered { # handle 10
-		add @icmp_egress_meter4 { ip daddr timeout 4s limit rate 3/second } counter reject with icmp port-unreachable # handle 64
-		add @icmp_egress_meter6 { ip6 daddr timeout 4s limit rate 3/second } counter reject with icmpv6 port-unreachable # handle 65
+		add @icmp_egress_meter4 { ip daddr timeout 4s limit rate 3/second } counter reject # handle 36
+		add @icmp_egress_meter6 { ip6 daddr timeout 4s limit rate 3/second } counter reject # handle 37
+		log prefix "reject_with_icmp_port_unreachable_metered" group 1 # handle 95
+		counter drop # handle 96
 	}
 
 	chain reject_with_icmp_port_unreachable { # handle 11
-		reject # handle 66
+		reject # handle 38
 	}
 
 	chain tcp_in { # handle 12
-		ct state established counter accept # handle 67
-		ip saddr . ip daddr . tcp dport vmap @tcp_ports_in4 counter # handle 68
-		ip6 saddr . ip6 daddr . tcp dport vmap @tcp_ports_in6 counter # handle 69
-		log prefix "tcp_in" group 1 # handle 70
-		ip saddr . ip daddr vmap @reject_or_drop_port4 # handle 71
-		ip6 saddr . ip6 daddr vmap @reject_or_drop_port6 # handle 72
+		ct state established counter accept # handle 41
+		ip saddr . ip daddr . tcp dport vmap @tcp_ports_in4 counter # handle 42
+		ip6 saddr . ip6 daddr . tcp dport vmap @tcp_ports_in6 counter # handle 43
+		log prefix "tcp_in" group 1 # handle 44
+		ip saddr . ip daddr vmap @reject_or_drop_port4 # handle 45
+		ip6 saddr . ip6 daddr vmap @reject_or_drop_port6 # handle 46
+		log prefix "tcp_in" group 1 # handle 99
+		counter drop # handle 100
 	}
 
 	chain tcp_out { # handle 13
 		ct state established counter accept # handle 73
 		ip saddr . ip daddr . tcp dport vmap @tcp_ports_out4 counter # handle 74
 		ip6 saddr . ip6 daddr . tcp dport vmap @tcp_ports_out6 counter # handle 75
+		log prefix "tcp_out" group 1 # handle 111
+		counter drop # handle 112
 	}
 
 	chain udp_in { # handle 14
-		ct state established counter accept # handle 76
-		ip saddr . ip daddr . udp dport vmap @udp_ports_in4 counter # handle 77
-		ip6 saddr . ip6 daddr . udp dport vmap @udp_ports_in6 counter # handle 78
-		log prefix "udp_in" group 1 # handle 79
-		ip saddr . ip daddr vmap @reject_or_drop_port4 # handle 80
-		ip6 saddr . ip6 daddr vmap @reject_or_drop_port6 # handle 81
+		ct state established counter accept # handle 47
+		ip saddr . ip daddr . udp dport vmap @udp_ports_in4 counter # handle 48
+		ip6 saddr . ip6 daddr . udp dport vmap @udp_ports_in6 counter # handle 49
+		log prefix "udp_in" group 1 # handle 50
+		ip saddr . ip daddr vmap @reject_or_drop_port4 # handle 51
+		ip6 saddr . ip6 daddr vmap @reject_or_drop_port6 # handle 52
+		log prefix "udp_in" group 1 # handle 101
+		counter drop # handle 102
 	}
 
 	chain udp_out { # handle 15
-		ct state established counter accept # handle 82
-		ip saddr . ip daddr . udp dport vmap @udp_ports_out4 counter # handle 83
-		ip6 saddr . ip6 daddr . udp dport vmap @udp_ports_out6 counter # handle 84
+		ct state established counter accept # handle 76
+		ip saddr . ip daddr . udp dport vmap @udp_ports_out4 counter # handle 77
+		ip6 saddr . ip6 daddr . udp dport vmap @udp_ports_out6 counter # handle 78
+		log prefix "udp_out" group 1 # handle 113
+		counter drop # handle 114
 	}
 }
 {{< / highlight >}}

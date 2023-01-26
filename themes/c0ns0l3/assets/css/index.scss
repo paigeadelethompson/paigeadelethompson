@@ -578,7 +578,8 @@ blockquote p {
   margin-bottom: 12px;
   float: left;
   margin-left: 12px;
-  width: 384px;
+  min-width: 384px;
+  max-width: 512px;
   color: antiquewhite;
   padding-top: 4px;
   padding-left: 4px;
