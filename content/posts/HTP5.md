@@ -34,6 +34,25 @@ cover = "img/og.png"
         padding:0;
         margin-top: 8px;
     }
+    .post-meta {
+        box-shadow: none;
+    }
+    .post-title {
+        box-shadow: none;
+    }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {       
+        box-shadow: none;
+    }
+    h2 { 
+        height: 0;
+        width: 0;
+        visibility: hidden;
+    }
     
 </style>
 ```
@@ -127,6 +146,7 @@ htphtphtphtphtphtphtphtphtphtphtphtphtphtphtphtphtphtphtphtphtphtphtphtphtphtpht
                                                                                 
 ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
 ```                                                                             
+## Intro
 
  So its been 182 days since our last zine, since then our dedicated team of researchers, philanthropists, playboys and troublemakers have been busy at work scouring the Internet for high quality entertainment at the expense of everybody who isn't us.                                             
                                                                                 
@@ -257,6 +277,7 @@ htphtphtphtphtphtphtphtphtphtphtphtphtphtphtphtphtphtphtphtphtphtphtphtphtphtpht
  ██ ▀▀ ██  ██  ██      FEATURING EDUCAUSE                                       
 ▄██▄▄▄▄██▄▄██▄▄██▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 ```                                                                                
+## MIT/EDU
 Back in January we decided to upstage Anonymous (again) and have a little fun with MIT. After their circa 2000 deface on mit.edu, we decided to up the ante.  In doing so, we knew we had to make it very clear that it was an anti-Anonymous deface (A mirror of it can be found here: straylig.ht/files/mit/mit.html). Thus why it made reference to Sabu, grand wizard of LulzSec, and "DOWN WITH ANONYMOUS." Despite all this, some of the cluebags in the media apparently thought that by "DOWN WITH ANONYMOUS," we meant "we b down wit da lol anonimuss leejun y0!" Additionally, almost everybody missed the fact that it was a troll deface, which just proves that it will be a few decades before we reach October 1st, 1993.                                                                      
                                                                                 
 MIT's reaction was particularly lulzy. They did a better job of reporting the facts than all the media outlets, but they couldn't decide whether the e-mail got intercepted or not. First, there was this from http://tech.mit.edu/V132/N62/hack.html:                                         
@@ -441,9 +462,9 @@ Enjoy the MIT emails/EDUCAUSE login data, included in this segment of HTP5:
    ██    ██  ██ ▀██  ██▄██  ██▄█▀  ██▄▄                                         
    ██ ▄▄ ▄▄                                                                     
 ▄▄▄████████▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
-```                                                                             
-<br />
 
+```                                                                             
+## Linode
 * Before reading this section of HTP5, we recommend you pop some popcorn.       
                                                                                 
 Following HTP4, we were promptly attacked by the next set of skids looking to get baked by our terabit DDoS cannon. A group impersonating ac1db1tch3z decided to take an alternative route, and located us through the development of one of our botnets, Zodiac. We quickly switched into a fallback network and found out they used SwiftIRC. SwiftIRC's nameservers were none other than Linode.         
@@ -476,12 +497,14 @@ The FBI lost their access into HTP.
 So what's in this release, if not Linode? EDIT: Hahaha we guess that was too hot, we'll give you guys registrar data instead.                                
 ```                                                                                
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+```
 ~ http://mirror.hack-the-planet.tv/HTP-5/Linode/ss1.png                         
 |- 193K | Linode blog post screenshot 1                                         
 ~ http://mirror.hack-the-planet.tv/HTP-5/Linode/ss2.png                         
 |- 179K | Linode blog post screenshot 2                                         
 ~ http://mirror.hack-the-planet.tv/HTP-5/Linode/registrardata.txt               
 |- 70K | Data on the registars mentioned above.                                 
+```
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 
 
@@ -543,7 +566,8 @@ So what's in this release, if not Linode? EDIT: Hahaha we guess that was too hot
    ██ ▀█▄██  ██ ▀ ██  ██▀██  ██▀▀                                               
    ██   ▀██  ██   ██  ██ ██  ██              Whoa. Did we just backdoor Trinity?
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
-```                                                                                
+```                                                                             
+## Nmap   
 Access to nmap.org (Insecure) was gained through Linode, which also included svn.nmap.org and Seclists. Based on our approximations, the FBI went into holy-shit mode beginning when we were backdooring it. We decided to withhold the private releases, including DARPA CINDER Nmap, and release to you the unabridged contents of the /home/ directory including those of Fyodor (Gordon Lyon) and David Fifield. Before we drop you into nmap.com, though, here's their /etc/shadow for those curious:                                                  
 ```                                                                                
 [root@web etc]# cat shadow                                                      
@@ -642,6 +666,7 @@ Adversary Mission Identification System described on the page.
 considered admissable in Internet Court'                                        
 <&REDACTED_4> "What's that? You say there's a hostage situation in your         
 apartment?! We'll call the police right away, sir."                             
+## Securi
 ```                                                                                
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
                                                                                 
@@ -759,7 +784,9 @@ though labs.sucuri.net and the rest of their VPS's were also compromised.
 ███████████████████████████████▒    ░▒▒▒▓▓▓▓▒       ░▓▓█████████████████████████
 ██████████████████████████████▓▓    ░▒▓▒▓▓▓▒▒▒      ▓▓██████████████████████████
 ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
-
+```
+## NIST/NVD
+```
 
    ▄▄    ▄▄  ▄  ▄▄▄▄  ▄▄▄▄▄       ▄▄    ▄▄  ▄   ▄  ▄▄▄                          
    ███▄  ██  █  █▄▄▄    █    ▄▄▄  ███▄  ██  █   █  █  █                     HTP5
@@ -838,8 +865,11 @@ Included in this segment of HTP5 is the DHS NIST/NVD user database, along with t
                                                                                 
 ```                                                                                
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+```
 ~ http://mirror.hack-the-planet.tv/HTP-5/NVD/NVD.zip                            
 |- 0MB | DHS NIST/NVD user database, two certs, CF admin password.properties    
+## Wireshark
+```
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 
 
@@ -901,6 +931,7 @@ After 24 hours, Wireshark's server 'splash' returned a shell. It featured a 3.7 
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 ```
 ~ http://mirror.hack-the-planet.tv/HTP-5/Wireshark/wireshark.zip  
+## Outro
 ```
 |- 1.3MB | 31MB compressed Wireshark data                         
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
