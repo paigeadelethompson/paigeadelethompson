@@ -14,7 +14,7 @@ The one I want to use is a bit [involved](https://github.com/nmrugg/stockfish.js
 <style> 
 
 .board {
-  min-width: 640px;
+  min-width: 832px;
 }
 
 .board-row {

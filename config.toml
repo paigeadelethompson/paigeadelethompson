@@ -1,7 +1,7 @@
 baseurl      = "/"
 languageCode = "en-us"
 theme        = "c0ns0l3"
-paginate     = 5
+paginate     = 8
 
 [markup]
   [markup.goldmark]
@@ -10,7 +10,7 @@ paginate     = 5
 
 [params]
   contentTypeName      = "posts"
-  showMenuItems        = 3
+  showMenuItems        = 8
   showLanguageSelector = false
   autoCover            = true
   showLastUpdated      = true
