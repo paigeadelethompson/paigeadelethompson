@@ -10,6 +10,7 @@ cover = "img/og.png"
 The goals of this firewall ruleset are as follows: 
 - Enforce sane limits over the number of automated ICMP responses that can be illicited by sources on the internet; mitigating ICMP amplification while still allowing some symbolance of networking mechanisms that rely on ICMP to function. 
 - Establish the basis for a "zero trust" model by ensuring the use of end-to-end encrypted protocols for necessary egress traffic (primarily NTPSEC and DoTLS.) This is necessary in an environment where protocols like `NDP-RA` are in use because of the possibility that other users on a network can advertise routes themselves which can potentially be used to hijack another user's traffic.
+- Providing an abstract ruleset such that it can be the basis for application virtually anywhere while minimizing the amount of overhead that can be potentially introduced by abstraction as much as possible (YMMV)
 - 1/26/2023 if you're seeing this message, parts of this post are still under construction, check back for the complete release later.
 ## Preparation
 This demo uses Debian on Parallels, updated from `bullseye` to `bookworm`:
@@ -1146,3 +1147,10 @@ table inet filter {
 	}
 }
 ```
+
+### TODO 
+#### IPAM Driver
+- [https://github.com/paigeadelethompson/docker-ipam-driver](https://github.com/paigeadelethompson/docker-ipam-driver)
+#### Network Driver 
+- EVPN/VXLAN transports 
+- NFTables Flowtables; interface names must be known to the firewall state for offloading
