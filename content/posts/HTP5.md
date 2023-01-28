@@ -5,8 +5,6 @@ Author = "HTP & ACiD"
 Description = "2013 - HTP (Hack the planet)"
 cover = "img/og.png"
 +++
-
-
 <style>
     * {
         line-height: 16px;
@@ -55,12 +53,12 @@ cover = "img/og.png"
     }
     .table-of-contents { 
         box-shadow: none;
+        padding:0;
     }
     nav {
         box-shadow: none;
         background-color: black;
     }
-    
 </style>
 ```
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄

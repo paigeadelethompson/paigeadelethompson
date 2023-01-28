@@ -413,7 +413,7 @@ blockquote p {
   justify-content: center;
   box-shadow: 4px 4px 0 0 #212529;
   background-color: #6C757D;
-  padding: 0;
+  padding: 8px;
   margin-left: 128px;
   margin-right:128px;
 }
@@ -424,14 +424,14 @@ blockquote p {
   overflow: hidden;
   
   a {
-    color: white;
-    text-decoration: underline;
+    color: white;    
   }
   li {
-    margin: 0;
+    margin: 0;   
   }
   li::before {
     color: #CED4DA;
+    padding-right: 4px;
   }
   a::after {
     content: "";    
@@ -442,29 +442,33 @@ blockquote p {
     margin:0;
     
     li:first-child::before {
-      content: "├─";
+      content: "┌";
     }
     
     li:last-child::before {
-      content: "├─";
+      content: "├";
     }
     
     li::before {
-      content: "├─";
+      content: "├";
     }
 
     li {
       ul {
         li:first-child::before {
-          content: "│├─";
+          content: "│ ┌";
         }
         
         li:last-child::before {
-          content: "│├─";
+          content: "│ ├";
         }
         
+        li:only-child::before {
+          content: "│ └"
+        }
+
         li::before {
-          content: "│├─";
+          content: "│ ├";
         }
       }
     }

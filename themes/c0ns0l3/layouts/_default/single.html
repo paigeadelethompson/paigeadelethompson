@@ -45,7 +45,7 @@
     {{ end }}
     
     {{ if (.Params.Toc | default .Site.Params.Toc) }}
-    <div class="table-of-contents">
+    <div class="table-of-contents" {{ if eq (strings.Count "<li>" .TableOfContents) 0}} style="padding: 0;" {{end}} >
         {{ .TableOfContents }}
     </div>
 
