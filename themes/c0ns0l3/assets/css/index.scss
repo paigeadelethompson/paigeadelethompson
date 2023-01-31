@@ -471,11 +471,17 @@ blockquote p {
 
 .copy-code-button {
   box-shadow: 4px 4px 0 0 #212529;
-  background-color: #6C757D;
+  background-color: #343A40;
   color: white;
   display: block;
-  padding: 8px;
+  padding-left: 8px;
+  padding-right: 8px;
   margin-bottom: 12px;  
+  //position: absolute; 
+  //margin-left: -132px;
+  //margin-top: 4px;
+  margin-left: auto;
+  margin-right: 0;
 }
 
 .copy-code-button:hover {
@@ -494,6 +500,10 @@ blockquote p {
 }
 
 .highlight pre {
+  
+}
+
+.highlight {
   margin: 0;
   margin-bottom:12px;
 }
@@ -573,6 +583,7 @@ blockquote p {
       margin-right: 8px;      
       float: left;
     }
+    margin-bottom: 12px;
   }
 
   ol {

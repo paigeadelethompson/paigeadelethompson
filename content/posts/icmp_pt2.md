@@ -322,6 +322,7 @@ Ports `21`, `23`, `25`, `53`, and `80` can be omitted if the point is to ensure 
 - `10.0.0.0/8` 
 - `172.16.0.0/12`
 - `192.168.0.0/16`
+
 {{< highlight bash >}}
 nft add map inet filter tcp_ports_out4 '{ typeof ip saddr . ip daddr . tcp dport : verdict; flags interval; }'
 nft add element inet filter tcp_ports_out4 '{ 10.0.0.0/8     . 10.0.0.0/8     . 21   : accept }'
@@ -359,6 +360,7 @@ nft add element inet filter tcp_ports_out4 '{ 192.168.0.0/16 . 0.0.0.0/0      . 
 #### IPv6 egress TCP ports
 Ports `21`, `23`, `25`, `53`, and `80` can be omitted if the point is to ensure that no egress traffic will ever be destined for unencrypted protocols. With this particular ruleset they are limited to the following destinations: 
 - `fc00::/7` (ULA)
+
 {{< highlight bash >}}
 nft add map inet filter tcp_ports_out6 '{ typeof ip6 saddr . ip6 daddr . tcp dport : verdict; flags interval; }'
 nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 21     : accept }'
