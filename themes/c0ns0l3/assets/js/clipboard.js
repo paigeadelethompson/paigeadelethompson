@@ -12,13 +12,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
                        leaving the button in a focused state. */
                     button.blur();
     
-                    button.innerText = 'Copied!';
+                    button.innerText = 'OK';
     
                     setTimeout(function () {
                         button.innerText = 'Copy';
                     }, 2000);
                 }, function (error) {
-                    button.innerText = 'Error';
+                    button.innerText = '!!';
                 });
             });
     

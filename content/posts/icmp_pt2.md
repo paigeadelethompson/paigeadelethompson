@@ -659,7 +659,7 @@ nft add rule inet filter ether_out log prefix "ether_out" group 1
 nft add rule inet filter ether_out counter drop
 {{< / highlight >}}
 
-## Filter state
+## Filter state / configuration format
 `nft -a -s list ruleset | tee /etc/nftables.conf`
 
 {{< highlight bash >}}
