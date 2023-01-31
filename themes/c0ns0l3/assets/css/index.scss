@@ -1,4 +1,5 @@
 * { 
+    border: 0;
     font-family: 'Web437_IBM_VGA_8x16', monospace;
     line-height: 16px;
     font-size: 16px;
@@ -181,7 +182,7 @@ pre {
   box-shadow: 4px 4px 0 0 #212529;
   display: block;
   padding: 8px;
-  margin: 12px;
+  margin-bottom: 12px;
   background-color: black;
   color: limegreen;
   min-width: 768x;
@@ -387,25 +388,18 @@ blockquote p {
       width: 8px;
       height: 8px;
     }
-    
-    /* Track */
+
     ::-webkit-scrollbar-track {
       background: black; 
     }
     
-    /* Handle */
     ::-webkit-scrollbar-thumb {
       background:  darkgreen;
     }
-    
-    /* Handle on hover */
+
     ::-webkit-scrollbar-thumb:hover {
       background: limegreen;
     }
-}
-
-.post {
-
 }
 
 .table-of-contents {
@@ -475,6 +469,35 @@ blockquote p {
   }
 }
 
+.copy-code-button {
+  box-shadow: 4px 4px 0 0 #212529;
+  background-color: #6C757D;
+  color: white;
+  display: block;
+  padding: 8px;
+  margin-bottom: 12px;  
+}
+
+.copy-code-button:hover {
+  cursor: pointer;
+  background-color: #F2F2F2;
+  color: black;
+}
+
+.copy-code-button:focus {
+  background-color: #E6E6E6;
+  outline: 0;
+}
+
+.copy-code-button:active {
+  background-color: #D9D9D9;
+}
+
+.highlight pre {
+  margin: 0;
+  margin-bottom:12px;
+}
+
 .post-title {
   float: left;
 }
@@ -490,20 +513,8 @@ blockquote p {
   min-width: 192px;
 }
 
-.post-date {
-  
-}
-
 .post-author {
   color: cyan;
-}
-
-.post-reading-time {
-
-}
-
-.post-tags {
-
 }
 
 .footer-container {
@@ -606,18 +617,6 @@ blockquote p {
     }
 
     float: right;
-}
-
-.index-content {
-
-}
-
-.posts {
-  
-}
-
-.read-more-button {
-
 }
 
 .pagination { 

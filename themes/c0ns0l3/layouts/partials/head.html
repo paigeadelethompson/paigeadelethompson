@@ -95,3 +95,8 @@
 
 {{ $menu := resources.Get "js/menu.js" | js.Build | resources.Minify }}
 <script type="text/javascript" src="{{ $menu.RelPermalink }}"></script>
+
+{{ if (findRE "<pre" .Content 1) }}
+  {{ $cb := resources.Get "js/clipboard.js" | js.Build | resources.Minify }}
+  <script type="text/javascript" src="{{ $cb.RelPermalink }}"></script>
+{{ end }}

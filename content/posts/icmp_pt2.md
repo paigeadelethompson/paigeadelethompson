@@ -86,6 +86,12 @@ nft add chain inet filter icmp_out
 nft add chain inet filter icmp_echo_reply_rate_limit
 nft add chain inet filter reject_with_icmp_port_unreachable_metered
 nft add chain inet filter reject_with_icmp_port_unreachable
+nft add chain inet filter reject_with_icmp_host_unreachable_metered
+nft add chain inet filter reject_with_icmp_host_unreachable
+nft add chain inet filter reject_with_icmp_no_route_metered
+nft add chain inet filter reject_with_icmp_no_route
+nft add chain inet filter reject_with_icmp_admin_prohibited_metered
+nft add chain inet filter reject_with_icmp_admin_prohibited
 nft add chain inet filter tcp_in
 nft add chain inet filter tcp_out
 nft add chain inet filter udp_in
@@ -117,6 +123,9 @@ nft add element inet filter drop_bogons4 '{ 198.51.100.0/24 : drop     }'
 nft add element inet filter drop_bogons4 '{ 203.0.113.0/24  : drop     }'
 nft add element inet filter drop_bogons4 '{ 240.0.0.0/4     : drop     }'
 {{< / highlight >}}
+
+##### TODO 
+- Class E / limited broadcast (240.0.0.0/4)
 
 #### IPv6 bogons
 {{< highlight bash >}}
@@ -157,6 +166,10 @@ nft add element inet filter drop_bogons6 '{ 2001:0:cb00:7100::/56 : drop }'
 nft add element inet filter drop_bogons6 '{ 2001:0:e000::/36      : drop }'
 nft add element inet filter drop_bogons6 '{ 2001:0:f000::/36      : drop }'
 {{< / highlight >}}
+##### TODO 
+- Multicast scopes; node-local `ff01::` vs. link-local `ff02::` vs. site-local `ff05::`
+- variable scope
+- more info: https://www.iana.org/assignments/ipv6-multicast-addresses/ipv6-multicast-addresses.xhtml
 
 #### IPv4 reject or drop
 {{< highlight bash >}}
@@ -286,7 +299,7 @@ nft add element inet filter icmp_types_out4 '{ 192.168.0.0/16 . 192.168.0.0/16 .
 nft add element inet filter icmp_types_out4 '{ 10.0.0.0/8     . 10.0.0.0/8     . destination-unreachable : accept }'
 nft add element inet filter icmp_types_out4 '{ 172.16.0.0/12  . 172.16.0.0/12  . destination-unreachable : accept }'
 nft add element inet filter icmp_types_out4 '{ 192.168.0.0/16 . 192.168.0.0/16 . destination-unreachable : accept }'
-nft add element inet filter icmp_types_out4 '{ 10.0.0.0/8     . 0.0.0.0/0      . echo-reply              : jump icmp_echo_reply_rate_limit }'
+nft add element inet filter icmp_types_out4 '{ 0.0.0.0/0      . 0.0.0.0/0      . echo-reply              : jump icmp_echo_reply_rate_limit }'
 {{< / highlight >}}
 
 #### IPv6 egress ICMP types 
@@ -304,7 +317,7 @@ nft add element inet filter icmp_types_out6 '{ fe80::/10 . ff00::/8  . nd-router
 {{< / highlight >}}
 
 #### IPv4 egress TCP ports 
-Ports `21`, `23`, `25`, `53`, and `80` can be omitted if the point is to ensure that no egress traffic will ever be destined unencrypted protocols. With this particular ruleset they are limited to the following destinations: 
+Ports `21`, `23`, `25`, `53`, and `80` can be omitted if the point is to ensure that no egress traffic will ever be destined for unencrypted protocols. With this particular ruleset they are limited to the following destinations: 
 - `169.254.0.0/16`
 - `10.0.0.0/8` 
 - `172.16.0.0/12`
@@ -344,7 +357,7 @@ nft add element inet filter tcp_ports_out4 '{ 192.168.0.0/16 . 0.0.0.0/0      . 
 {{< / highlight >}}
 
 #### IPv6 egress TCP ports
-Ports `21`, `23`, `25`, `53`, and `80` can be omitted if the point is to ensure that no egress traffic will ever be destined unencrypted protocols. With this particular ruleset they are limited to the following destinations: 
+Ports `21`, `23`, `25`, `53`, and `80` can be omitted if the point is to ensure that no egress traffic will ever be destined for unencrypted protocols. With this particular ruleset they are limited to the following destinations: 
 - `fc00::/7` (ULA)
 {{< highlight bash >}}
 nft add map inet filter tcp_ports_out6 '{ typeof ip6 saddr . ip6 daddr . tcp dport : verdict; flags interval; }'
@@ -364,7 +377,7 @@ nft add element inet filter tcp_ports_out6 '{ 2000::/3 . 2000::/3 . 5349   : acc
 {{< / highlight >}}
 
 #### IPv4 egress UDP ports 
-Ports `67`, `53`, `137` can be omitted if the point is to ensure that no egress traffic will ever be destined unencrypted protocols. With this particular ruleset they are limited to the following destinations: 
+Ports `53`, `67`, `137` can be omitted if the point is to ensure that no egress traffic will ever be destined for unencrypted protocols. With this particular ruleset they are limited to the following destinations: 
 - `169.254.0.0/16`
 - `10.0.0.0/8` 
 - `172.16.0.0/12`
@@ -405,17 +418,43 @@ nft add element inet filter udp_ports_out6 '{ fc00::/7  . ff00::/8 . 5353  : acc
 
 ### Rules
 
-#### Metered ICMP unreachable
+#### Metered ICMP port unreachable
 {{< highlight bash >}}
 nft add rule inet filter reject_with_icmp_port_unreachable_metered add @icmp_egress_meter4 '{ ip daddr timeout 4s limit rate 3/second }' counter reject with icmpx type port-unreachable
 nft add rule inet filter reject_with_icmp_port_unreachable_metered add @icmp_egress_meter6 '{ ip6 daddr timeout 4s limit rate 3/second }' counter reject with icmpx type port-unreachable
 {{< / highlight >}}
-
-#### Un-metered ICMP unreachable
+#### Un-metered ICMP port unreachable
 {{< highlight bash >}}
 nft add rule inet filter reject_with_icmp_port_unreachable reject with icmpx type port-unreachable
 {{< / highlight >}}
 
+#### Metered ICMP host unreachable
+{{< highlight bash >}}
+nft add rule inet filter reject_with_icmp_host_unreachable_metered add @icmp_egress_meter4 '{ ip daddr timeout 4s limit rate 3/second }' counter reject with icmpx type host-unreachable
+nft add rule inet filter reject_with_icmp_host_unreachable_metered add @icmp_egress_meter6 '{ ip6 daddr timeout 4s limit rate 3/second }' counter reject with icmpx type host-unreachable
+{{< / highlight >}}
+#### Un-Metered ICMP host unreachable
+{{< highlight bash >}}
+nft add rule inet filter reject_with_icmp_host_unreachable reject with icmpx type host-unreachable
+{{< / highlight >}}
+#### Metered ICMP no route
+{{< highlight bash >}}
+nft add rule inet filter reject_with_icmp_no_route_metered add @icmp_egress_meter4 '{ ip daddr timeout 4s limit rate 3/second }' counter reject with icmpx type no-route
+nft add rule inet filter reject_with_icmp_host_no_route_metered add @icmp_egress_meter6 '{ ip6 daddr timeout 4s limit rate 3/second }' counter reject with icmpx type no-route
+{{< / highlight >}}
+#### Un-Metered ICMP no route
+{{< highlight bash >}}
+nft add rule inet filter reject_with_icmp_no_route reject with icmpx type no-route
+{{< / highlight >}}
+#### Metered ICMP admin prohibited
+{{< highlight bash >}}
+nft add rule inet filter reject_with_icmp_no_admin_prohibited add @icmp_egress_meter4 '{ ip daddr timeout 4s limit rate 3/second }' counter reject with icmpx type admin-prohibited
+nft add rule inet filter reject_with_icmp_host_admin_prohibited_metered add @icmp_egress_meter6 '{ ip6 daddr timeout 4s limit rate 3/second }' counter reject with icmpx type admin-prohibited
+{{< / highlight >}}
+#### Un-Metered ICMP admin-prohibited
+{{< highlight bash >}}
+nft add rule inet filter reject_with_icmp_admin_prohibited reject with icmpx type admin-prohibited
+{{< / highlight >}}
 #### icmp_in
 {{< highlight bash >}}
 nft add rule inet filter icmp_in ip saddr . ip daddr . icmp type vmap @icmp_types_in4 counter
@@ -458,8 +497,8 @@ nft add rule inet filter input meta iiftype vmap '{ ether: jump ether_in }'
 
 #### ether_forward
 {{< highlight bash >}}
-nft add rule inet filter ether_forward ip saddr . ip daddr . ct state vmap @default_forward4
-nft add rule inet filter ether_forward ip6 saddr . ip6 daddr . ct state vmap @default_forward6
+nft add rule inet filter ether_forward ip saddr . ip daddr . ct state vmap @default_forward4 counter
+nft add rule inet filter ether_forward ip6 saddr . ip6 daddr . ct state vmap @default_forward6 counter
 {{< / highlight >}}
 
 #### forward
@@ -497,8 +536,8 @@ nft add rule inet filter udp_out ip6 saddr . ip6 daddr . udp dport vmap @udp_por
 
 #### ether_out
 {{< highlight bash >}}
-nft add rule inet filter ether_out ip protocol vmap { tcp : jump tcp_out, udp : jump udp_out, icmp : jump icmp_out }
-nft add rule inet filter ether_out ip6 nexthdr vmap { tcp : jump tcp_out, udp : jump udp_out, icmpv6 : jump icmp_out, ipv6-icmp: jump icmp_out }
+nft add rule inet filter ether_out ip protocol vmap '{ tcp : jump tcp_out, udp : jump udp_out, icmp : jump icmp_out }' counter
+nft add rule inet filter ether_out ip6 nexthdr vmap '{ tcp : jump tcp_out, udp : jump udp_out, icmpv6 : jump icmp_out, ipv6-icmp: jump icmp_out }' counter
 {{< / highlight >}}
 
 #### output
@@ -1038,8 +1077,14 @@ table inet filter { # handle 131
 	}
 }
 {{< / highlight >}}
-### flush ruleset 
+### flushing the ruleset 
 Something that helps me is adding `flush ruleset` to the beginning of the new `/etc/nftables.conf` file so that the existing state is flushed before loading the file. 
+
+## Hardening
+- TODO
+
+## Testing 
+- TODO
 
 ## Custom Docker support
 ### Preparation
