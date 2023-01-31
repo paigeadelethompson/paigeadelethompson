@@ -12,6 +12,9 @@ The goals of this firewall ruleset are as follows:
 - Establish the basis for a "zero trust" model by ensuring the use of end-to-end encrypted protocols for necessary egress traffic (primarily NTPSEC and DoTLS.) This is necessary in an environment where protocols like `NDP-RA` are in use because of the possibility that other users on a network can advertise routes themselves which can potentially be used to hijack another user's traffic.
 - Providing an abstract ruleset such that it can be the basis for application virtually anywhere while minimizing the amount of overhead that can be potentially introduced by abstraction as much as possible (YMMV)
 - 1/26/2023 if you're seeing this message, parts of this post are still under construction, check back for the complete release later.
+
+The simplest way to go about this is to start at the [filter state / configuration format](#filter-state--configuration-format) section.
+
 ## Preparation
 This demo uses Debian on Parallels, updated from `bullseye` to `bookworm`:
 ```
@@ -78,6 +81,9 @@ nft add table inet filter
 nft add chain inet filter input '{ type filter hook input priority filter; policy accept; }'
 nft add chain inet filter forward '{ type filter hook forward priority filter; policy accept; }'
 nft add chain inet filter output '{ type filter hook output priority filter; policy accept; }'
+nft add chain inet filter prerouting '{ type nat hook prerouting priority 100; policy accept; }'
+nft add chain inet filter postrouting '{ type nat hook postrouting priority 100; policy accept; }'
+nft add chain inet filter masq
 nft add chain inet filter ether_in
 nft add chain inet filter ether_out
 nft add chain inet filter ether_forward
@@ -104,7 +110,7 @@ nft add set inet filter icmp_egress_meter4 '{ type ipv4_addr; size 8; flags time
 nft add set inet filter icmp_egress_meter6 '{ type ipv6_addr; size 8; flags timeout, dynamic; }'
 {{< / highlight >}}
 
-### Verdict maps
+### Verdict maps and sets
 #### IPv4 bogons
 {{< highlight bash >}}
 nft add map inet filter drop_bogons4 '{ type ipv4_addr : verdict; flags interval; }'
@@ -215,6 +221,9 @@ nft add element inet filter icmp_types_in6 '{ fe80::/10 . ff00::/8  . nd-router-
 nft add element inet filter icmp_types_in6 '{ fe80::/10 . fe80::/10 . nd-router-advert    : accept }'
 {{< / highlight >}}
 
+##### TODO 
+- NDP for GUA
+
 #### IPv4 ingress TCP ports
 {{< highlight bash >}}
 nft add map inet filter tcp_ports_in4 '{ typeof ip saddr . ip daddr . tcp dport : verdict; flags interval; }'
@@ -258,12 +267,12 @@ nft add element inet filter udp_ports_in6 '{ fc00::/7  . ff00::/8 . 5353  : acce
 nft add map inet filter default_forward4 '{ typeof ip saddr . ip daddr . ct state : verdict; flags interval; }'
 nft add element inet filter default_forward4 '{ 169.254.0.0/16 . 0.0.0.0/0      . new         : drop }'
 nft add element inet filter default_forward4 '{ 0.0.0.0/0      . 169.254.0.0/16 . new         : drop }'
-nft add element inet filter default_forward4 '{ 10.0.0.0/8     . 172.16.0.0/12  . new         : drop }'
-nft add element inet filter default_forward4 '{ 10.0.0.0/8     . 192.168.0.0/16 . new         : drop }'
-nft add element inet filter default_forward4 '{ 172.16.0.0/12  . 10.0.0.0/8     . new         : drop }'
-nft add element inet filter default_forward4 '{ 172.16.0.0/12  . 192.168.0.0/16 . new         : drop }'
-nft add element inet filter default_forward4 '{ 192.168.0.0/16 . 10.0.0.0/8     . new         : drop }'
-nft add element inet filter default_forward4 '{ 192.168.0.0/16 . 172.16.0.0/12  . new         : drop }'
+nft add element inet filter default_forward4 '{ 10.0.0.0/8     . 172.16.0.0/12  . new         : jump reject_with_icmp_no_route }'
+nft add element inet filter default_forward4 '{ 10.0.0.0/8     . 192.168.0.0/16 . new         : jump reject_with_icmp_no_route }'
+nft add element inet filter default_forward4 '{ 172.16.0.0/12  . 10.0.0.0/8     . new         : jump reject_with_icmp_no_route }'
+nft add element inet filter default_forward4 '{ 172.16.0.0/12  . 192.168.0.0/16 . new         : jump reject_with_icmp_no_route }'
+nft add element inet filter default_forward4 '{ 192.168.0.0/16 . 10.0.0.0/8     . new         : jump reject_with_icmp_no_route }'
+nft add element inet filter default_forward4 '{ 192.168.0.0/16 . 172.16.0.0/12  . new         : jump reject_with_icmp_no_route }'
 nft add element inet filter default_forward4 '{ 10.0.0.0/8     . 10.0.0.0/8     . new         : accept }'
 nft add element inet filter default_forward4 '{ 10.0.0.0/8     . 10.0.0.0/8     . established : accept }'
 nft add element inet filter default_forward4 '{ 172.16.0.0/12  . 172.16.0.0/12  . new         : accept }'
@@ -316,6 +325,9 @@ nft add element inet filter icmp_types_out6 '{ fe80::/10 . fe80::/10 . nd-neighb
 nft add element inet filter icmp_types_out6 '{ fe80::/10 . ff00::/8  . nd-router-solicit   : accept }'
 {{< / highlight >}}
 
+##### TODO 
+- NDP for GUA
+
 #### IPv4 egress TCP ports 
 Ports `21`, `23`, `25`, `53`, and `80` can be omitted if the point is to ensure that no egress traffic will ever be destined for unencrypted protocols. With this particular ruleset they are limited to the following destinations: 
 - `169.254.0.0/16`
@@ -363,19 +375,19 @@ Ports `21`, `23`, `25`, `53`, and `80` can be omitted if the point is to ensure 
 
 {{< highlight bash >}}
 nft add map inet filter tcp_ports_out6 '{ typeof ip6 saddr . ip6 daddr . tcp dport : verdict; flags interval; }'
-nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 21     : accept }'
-nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 23     : accept }'
-nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 25     : accept }'
-nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 53     : accept }'
-nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 80     : accept }'
-nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 443    : accept }'
-nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 853    : accept }'
-nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 4460   : accept }'
-nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 5349   : accept }'
-nft add element inet filter tcp_ports_out6 '{ 2000::/3 . 2000::/3 . 443    : accept }'
-nft add element inet filter tcp_ports_out6 '{ 2000::/3 . 2000::/3 . 853    : accept }'
-nft add element inet filter tcp_ports_out6 '{ 2000::/3 . 2000::/3 . 4460   : accept }'
-nft add element inet filter tcp_ports_out6 '{ 2000::/3 . 2000::/3 . 5349   : accept }'
+nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 21   : accept }'
+nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 23   : accept }'
+nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 25   : accept }'
+nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 53   : accept }'
+nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 80   : accept }'
+nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 443  : accept }'
+nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 853  : accept }'
+nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 4460 : accept }'
+nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 5349 : accept }'
+nft add element inet filter tcp_ports_out6 '{ 2000::/3 . 2000::/3 . 443  : accept }'
+nft add element inet filter tcp_ports_out6 '{ 2000::/3 . 2000::/3 . 853  : accept }'
+nft add element inet filter tcp_ports_out6 '{ 2000::/3 . 2000::/3 . 4460 : accept }'
+nft add element inet filter tcp_ports_out6 '{ 2000::/3 . 2000::/3 . 5349 : accept }'
 {{< / highlight >}}
 
 #### IPv4 egress UDP ports 
@@ -413,9 +425,20 @@ nft add element inet filter udp_ports_out4 '{ 192.168.0.0/16 . 0.0.0.0/0      . 
 #### IPv6 egress UDP ports
 {{< highlight bash >}}
 nft add map inet filter udp_ports_out6 '{ typeof ip6 saddr . ip6 daddr . udp dport : verdict; flags interval; }'
-nft add element inet filter udp_ports_out6 '{ fe80::/10 . ff00::/8 . 547 : accept }'
-nft add element inet filter udp_ports_out6 '{ 2000::/3 . ::/0 . 443 : accept }'
-nft add element inet filter udp_ports_out6 '{ fc00::/7  . ff00::/8 . 5353  : accept }'
+nft add element inet filter udp_ports_out6 '{ fe80::/10 . ff00::/8 . 547  : accept }'
+nft add element inet filter udp_ports_out6 '{ 2000::/3  . ::/0     . 443  : accept }'
+nft add element inet filter udp_ports_out6 '{ fc00::/7  . ff00::/8 . 5353 : accept }'
+{{< / highlight >}}
+
+#### Forwarding ports for IPv4
+{{< highlight bash >}}
+nft add map inet filter tcp_ports_forward4 '{ type inet_service : ipv4_addr; }'
+nft add map inet filter udp_ports_forward4 '{ type inet_service : ipv4_addr; }'
+{{< / highlight >}}
+
+#### Masquerading
+{{< highlight bash >}}
+nft add map inet filter masquerade_networks4 '{ typeof oif . ip saddr : verdict; flags interval; }'
 {{< / highlight >}}
 
 ### Rules
@@ -442,7 +465,7 @@ nft add rule inet filter reject_with_icmp_host_unreachable reject with icmpx typ
 #### Metered ICMP no route
 {{< highlight bash >}}
 nft add rule inet filter reject_with_icmp_no_route_metered add @icmp_egress_meter4 '{ ip daddr timeout 4s limit rate 3/second }' counter reject with icmpx type no-route
-nft add rule inet filter reject_with_icmp_host_no_route_metered add @icmp_egress_meter6 '{ ip6 daddr timeout 4s limit rate 3/second }' counter reject with icmpx type no-route
+nft add rule inet filter reject_with_icmp_no_route_metered add @icmp_egress_meter6 '{ ip6 daddr timeout 4s limit rate 3/second }' counter reject with icmpx type no-route
 {{< / highlight >}}
 #### Un-Metered ICMP no route
 {{< highlight bash >}}
@@ -450,8 +473,8 @@ nft add rule inet filter reject_with_icmp_no_route reject with icmpx type no-rou
 {{< / highlight >}}
 #### Metered ICMP admin prohibited
 {{< highlight bash >}}
-nft add rule inet filter reject_with_icmp_no_admin_prohibited add @icmp_egress_meter4 '{ ip daddr timeout 4s limit rate 3/second }' counter reject with icmpx type admin-prohibited
-nft add rule inet filter reject_with_icmp_host_admin_prohibited_metered add @icmp_egress_meter6 '{ ip6 daddr timeout 4s limit rate 3/second }' counter reject with icmpx type admin-prohibited
+nft add rule inet filter reject_with_icmp_admin_prohibited add @icmp_egress_meter4 '{ ip daddr timeout 4s limit rate 3/second }' counter reject with icmpx type admin-prohibited
+nft add rule inet filter reject_with_icmp_admin_prohibited_metered add @icmp_egress_meter6 '{ ip6 daddr timeout 4s limit rate 3/second }' counter reject with icmpx type admin-prohibited
 {{< / highlight >}}
 #### Un-Metered ICMP admin-prohibited
 {{< highlight bash >}}
@@ -468,9 +491,6 @@ nft add rule inet filter icmp_in ip6 saddr . ip6 daddr . icmpv6 type vmap @icmp_
 nft add rule inet filter tcp_in ct state established counter accept
 nft add rule inet filter tcp_in ip saddr . ip daddr . tcp dport vmap @tcp_ports_in4 counter
 nft add rule inet filter tcp_in ip6 saddr . ip6 daddr . tcp dport vmap @tcp_ports_in6 counter
-nft add rule inet filter tcp_in log prefix "tcp_in" group 1
-nft add rule inet filter tcp_in ip saddr . ip daddr vmap @reject_or_drop_port4
-nft add rule inet filter tcp_in ip6 saddr . ip6 daddr vmap @reject_or_drop_port6
 {{< / highlight >}}
 
 #### udp_in
@@ -478,9 +498,6 @@ nft add rule inet filter tcp_in ip6 saddr . ip6 daddr vmap @reject_or_drop_port6
 nft add rule inet filter udp_in ct state established counter accept
 nft add rule inet filter udp_in ip saddr . ip daddr . udp dport vmap @udp_ports_in4 counter
 nft add rule inet filter udp_in ip6 saddr . ip6 daddr . udp dport vmap @udp_ports_in6 counter
-nft add rule inet filter udp_in log prefix "udp_in" group 1
-nft add rule inet filter udp_in ip saddr . ip daddr vmap @reject_or_drop_port4
-nft add rule inet filter udp_in ip6 saddr . ip6 daddr vmap @reject_or_drop_port6
 {{< / highlight >}}
 
 #### ether_in
@@ -542,12 +559,28 @@ nft add rule inet filter ether_out ip protocol vmap '{ tcp : jump tcp_out, udp :
 nft add rule inet filter ether_out ip6 nexthdr vmap '{ tcp : jump tcp_out, udp : jump udp_out, icmpv6 : jump icmp_out, ipv6-icmp: jump icmp_out }' counter
 {{< / highlight >}}
 
+#### masq 
+{{< highlight bash >}}
+nft add rule inet filter masq masquerade
+{{< / highlight >}}
+
 #### output
 {{< highlight bash >}}
 nft add rule inet filter output meta oiftype vmap '{ loopback: accept }'
 nft add rule inet filter output ip daddr vmap @drop_bogons4 counter
 nft add rule inet filter output ip6 daddr vmap @drop_bogons6 counter
 nft add rule inet filter output meta oiftype vmap '{ ether: jump ether_out }'
+{{< / highlight >}}
+
+#### prerouting
+{{< highlight bash >}}
+nft add rule inet filter prerouting ip protocol tcp dnat to tcp dport map @tcp_ports_forward4
+nft add rule inet filter prerouting ip protocol udp dnat to udp dport map @udp_ports_forward4
+{{< / highlight >}}
+
+#### postrouting
+{{< highlight bash >}}
+nft add rule inet filter postrouting oif . ip saddr vmap @masquerade_networks4 counter
 {{< / highlight >}}
 
 ### Default chain policies 
@@ -593,10 +626,28 @@ Dropped packets are logged in pcap format: `tcpdump -vvv -n -e -ttt -i nflog:1 -
 ```
 
 #### Per-chain logging
-##### Metered ICMP unreachable
+##### Metered ICMP port unreachable
 {{< highlight bash >}}
 nft add rule inet filter reject_with_icmp_port_unreachable_metered log prefix "reject_with_icmp_port_unreachable_metered" group 1
 nft add rule inet filter reject_with_icmp_port_unreachable_metered counter drop
+{{< / highlight >}}
+
+##### Metered ICMP host unreachable
+{{< highlight bash >}}
+nft add rule inet filter reject_with_icmp_host_unreachable_metered log prefix "reject_with_icmp_host_unreachable_metered" group 1
+nft add rule inet filter reject_with_icmp_host_unreachable_metered counter drop
+{{< / highlight >}}
+
+##### Metered ICMP no route
+{{< highlight bash >}}
+nft add rule inet filter reject_with_icmp_no_route_metered log prefix "reject_with_icmp_no_route_metered" group 1
+nft add rule inet filter reject_with_icmp_no_route_metered counter drop
+{{< / highlight >}}
+
+##### Metered ICMP admin prohibited
+{{< highlight bash >}}
+nft add rule inet filter reject_with_icmp_admin_prohibited_metered log prefix "reject_with_icmp_admin_prohibited_metered" group 1
+nft add rule inet filter reject_with_icmp_admin_prohibited_metered counter drop
 {{< / highlight >}}
 
 ##### Ingress ICMP
@@ -660,23 +711,49 @@ nft add rule inet filter ether_out counter drop
 {{< / highlight >}}
 
 ## Filter state / configuration format
-`nft -a -s list ruleset | tee /etc/nftables.conf`
+If you are starting from here you can copy / paste this section to `/etc/nftables.conf`. Otherwise the current filter state can be made to persist with:
+- `nft -a -s list ruleset | tee /etc/nftables.conf`
 
 {{< highlight bash >}}
-table inet filter { # handle 131
-	set icmp_egress_meter4 { # handle 16
+table inet filter { # handle 134
+	set icmp_egress_meter4 { # handle 22
 		type ipv4_addr
 		size 8
 		flags dynamic,timeout
 	}
 
-	set icmp_egress_meter6 { # handle 17
+	set icmp_egress_meter6 { # handle 23
 		type ipv6_addr
 		size 8
 		flags dynamic,timeout
 	}
 
-	map drop_bogons4 { # handle 18
+	map default_forward4 { # handle 24
+		typeof ip saddr . ip daddr . ct state : verdict
+		flags interval
+		elements = { 169.254.0.0/16 . 0.0.0.0/0 . new : drop,
+			     0.0.0.0/0 . 169.254.0.0/16 . new : drop,
+			     10.0.0.0/8 . 172.16.0.0/12 . new : jump reject_with_icmp_no_route,
+			     10.0.0.0/8 . 192.168.0.0/16 . new : jump reject_with_icmp_no_route,
+			     172.16.0.0/12 . 10.0.0.0/8 . new : jump reject_with_icmp_no_route,
+			     172.16.0.0/12 . 192.168.0.0/16 . new : jump reject_with_icmp_no_route,
+			     192.168.0.0/16 . 10.0.0.0/8 . new : jump reject_with_icmp_no_route,
+			     192.168.0.0/16 . 172.16.0.0/12 . new : jump reject_with_icmp_no_route,
+			     10.0.0.0/8 . 10.0.0.0/8 . new : accept,
+			     10.0.0.0/8 . 10.0.0.0/8 . established : accept,
+			     172.16.0.0/12 . 172.16.0.0/12 . new : accept,
+			     172.16.0.0/12 . 172.16.0.0/12 . established : accept,
+			     192.168.0.0/16 . 192.168.0.0/16 . new : accept,
+			     192.168.0.0/16 . 192.168.0.0/16 . established : accept,
+			     10.0.0.0/8 . 0.0.0.0/0 . new : accept,
+			     172.16.0.0/12 . 0.0.0.0/0 . new : accept,
+			     192.168.0.0/16 . 0.0.0.0/0 . new : accept,
+			     0.0.0.0/0 . 10.0.0.0/8 . established : accept,
+			     0.0.0.0/0 . 172.16.0.0/12 . established : accept,
+			     0.0.0.0/0 . 192.168.0.0/16 . established : accept }
+	}
+
+	map drop_bogons4 { # handle 25
 		type ipv4_addr : verdict
 		flags interval
 		elements = { 0.0.0.0/8 : drop, 10.0.0.0/8 : continue,
@@ -688,7 +765,7 @@ table inet filter { # handle 131
 			     224.0.0.0/4 : continue, 240.0.0.0/4 : drop }
 	}
 
-	map drop_bogons6 { # handle 19
+	map drop_bogons6 { # handle 26
 		type ipv6_addr : verdict
 		flags interval
 		elements = { ::/96 : drop,
@@ -728,7 +805,7 @@ table inet filter { # handle 131
 			     ff00::/8 : continue }
 	}
 
-	map reject_or_drop_port4 { # handle 20
+	map reject_or_drop_port4 { # handle 27
 		typeof ip saddr . ip daddr : verdict
 		flags interval
 		elements = { 10.0.0.0/8 . 10.0.0.0/8 : jump reject_with_icmp_port_unreachable,
@@ -738,7 +815,7 @@ table inet filter { # handle 131
 			     0.0.0.0/0 . 0.0.0.0/0 : jump reject_with_icmp_port_unreachable_metered }
 	}
 
-	map reject_or_drop_port6 { # handle 21
+	map reject_or_drop_port6 { # handle 28
 		typeof ip6 saddr . ip6 daddr : verdict
 		flags interval
 		elements = { fe80::/10 . fe80::/10 : jump reject_with_icmp_port_unreachable,
@@ -746,7 +823,7 @@ table inet filter { # handle 131
 			     ::/0 . ::/0 : jump reject_with_icmp_port_unreachable_metered }
 	}
 
-	map icmp_types_in4 { # handle 22
+	map icmp_types_in4 { # handle 29
 		typeof ip saddr . ip daddr . icmp type : verdict
 		flags interval
 		elements = { 0.0.0.0/0 . 0.0.0.0/0 . echo-request : accept,
@@ -754,7 +831,7 @@ table inet filter { # handle 131
 			     0.0.0.0/0 . 0.0.0.0/0 . destination-unreachable : accept }
 	}
 
-	map icmp_types_in6 { # handle 23
+	map icmp_types_in6 { # handle 30
 		typeof ip6 saddr . ip6 daddr . icmpv6 type : verdict
 		flags interval
 		elements = { fe80::/10 . fe80::/10 . echo-request : accept,
@@ -772,19 +849,19 @@ table inet filter { # handle 131
 			     fe80::/10 . fe80::/10 . nd-router-advert : accept }
 	}
 
-	map tcp_ports_in4 { # handle 24
+	map tcp_ports_in4 { # handle 31
 		typeof ip saddr . ip daddr . tcp dport : verdict
 		flags interval
 		elements = { 0.0.0.0/0 . 0.0.0.0/0 . 22 : accept }
 	}
 
-	map tcp_ports_in6 { # handle 25
+	map tcp_ports_in6 { # handle 32
 		typeof ip6 saddr . ip6 daddr . tcp dport : verdict
 		flags interval
 		elements = { ::/0 . ::/0 . 22 : accept }
 	}
 
-	map udp_ports_in4 { # handle 26
+	map udp_ports_in4 { # handle 33
 		typeof ip saddr . ip daddr . udp dport : verdict
 		flags interval
 		elements = { 169.254.0.0/16 . 169.254.0.0/16 . 68 : accept,
@@ -802,7 +879,7 @@ table inet filter { # handle 131
 			     192.160.0.0/12 . 224.0.0.0/4 . 5353 : accept }
 	}
 
-	map udp_ports_in6 { # handle 27
+	map udp_ports_in6 { # handle 34
 		typeof ip6 saddr . ip6 daddr . udp dport : verdict
 		flags interval
 		elements = { fe80::/10 . ff00::/8 . 546 : accept,
@@ -810,32 +887,7 @@ table inet filter { # handle 131
 			     fc00::/7 . ff00::/8 . 5353 : accept }
 	}
 
-	map default_forward4 { # handle 28
-		typeof ip saddr . ip daddr . ct state : verdict
-		flags interval
-		elements = { 169.254.0.0/16 . 0.0.0.0/0 . new : drop,
-			     0.0.0.0/0 . 169.254.0.0/16 . new : drop,
-			     10.0.0.0/8 . 172.16.0.0/12 . new : drop,
-			     10.0.0.0/8 . 192.168.0.0/16 . new : drop,
-			     172.16.0.0/12 . 10.0.0.0/8 . new : drop,
-			     172.16.0.0/12 . 192.168.0.0/16 . new : drop,
-			     192.168.0.0/16 . 10.0.0.0/8 . new : drop,
-			     192.168.0.0/16 . 172.16.0.0/12 . new : drop,
-			     10.0.0.0/8 . 10.0.0.0/8 . new : accept,
-			     10.0.0.0/8 . 10.0.0.0/8 . established : accept,
-			     172.16.0.0/12 . 172.16.0.0/12 . new : accept,
-			     172.16.0.0/12 . 172.16.0.0/12 . established : accept,
-			     192.168.0.0/16 . 192.168.0.0/16 . new : accept,
-			     192.168.0.0/16 . 192.168.0.0/16 . established : accept,
-			     10.0.0.0/8 . 0.0.0.0/0 . new : accept,
-			     172.16.0.0/12 . 0.0.0.0/0 . new : accept,
-			     192.168.0.0/16 . 0.0.0.0/0 . new : accept,
-			     0.0.0.0/0 . 10.0.0.0/8 . established : accept,
-			     0.0.0.0/0 . 172.16.0.0/12 . established : accept,
-			     0.0.0.0/0 . 192.168.0.0/16 . established : accept }
-	}
-
-	map default_forward6 { # handle 29
+	map default_forward6 { # handle 35
 		typeof ip6 saddr . ip6 daddr . ct state : verdict
 		flags interval
 		elements = { fe80::/10 . ::/0 . new : drop,
@@ -843,7 +895,7 @@ table inet filter { # handle 131
 			     fc00::/7 . fc00::/7 . new : accept }
 	}
 
-	map icmp_types_out4 { # handle 30
+	map icmp_types_out4 { # handle 36
 		typeof ip saddr . ip daddr . icmp type : verdict
 		flags interval
 		elements = { 10.0.0.0/8 . 0.0.0.0/0 . echo-request : accept,
@@ -855,10 +907,10 @@ table inet filter { # handle 131
 			     10.0.0.0/8 . 10.0.0.0/8 . destination-unreachable : accept,
 			     172.16.0.0/12 . 172.16.0.0/12 . destination-unreachable : accept,
 			     192.168.0.0/16 . 192.168.0.0/16 . destination-unreachable : accept,
-			     10.0.0.0/8 . 0.0.0.0/0 . echo-reply : jump icmp_echo_reply_rate_limit }
+			     0.0.0.0/0 . 0.0.0.0/0 . echo-reply : jump icmp_echo_reply_rate_limit }
 	}
 
-	map icmp_types_out6 { # handle 31
+	map icmp_types_out6 { # handle 37
 		typeof ip6 saddr . ip6 daddr . icmpv6 type : verdict
 		flags interval
 		elements = { fe80::/10 . ff00::/8 . echo-request : accept,
@@ -872,7 +924,7 @@ table inet filter { # handle 131
 			     fe80::/10 . ff00::/8 . nd-router-solicit : accept }
 	}
 
-	map tcp_ports_out4 { # handle 32
+	map tcp_ports_out4 { # handle 38
 		typeof ip saddr . ip daddr . tcp dport : verdict
 		flags interval
 		elements = { 10.0.0.0/8 . 10.0.0.0/8 . 21 : accept,
@@ -907,13 +959,14 @@ table inet filter { # handle 131
 			     192.168.0.0/16 . 0.0.0.0/0 . 5349 : accept }
 	}
 
-	map tcp_ports_out6 { # handle 33
+	map tcp_ports_out6 { # handle 39
 		typeof ip6 saddr . ip6 daddr . tcp dport : verdict
 		flags interval
 		elements = { fc00::/7 . fc00::/7 . 21 : accept,
 			     fc00::/7 . fc00::/7 . 23 : accept,
 			     fc00::/7 . fc00::/7 . 25 : accept,
 			     fc00::/7 . fc00::/7 . 53 : accept,
+			     fc00::/7 . fc00::/7 . 80 : accept,
 			     fc00::/7 . fc00::/7 . 443 : accept,
 			     fc00::/7 . fc00::/7 . 853 : accept,
 			     fc00::/7 . fc00::/7 . 4460 : accept,
@@ -921,11 +974,10 @@ table inet filter { # handle 131
 			     2000::/3 . 2000::/3 . 443 : accept,
 			     2000::/3 . 2000::/3 . 853 : accept,
 			     2000::/3 . 2000::/3 . 4460 : accept,
-			     2000::/3 . 2000::/3 . 5349 : accept,
-			     fc00::/7 . fc00::/7 . 80 : accept }
+			     2000::/3 . 2000::/3 . 5349 : accept }
 	}
 
-	map udp_ports_out4 { # handle 34
+	map udp_ports_out4 { # handle 40
 		typeof ip saddr . ip daddr . udp dport : verdict
 		flags interval
 		elements = { 10.0.0.0/8 . 10.0.0.0/8 . 67 : accept,
@@ -950,7 +1002,7 @@ table inet filter { # handle 131
 			     192.168.0.0/16 . 0.0.0.0/0 . 1194 : accept }
 	}
 
-	map udp_ports_out6 { # handle 35
+	map udp_ports_out6 { # handle 41
 		typeof ip6 saddr . ip6 daddr . udp dport : verdict
 		flags interval
 		elements = { fe80::/10 . ff00::/8 . 547 : accept,
@@ -960,127 +1012,157 @@ table inet filter { # handle 131
 
 	chain input { # handle 1
 		type filter hook input priority filter; policy drop;
-		meta iiftype vmap { loopback : accept } # handle 58
-		ip saddr vmap @drop_bogons4 counter # handle 59
-		ip6 saddr vmap @drop_bogons6 counter # handle 60
-		meta iiftype vmap { ether : jump ether_in } # handle 62
-		log prefix "input" group 1 # handle 89
-		counter # handle 90
+		meta iiftype vmap { loopback : accept } # handle 51
+		ip saddr vmap @drop_bogons4 counter # handle 52
+		ip6 saddr vmap @drop_bogons6 counter # handle 53
+		meta iiftype vmap { ether : jump ether_in } # handle 54
+		log prefix "input" group 1 # handle 55
+		counter # handle 56
 	}
 
 	chain forward { # handle 2
 		type filter hook forward priority filter; policy drop;
-		ip saddr vmap @drop_bogons4 counter # handle 65
-		ip6 saddr vmap @drop_bogons6 counter # handle 66
-		meta oiftype vmap { ether : jump ether_forward } # handle 68
-		log prefix "forward" group 1 # handle 91
-		counter # handle 92
+		ip saddr vmap @drop_bogons4 counter # handle 57
+		ip6 saddr vmap @drop_bogons6 counter # handle 58
+		meta oiftype vmap { ether : jump ether_forward } # handle 59
+		log prefix "forward" group 1 # handle 60
+		counter # handle 61
 	}
 
 	chain output { # handle 3
 		type filter hook output priority filter; policy drop;
-		meta oiftype vmap { loopback : accept } # handle 84
-		ip daddr vmap @drop_bogons4 counter # handle 85
-		ip6 daddr vmap @drop_bogons6 counter # handle 86
-		meta oiftype vmap { ether : jump ether_out } # handle 88
-		log prefix "output" group 1 # handle 93
-		counter # handle 94
+		meta oiftype vmap { loopback : accept } # handle 62
+		ip daddr vmap @drop_bogons4 counter # handle 63
+		ip6 daddr vmap @drop_bogons6 counter # handle 64
+		meta oiftype vmap { ether : jump ether_out } # handle 65
+		log prefix "output" group 1 # handle 66
+		counter # handle 67
 	}
 
 	chain ether_in { # handle 4
-		ip protocol vmap { icmp : jump icmp_in, tcp : jump tcp_in, udp : jump udp_in } counter # handle 54
-		ip6 nexthdr vmap { tcp : jump tcp_in, udp : jump udp_in, ipv6-icmp : jump icmp_in } counter # handle 56
-		log prefix "ether_in" group 1 # handle 103
-		counter drop # handle 104
+		ip protocol vmap { icmp : jump icmp_in, tcp : jump tcp_in, udp : jump udp_in } counter # handle 68
+		ip6 nexthdr vmap { tcp : jump tcp_in, udp : jump udp_in, ipv6-icmp : jump icmp_in } counter # handle 69
+		log prefix "ether_in" group 1 # handle 70
+		counter drop # handle 71
 	}
 
 	chain ether_out { # handle 5
-		ip protocol vmap { icmp : jump icmp_out, tcp : jump tcp_out, udp : jump udp_out } # handle 80
-		ip6 nexthdr vmap { tcp : jump tcp_out, udp : jump udp_out, ipv6-icmp : jump icmp_out } # handle 82
-		log prefix "ether_out" group 1 # handle 115
-		counter drop # handle 116
+		ip protocol vmap { icmp : jump icmp_out, tcp : jump tcp_out, udp : jump udp_out } counter # handle 72
+		ip6 nexthdr vmap { tcp : jump tcp_out, udp : jump udp_out, ipv6-icmp : jump icmp_out } counter # handle 73
+		log prefix "ether_out" group 1 # handle 74
+		counter drop # handle 75
 	}
 
 	chain ether_forward { # handle 6
-		ip saddr . ip daddr . ct state vmap @default_forward4 # handle 63
-		ip6 saddr . ip6 daddr . ct state vmap @default_forward6 # handle 64
-		log prefix "ether_forward" group 1 # handle 105
-		counter drop # handle 106
+		ip saddr . ip daddr . ct state vmap @default_forward4 counter # handle 76
+		ip6 saddr . ip6 daddr . ct state vmap @default_forward6 counter # handle 77
+		log prefix "ether_forward" group 1 # handle 78
+		counter drop # handle 79
 	}
 
 	chain icmp_in { # handle 7
-		ip saddr . ip daddr . icmp type vmap @icmp_types_in4 counter # handle 39
-		ip6 saddr . ip6 daddr . icmpv6 type vmap @icmp_types_in6 counter # handle 40
-		log prefix "icmp_in" group 1 # handle 97
-		counter drop # handle 98
+		ip saddr . ip daddr . icmp type vmap @icmp_types_in4 counter # handle 80
+		ip6 saddr . ip6 daddr . icmpv6 type vmap @icmp_types_in6 counter # handle 81
+		log prefix "icmp_in" group 1 # handle 82
+		counter drop # handle 83
 	}
 
 	chain icmp_out { # handle 8
-		ip saddr . ip daddr . icmp type vmap @icmp_types_out4 counter # handle 71
-		ip6 saddr . ip6 daddr . icmpv6 type vmap @icmp_types_out6 counter # handle 72
-		log prefix "icmp_out" group 1 # handle 109
-		counter drop # handle 110
+		ip saddr . ip daddr . icmp type vmap @icmp_types_out4 counter # handle 84
+		ip6 saddr . ip6 daddr . icmpv6 type vmap @icmp_types_out6 counter # handle 85
+		log prefix "icmp_out" group 1 # handle 86
+		counter drop # handle 87
 	}
 
 	chain icmp_echo_reply_rate_limit { # handle 9
-		add @icmp_egress_meter4 { ip saddr timeout 4s limit rate 3/second } counter accept # handle 69
-		add @icmp_egress_meter6 { ip6 saddr timeout 4s limit rate 3/second } counter accept # handle 70
-		log prefix "icmp_echo_reply_rate_limit" group 1 # handle 107
-		counter drop # handle 108
+		add @icmp_egress_meter4 { ip saddr timeout 4s limit rate 3/second } counter accept # handle 88
+		add @icmp_egress_meter6 { ip6 saddr timeout 4s limit rate 3/second } counter accept # handle 89
+		log prefix "icmp_echo_reply_rate_limit" group 1 # handle 90
+		counter drop # handle 91
 	}
 
 	chain reject_with_icmp_port_unreachable_metered { # handle 10
-		add @icmp_egress_meter4 { ip daddr timeout 4s limit rate 3/second } counter reject # handle 36
-		add @icmp_egress_meter6 { ip6 daddr timeout 4s limit rate 3/second } counter reject # handle 37
-		log prefix "reject_with_icmp_port_unreachable_metered" group 1 # handle 95
-		counter drop # handle 96
+		add @icmp_egress_meter4 { ip daddr timeout 4s limit rate 3/second } counter reject with icmp port-unreachable # handle 92
+		add @icmp_egress_meter6 { ip6 daddr timeout 4s limit rate 3/second } counter reject with icmpv6 port-unreachable # handle 93
+		log prefix "reject_with_icmp_port_unreachable_metered" group 1 # handle 94
+		counter drop # handle 95
 	}
 
 	chain reject_with_icmp_port_unreachable { # handle 11
-		reject # handle 38
+		reject # handle 96
 	}
 
-	chain tcp_in { # handle 12
-		ct state established counter accept # handle 41
-		ip saddr . ip daddr . tcp dport vmap @tcp_ports_in4 counter # handle 42
-		ip6 saddr . ip6 daddr . tcp dport vmap @tcp_ports_in6 counter # handle 43
-		log prefix "tcp_in" group 1 # handle 44
-		ip saddr . ip daddr vmap @reject_or_drop_port4 # handle 45
-		ip6 saddr . ip6 daddr vmap @reject_or_drop_port6 # handle 46
-		log prefix "tcp_in" group 1 # handle 99
+	chain reject_with_icmp_host_unreachable_metered { # handle 12
+		add @icmp_egress_meter4 { ip daddr timeout 4s limit rate 3/second } counter reject with icmpx host-unreachable # handle 97
+		add @icmp_egress_meter6 { ip6 daddr timeout 4s limit rate 3/second } counter reject with icmpx host-unreachable # handle 98
+		log prefix "reject_with_icmp_host_unreachable_metered" group 1 # handle 99
 		counter drop # handle 100
 	}
 
-	chain tcp_out { # handle 13
-		ct state established counter accept # handle 73
-		ip saddr . ip daddr . tcp dport vmap @tcp_ports_out4 counter # handle 74
-		ip6 saddr . ip6 daddr . tcp dport vmap @tcp_ports_out6 counter # handle 75
-		log prefix "tcp_out" group 1 # handle 111
-		counter drop # handle 112
+	chain reject_with_icmp_host_unreachable { # handle 13
+		reject with icmpx host-unreachable # handle 101
 	}
 
-	chain udp_in { # handle 14
-		ct state established counter accept # handle 47
-		ip saddr . ip daddr . udp dport vmap @udp_ports_in4 counter # handle 48
-		ip6 saddr . ip6 daddr . udp dport vmap @udp_ports_in6 counter # handle 49
-		log prefix "udp_in" group 1 # handle 50
-		ip saddr . ip daddr vmap @reject_or_drop_port4 # handle 51
-		ip6 saddr . ip6 daddr vmap @reject_or_drop_port6 # handle 52
-		log prefix "udp_in" group 1 # handle 101
-		counter drop # handle 102
+	chain reject_with_icmp_no_route_metered { # handle 14
+		add @icmp_egress_meter4 { ip daddr timeout 4s limit rate 3/second } counter reject with icmpx no-route # handle 102
+		add @icmp_egress_meter6 { ip6 daddr timeout 4s limit rate 3/second } counter reject with icmpx no-route # handle 103
+		log prefix "reject_with_icmp_no_route_metered" group 1 # handle 104
+		counter drop # handle 105
 	}
 
-	chain udp_out { # handle 15
-		ct state established counter accept # handle 76
-		ip saddr . ip daddr . udp dport vmap @udp_ports_out4 counter # handle 77
-		ip6 saddr . ip6 daddr . udp dport vmap @udp_ports_out6 counter # handle 78
-		log prefix "udp_out" group 1 # handle 113
-		counter drop # handle 114
+	chain reject_with_icmp_no_route { # handle 15
+		reject with icmpx no-route # handle 106
+	}
+
+	chain reject_with_icmp_admin_prohibited_metered { # handle 16
+		add @icmp_egress_meter6 { ip6 daddr timeout 4s limit rate 3/second } counter reject with icmpx admin-prohibited # handle 107
+		log prefix "reject_with_icmp_admin_prohibited_metered" group 1 # handle 108
+		counter drop # handle 109
+	}
+
+	chain reject_with_icmp_admin_prohibited { # handle 17
+		add @icmp_egress_meter4 { ip daddr timeout 4s limit rate 3/second } counter reject with icmpx admin-prohibited # handle 110
+		reject with icmpx admin-prohibited # handle 111
+	}
+
+	chain tcp_in { # handle 18
+		ct state established counter accept # handle 112
+		ip saddr . ip daddr . tcp dport vmap @tcp_ports_in4 counter # handle 113
+		ip6 saddr . ip6 daddr . tcp dport vmap @tcp_ports_in6 counter # handle 114
+		log prefix "tcp_in" group 1 # handle 115
+		counter drop # handle 116
+	}
+
+	chain tcp_out { # handle 19
+		ct state established counter accept # handle 117
+		ip saddr . ip daddr . tcp dport vmap @tcp_ports_out4 counter # handle 118
+		ip6 saddr . ip6 daddr . tcp dport vmap @tcp_ports_out6 counter # handle 119
+		log prefix "tcp_out" group 1 # handle 120
+		counter drop # handle 121
+	}
+
+	chain udp_in { # handle 20
+		ct state established counter accept # handle 122
+		ip saddr . ip daddr . udp dport vmap @udp_ports_in4 counter # handle 123
+		ip6 saddr . ip6 daddr . udp dport vmap @udp_ports_in6 counter # handle 124
+		log prefix "udp_in" group 1 # handle 125
+		counter drop # handle 126
+	}
+
+	chain udp_out { # handle 21
+		ct state established counter accept # handle 127
+		ip saddr . ip daddr . udp dport vmap @udp_ports_out4 counter # handle 128
+		ip6 saddr . ip6 daddr . udp dport vmap @udp_ports_out6 counter # handle 129
+		log prefix "udp_out" group 1 # handle 130
+		counter drop # handle 131
 	}
 }
 {{< / highlight >}}
 ### flushing the ruleset 
 Something that helps me is adding `flush ruleset` to the beginning of the new `/etc/nftables.conf` file so that the existing state is flushed before loading the file. 
+
+## IPv6 GUA prefixes
+- TODO
 
 ## Hardening
 - TODO
