@@ -35,3 +35,6 @@ cover = "img/og.png"
 - [Groove Salad SomaFM https://somafm.com/groovesalad/](https://somafm.com/groovesalad/)
 ## Audio Production 
 - [Adlib Tracker II http://www.adlibtracker.net](http://www.adlibtracker.net)
+## Politics 
+- [United States Pirate Party](https://uspirates.org/about/)
+- [Cascadia Dept of Bioregion](https://cascadiabioregion.org)

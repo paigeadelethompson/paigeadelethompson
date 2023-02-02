@@ -2,7 +2,7 @@
 Title = "HTP5 (Hack the planet)"
 Date = "2013-05-08T23:20:20-0800"
 Author = "HTP & ACiD"
-Description = "2013 - HTP (Hack the planet)"
+Description = "2013 - HTP (Hack the planet) ezine-view test page"
 cover = "img/og.png"
 +++
 <style>
@@ -23,6 +23,10 @@ cover = "img/og.png"
         margin:0;
         padding:0;
         overflow: hidden;
+        min-width: unset;
+    }
+    .copy-code-button {
+      display: none;
     }
     .content-container {
         background-color: black;

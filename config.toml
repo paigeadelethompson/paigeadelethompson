@@ -17,7 +17,8 @@ paginate     = 8
   OGImageWidth         = 499
   OGImageHeight        = 627
   toc                  = true
-
+  custom_css           = ["/formio/formio.full.min.css", "/formio/formio.builder.min.css"]
+  custom_js            = ["/formio/formio.full.min.js"]
 
 [params.twitter]
   creator = "IAmPaigeAT"
@@ -41,7 +42,7 @@ paginate     = 8
 
     [languages.en.menu]
       [[languages.en.menu.main]]
-        identifier = "about"
+        identifier = "About"
         name       = "Resume"
         url        = "/resume"
 
@@ -67,10 +68,6 @@ paginate     = 8
         
 [module]
   [[module.mounts]]
-    source = "node_modules/stockfish/src/stockfish.js"
-    target = "static/stockfish/stockfish.js"
-
-  [[module.mounts]]
     source = "node_modules/emulators-ui/dist"
     target = "static/emulators-ui"
 
@@ -93,3 +90,7 @@ paginate     = 8
   [[module.mounts]]
     source = "static/webamp_theme"
     target = "static/webamp_theme"
+
+  [[module.mounts]]
+    source = "node_modules/formiojs/dist/"
+    target = "static/formio"

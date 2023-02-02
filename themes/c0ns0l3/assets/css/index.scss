@@ -1,4 +1,4 @@
-* { 
+* {
     border: 0;
     font-family: 'Web437_IBM_VGA_8x16', monospace;
     line-height: 16px;
@@ -81,7 +81,7 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6 {    
     box-shadow: 4px 4px 0 0 #212529;
     text-align: center;
     display: block;
@@ -95,6 +95,7 @@ h6 {
 }
 
 h1 {
+  
   background-color: #DEE2E6;
 }
 
@@ -140,10 +141,10 @@ h6 {
 }
 
 div {
-  border-style: solid;
-  border-width: 0px;
-  border-color: white;
-  border-style: dotted;
+  //border-style: solid;
+  //border-width: 0px;
+  //border-color: white;
+  //border-style: dotted;
   margin-left: 2px;
   margin-right: 2px;
   margin-top: 2px;
@@ -178,7 +179,6 @@ pre {
     margin: unset;
     color: unset;
   }
-
   box-shadow: 4px 4px 0 0 #212529;
   display: block;
   padding: 8px;
@@ -614,8 +614,8 @@ blockquote p {
 }
 
 .read-more {
-  background-color: #F8F9FA;
-  box-shadow: 4px 4px 0 0 #212529;
+    background-color: #F8F9FA;
+    box-shadow: 4px 4px 0 0 #212529;
     text-align: center;
     display: block;
     padding: 16px;
