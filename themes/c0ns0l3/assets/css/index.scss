@@ -38,7 +38,7 @@ body {
 }
 
 time {
-  color: gold;
+  color: #F5CB5C;
 }
 
 a {
@@ -141,10 +141,10 @@ h6 {
 }
 
 div {
-  //border-style: solid;
-  //border-width: 0px;
-  //border-color: white;
-  //border-style: dotted;
+  border-style: solid;
+  border-width: 0px;
+  border-color: white;
+  border-style: dotted;
   margin-left: 2px;
   margin-right: 2px;
   margin-top: 2px;
@@ -183,10 +183,9 @@ pre {
   display: block;
   padding: 8px;
   margin-bottom: 12px;
-  background-color: black;
+  background-color: #242423;
   color: limegreen;
-  min-width: 768x;
-  max-width:896px;
+  min-width: 767px;
   overflow: auto;
 }
 
@@ -406,7 +405,7 @@ blockquote p {
   display: flex;
   justify-content: center;
   box-shadow: 4px 4px 0 0 #212529;
-  background-color: #6C757D;
+  background-color: #242423;
   padding: 8px;
   margin-left: 128px;
   margin-right:128px;
@@ -515,7 +514,7 @@ blockquote p {
 
 .post-meta {
   margin-right: 12px;
-  background-color: black;
+  background-color: #242423;
   box-shadow: 4px 4px 0 0 #212529;
   padding: 16px;
   float: right;
@@ -525,7 +524,7 @@ blockquote p {
 }
 
 .post-author {
-  color: cyan;
+  color: #E8EDDF;
 }
 
 .footer-container {
@@ -598,19 +597,29 @@ blockquote p {
   }
 }
 
+article { 
+  background-color: #393131;
+  padding: 16px;
+  box-shadow: 4px 4px 0 0 #212529;
+}
+
+hr {
+  border: 8px solid #333533;
+  box-shadow: 4px 4px 0 0 #212529;
+}
+
 .post-content-preview {
   text-align: left;
   display: block;
   padding: 0;
   height:44px;
   margin-bottom: 12px;
-  float: left;
   margin-left: 12px;
   min-width: 384px;
   max-width: 512px;
   color: antiquewhite;
   padding-top: 4px;
-  padding-left: 4px;
+  padding-left: 8px;
 }
 
 .read-more {
