@@ -7,11 +7,13 @@ cover = "img/og.png"
 +++
 
 ## Intro 
+
+This is part two of another post I wrote: [Should I enable ICMP?](/posts/icmp/)
+
 The goals of this firewall ruleset are as follows: 
 - Enforce sane limits over the number of automated ICMP responses that can be elicited by sources on the internet; mitigating ICMP amplification while still allowing some symbolance of networking mechanisms that rely on ICMP to function. 
-- Establish the basis for a "zero trust" model by ensuring the use of end-to-end encrypted protocols for necessary egress traffic (primarily NTPSEC and DoTLS.) This is necessary in an environment where protocols like `NDP-RA` are in use because of the possibility that other users on a network can advertise routes themselves which can potentially be used to hijack another user's traffic.
+- Establish the basis for a "zero trust" model by ensuring the use of end-to-end encrypted protocols for necessary egress traffic (primarily NTPSEC and DoTLS.) This is necessary in an environment where protocols like `NDP-RA` are in use because of the possibility that other users on a network can advertise routes themselves which can potentially be used to hijack another user's traffic. Unauthorized route advertisements can certainly be mitigated with multicast filtering/snooping however it is not necessarily consistent from one network to the next. 
 - Providing an abstract ruleset such that it can be the basis for application virtually anywhere while minimizing the amount of overhead that can be potentially introduced by abstraction as much as possible (YMMV)
-- 1/26/2023 if you're seeing this message, parts of this post are still under construction, check back for the complete release later.
 
 The simplest way to go about this is to start at the [filter state / configuration format](#filter-state--configuration-format) section.
 
@@ -325,8 +327,9 @@ nft add element inet filter icmp_types_out6 '{ fe80::/10 . fe80::/10 . nd-neighb
 nft add element inet filter icmp_types_out6 '{ fe80::/10 . ff00::/8  . nd-router-solicit   : accept }'
 {{< / highlight >}}
 
-##### TODO 
-- NDP for GUA
+##### GUA prefixes
+The same rules apply, but it's less than ideal to use an over-reaching prefix like `2000::/3` because `2000::/3` should be metered. 
+That is, anything except local GUA prefixes should be metered.
 
 #### IPv4 egress TCP ports 
 Ports `21`, `23`, `25`, `53`, and `80` can be omitted if the point is to ensure that no egress traffic will ever be destined for unencrypted protocols. With this particular ruleset they are limited to the following destinations: 
@@ -334,6 +337,8 @@ Ports `21`, `23`, `25`, `53`, and `80` can be omitted if the point is to ensure 
 - `10.0.0.0/8` 
 - `172.16.0.0/12`
 - `192.168.0.0/16`
+
+This is covered later in the [hardening](#hardening) section.
 
 {{< highlight bash >}}
 nft add map inet filter tcp_ports_out4 '{ typeof ip saddr . ip daddr . tcp dport : verdict; flags interval; }'
@@ -373,6 +378,8 @@ nft add element inet filter tcp_ports_out4 '{ 192.168.0.0/16 . 0.0.0.0/0      . 
 Ports `21`, `23`, `25`, `53`, and `80` can be omitted if the point is to ensure that no egress traffic will ever be destined for unencrypted protocols. With this particular ruleset they are limited to the following destinations: 
 - `fc00::/7` (ULA)
 
+This is covered later in the [hardening](#hardening) section.
+
 {{< highlight bash >}}
 nft add map inet filter tcp_ports_out6 '{ typeof ip6 saddr . ip6 daddr . tcp dport : verdict; flags interval; }'
 nft add element inet filter tcp_ports_out6 '{ fc00::/7 . fc00::/7 . 21   : accept }'
@@ -398,6 +405,9 @@ Ports `53`, `67`, `137` can be omitted if the point is to ensure that no egress 
 - `192.168.0.0/16`
 
 Port `5353` is used for `mDNS`. It can be safely omitted, but it is useful for enumeration of hostnames on local networks (zeroconf). Currently mDNS doesn't use any encryption as of 1-26-2023, and I would say it should be omitted in environments that use `NDP-RA`. For more information on mDNS, refer to: [https://datatracker.ietf.org/doc/html/draft-rafiee-dnssd-mdns-threatmodel-01](https://datatracker.ietf.org/doc/html/draft-rafiee-dnssd-mdns-threatmodel-01)
+
+This is covered later in the [hardening](#hardening) section.
+
 {{< highlight bash >}}
 nft add map inet filter udp_ports_out4 '{ typeof ip saddr . ip daddr . udp dport : verdict; flags interval; }'
 nft add element inet filter udp_ports_out4 '{ 10.0.0.0/8     . 10.0.0.0/8     . 67   : accept }'
@@ -1158,17 +1168,73 @@ table inet filter { # handle 134
 	}
 }
 {{< / highlight >}}
+
 ### flushing the ruleset 
 Something that helps me is adding `flush ruleset` to the beginning of the new `/etc/nftables.conf` file so that the existing state is flushed before loading the file. 
 
-## IPv6 GUA prefixes
-- TODO
-
 ## Hardening
-- TODO
+```
+nft delete element inet filter udp_ports_in4 '{ 10.0.0.0/8     . 10.0.0.0/8     . 137  : accept }'
+nft delete element inet filter udp_ports_in4 '{ 172.16.0.0/12  . 172.16.0.0/12  . 137  : accept }'
+nft delete element inet filter udp_ports_in4 '{ 192.168.0.0/12 . 192.168.0.0/16 . 137  : accept }'
+nft delete element inet filter udp_ports_in4 '{ 10.0.0.0/8     . 10.0.0.0/8     . 5353 : accept }'
+nft delete element inet filter udp_ports_in4 '{ 172.16.0.0/12  . 172.16.0.0/12  . 5353 : accept }'
+nft delete element inet filter udp_ports_in4 '{ 192.168.0.0/12 . 192.168.0.0/16 . 5353 : accept }'
+nft delete element inet filter udp_ports_in4 '{ 10.0.0.0/8     . 224.0.0.0/4    . 5353 : accept }'
+nft delete element inet filter udp_ports_in4 '{ 172.16.0.0/12  . 224.0.0.0/4    . 5353 : accept }'
+nft delete element inet filter udp_ports_in4 '{ 192.168.0.0/12 . 224.0.0.0/4    . 5353 : accept }'
+
+nft delete element inet filter udp_ports_in6 '{ fe80::/10 . ff00::/8 . 5353  : accept }'
+nft delete element inet filter udp_ports_in6 '{ fc00::/7  . ff00::/8 . 5353  : accept }'
+
+nft delete element inet filter tcp_ports_out4 '{ 10.0.0.0/8     . 10.0.0.0/8     . 21   : accept }'
+nft delete element inet filter tcp_ports_out4 '{ 172.16.0.0/12  . 172.16.0.0/12  . 21   : accept }'
+nft delete element inet filter tcp_ports_out4 '{ 192.168.0.0/16 . 192.168.0.0/16 . 21   : accept }'
+nft delete element inet filter tcp_ports_out4 '{ 10.0.0.0/8     . 10.0.0.0/8     . 23   : accept }'
+nft delete element inet filter tcp_ports_out4 '{ 172.16.0.0/12  . 172.16.0.0/12  . 23   : accept }'
+nft delete element inet filter tcp_ports_out4 '{ 192.168.0.0/16 . 192.168.0.0/16 . 23   : accept }'
+nft delete element inet filter tcp_ports_out4 '{ 10.0.0.0/8     . 10.0.0.0/8     . 25   : accept }'
+nft delete element inet filter tcp_ports_out4 '{ 172.16.0.0/12  . 172.16.0.0/12  . 25   : accept }'
+nft delete element inet filter tcp_ports_out4 '{ 192.168.0.0/16 . 192.168.0.0/16 . 25   : accept }'
+nft delete element inet filter tcp_ports_out4 '{ 10.0.0.0/8     . 10.0.0.0/8     . 53   : accept }'
+nft delete element inet filter tcp_ports_out4 '{ 172.16.0.0/12  . 172.16.0.0/12  . 53   : accept }'
+nft delete element inet filter tcp_ports_out4 '{ 192.168.0.0/16 . 192.168.0.0/16 . 53   : accept }'
+nft delete element inet filter tcp_ports_out4 '{ 10.0.0.0/8     . 10.0.0.0/8     . 80   : accept }'
+nft delete element inet filter tcp_ports_out4 '{ 172.16.0.0/12  . 172.16.0.0/12  . 80   : accept }'
+nft delete element inet filter tcp_ports_out4 '{ 192.168.0.0/16 . 192.168.0.0/16 . 80   : accept }'
+
+nft delete element inet filter udp_ports_out4 '{ 10.0.0.0/8     . 10.0.0.0/8     . 53   : accept }'
+nft delete element inet filter udp_ports_out4 '{ 172.16.0.0/12  . 172.16.0.0/12  . 53   : accept }'
+nft delete element inet filter udp_ports_out4 '{ 192.168.0.0/16 . 192.168.0.0/16 . 53   : accept }'
+nft delete element inet filter udp_ports_out4 '{ 10.0.0.0/8     . 10.0.0.0/8     . 137  : accept }'
+nft delete element inet filter udp_ports_out4 '{ 172.16.0.0/12  . 172.16.0.0/12  . 137  : accept }'
+nft delete element inet filter udp_ports_out4 '{ 192.168.0.0/16 . 192.168.0.0/16 . 137  : accept }'
+nft delete element inet filter udp_ports_out4 '{ 10.0.0.0/8     . 224.0.0.0/4    . 5353 : accept }'
+nft delete element inet filter udp_ports_out4 '{ 172.16.0.0/12  . 224.0.0.0/4    . 5353 : accept }'
+nft delete element inet filter udp_ports_out4 '{ 192.168.0.0/16 . 224.0.0.0/4    . 5353 : accept }'
+nft delete element inet filter udp_ports_out4 '{ 169.254.0.0/16 . 224.0.0.0/4    . 5353 : accept }'
+nft delete element inet filter udp_ports_out6 '{ fc00::/7  . ff00::/8 . 5353 : accept }'
+```
 
 ## Testing 
-- TODO
+Testing can be performed from another client using scapy: 
+{{< highlight bash >}}
+from scapy.all import *; from ipaddress import IPv4Network as N4; [send(IP(src=str(x), dst='10.211.55.11')/ICMP(id=1, seq=1), loop=0) for x, y in zip(N4('65.146.55.0/24').hosts(), range(254))]
+{{< / highlight >}}
+
+On the firewall: 
+```
+tcpdump -vvv -n -e -ttt -i nflog:1 -XX
+...
+ 00:00:00.000036 version 0, resource ID 1, family IPv4 (2), length 84: (tos 0x0, ttl 64, id 41167, offset 0, flags [none], proto ICMP (1), length 28)
+    10.211.55.11 > 65.146.55.254: ICMP echo reply, id 1, seq 1, length 8
+	0x0000:  0200 0001 0800 0100 0800 0300 1f00 0a00  ................
+	0x0010:  6963 6d70 5f65 6368 6f5f 7265 706c 795f  icmp_echo_reply_
+	0x0020:  7261 7465 5f6c 696d 6974 0000 0800 0500  rate_limit......
+	0x0030:  0000 0002 2000 0900 4500 001c a0cf 0000  ........E.......
+	0x0040:  4001 1ea4 0ad3 370b 4192 37fe 0000 fffd  @.....7.A.7.....
+	0x0050:  0001 0001                                ....
+```
 
 ## Custom Docker support
 ### Preparation
@@ -1277,7 +1343,8 @@ table inet filter {
 }
 ```
 
-### TODO 
+### TODO
+This networking scheme is nice for Docker, but it sucks having to specify every address in `docker-compose`. I have an IPAM driver for Docker that will allow tags to specified for networks as options to the IPAM driver in compose, but it is a work in progress. 
 #### IPAM Driver
 - [https://github.com/paigeadelethompson/docker-ipam-driver](https://github.com/paigeadelethompson/docker-ipam-driver)
 #### Network Driver 
