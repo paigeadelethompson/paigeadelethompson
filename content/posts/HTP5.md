@@ -17,6 +17,7 @@ cover = "img/og.png"
         margin: 0;
     }
     pre {
+        background-color: black;
         color: #CED4DA;
         box-shadow: none;
         width: auto;
