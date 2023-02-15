@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
   const container = document.querySelector(".container");
   const allMenus = document.querySelectorAll(".menu");
 
-  // Hide menus on body click
   document.body.addEventListener("click", () => {
     allMenus.forEach(menu => {
       if (menu.classList.contains("open")) {
@@ -11,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     });
   });
 
-  // Reset menus on resize
   window.addEventListener("resize", () => {
     allMenus.forEach(menu => {
       menu.classList.remove("open");
@@ -19,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     });
   });
 
-  // Handle desktop menu
   allMenus.forEach(menu => {
     const trigger = menu.querySelector(".menu__trigger");
     const dropdown = menu.querySelector(".menu__dropdown");

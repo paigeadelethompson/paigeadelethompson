@@ -848,7 +848,8 @@ nft add rule inet filter ether_out log prefix "ether_out" group 1
 nft add rule inet filter ether_out counter drop
 {{< / highlight >}}
 
-## Filter state / configuration format
+## Filter state persistence
+### Configuration format
 If you are starting from here you can copy / paste this section to `/etc/nftables.conf`. Otherwise the current filter state can be made to persist with:
 - `nft -a -s list ruleset | tee /etc/nftables.conf`
 
@@ -1442,7 +1443,7 @@ table inet filter { # handle 60
 }
 {{< / highlight >}}
 
-### flushing the ruleset 
+### Flushing the ruleset 
 Something that helps me is adding `flush ruleset` to the beginning of the new `/etc/nftables.conf` file so that the existing state is flushed before loading the file. 
 
 ## Hardening

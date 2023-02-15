@@ -13,7 +13,6 @@
 
 <link rel="stylesheet" href="{{ $style.Permalink }}" integrity="{{ $style.Data.Integrity }}">
 
-<!-- Custom CSS to override theme properties (/static/style.css) -->
 {{ if (fileExists "static/style.css") -}}
 
 <link rel="stylesheet" href="{{ "style.css" | absURL }}">
@@ -28,14 +27,12 @@
     <script type="text/javascript" src="{{ . | absURL }}"></script>
 {{- end }}
 
-<!-- Icons -->
 {{ if isset $.Site.Params "favicon" }}
 
 <link rel="shortcut icon" href="{{ $.Site.Params.favicon | absURL }}">
 
 {{ end }}
 
-<!-- Twitter Card -->
 <meta name="twitter:card" content="summary" />
 
 {{ if (isset $.Site.Params "twitter") }}
@@ -49,7 +46,6 @@
 
 {{ end }}
 
-<!-- OG data -->
 <meta property="og:locale" content="{{ $.Site.Language.Lang }}" />
 <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}" />
 <meta property="og:title" content="{{ if .IsHome }}{{ $.Site.Title }}{{ else }}{{ .Title }}{{ end }}">
@@ -87,14 +83,12 @@
 
 {{ end }}
 
-<!-- RSS -->
 {{ with .OutputFormats.Get "RSS" }}
 
   <link href="{{ .RelPermalink }}" rel="alternate" type="application/rss+xml" title="{{ $.Site.Title }}" />
 
 {{ end }}
 
-<!-- JSON Feed -->
 {{ with .OutputFormats.Get "json" }}
 
   <link href="{{ .RelPermalink }}" rel="alternate" type="application/json" title="{{ $.Site.Title }}" />
@@ -102,11 +96,14 @@
 {{ end }}
 
 {{ $menu := resources.Get "js/menu.js" | js.Build | resources.Minify }}
-<script type="text/javascript" src="{{ $menu.RelPermalink }}"></script>
+{{ $secureJS := $menu | resources.Fingerprint "sha512" }}
+
+<script type="text/javascript" integrity="{{ $secureJS.Data.Integrity }}" src="{{ $menu.RelPermalink }}"></script>
 
 {{ if (findRE "<pre" .Content 1) }}
   {{ $cb := resources.Get "js/clipboard.js" | js.Build | resources.Minify }}
-  <script type="text/javascript" src="{{ $cb.RelPermalink }}"></script>
+  {{ $secureJS := $cb | resources.Fingerprint "sha512" }}
+  <script type="text/javascript" integrity="{{ $secureJS.Data.Integrity }}" src="{{ $cb.RelPermalink }}"></script>
 {{ end }}
 
 
