@@ -12,7 +12,7 @@ cover = "img/og.png"
 
 <style>
     .post-inner {
-        width:100%;
+        width:90%;
     }
 </style>
 
@@ -22,15 +22,10 @@ I've been wanting to make a game for a long time now... suffice to say I have oc
 
 <script src="https://gist.github.com/paigeadelethompson/939772f6f90d548a86af4cbf701d3f1c.js"></script>
 
-Unless you're familiar with tile map games this is probably especially hard to relate to given that the "sprites" are just ASCII characters. I never really could even relate to playing NetHack on console myself, and opted for the QT / GTK frontends that haven't worked for years now as far as I know (I never can get them to work.) I can certainly appreciate [ASCII and ANSI graphics](http://localhost:1313/posts/animation/) if that much isn't already obvious but I guess the NetHack ncurses frontent just never spoke to me the same way the pixmap sprites did on the GUI frontends. K? feel free to say "lol its cause' you don't know how to play and you're a noob" now. 
-
-Also, just wow... [CVE-2023-24809](https://www.nethack.org/security/CVE-2023-24809.html)
-
 <style>
     .gist .gist-meta a {
         color: white;
-        font-weight: unset;
-        
+        font-weight: unset;    
     }
     .gist .gist-meta {
         background-color: #272822;
@@ -54,7 +49,8 @@ Also, just wow... [CVE-2023-24809](https://www.nethack.org/security/CVE-2023-248
         background-color: #272822;
         border: unset;            
     }
-</style>   
+</style>
+Unless you're familiar with tile map games this is probably especially hard to relate to given that the "sprites" are just ASCII characters. I never really could even relate to playing NetHack on console myself, and opted for the QT / GTK frontends that haven't worked for years now as far as I know (I never can get them to work.) I can certainly appreciate [ASCII and ANSI graphics](http://localhost:1313/posts/animation/) if that much isn't already obvious but I guess the NetHack ncurses frontent just never spoke to me the same way the pixmap sprites did on the GUI frontends. K? feel free to say "lol its cause' you don't know how to play and you're a noob" now. 
 
 ## My first working engine
 
@@ -109,6 +105,11 @@ I had this idea that it would be cool to use authentic computers as part of the 
 ### Generating an open world
 A good source of open / 3D map data is difficult to acquire in it's entirety. I want to start by developing a game focused around the East Berlin area. A lot could be interpreted from old maps: 
 
-![Berlin](https://c7.alamy.com/comp/2ABAYNF/berlin-wall-vintage-1960s-berlin-cold-war-propaganda-map-illustration-showing-the-berlin-wall-as-a-bricked-up-barrier-and-barbed-wire-surrounding-west-berlin-airports-government-buildings-factories-and-other-sites-are-shown-in-the-west-but-none-in-the-east-detailed-explanations-of-transportation-borders-and-border-crossing-are-provided-in-german-english-french-and-spanish-but-not-in-russian-the-map-was-published-by-the-press-and-information-office-of-the-state-of-berlin-in-1963-germany-2ABAYNF.jpg)
-
 ![Berlin](http://www.tundria.com/trams/DEU/Berlin-1980.png)
+
+
+<style>
+    img { 
+        max-width:768px;
+    }
+</style>

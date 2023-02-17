@@ -593,6 +593,10 @@ blockquote p {
     a {
       text-decoration: underline;
     }
+
+    img { 
+      max-width:768px;
+    }
   }
 }
 
@@ -689,3 +693,4 @@ blockquote p {
   overflow: unset;
   }
 }
+
