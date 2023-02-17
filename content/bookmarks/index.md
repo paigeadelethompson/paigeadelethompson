@@ -13,6 +13,8 @@ cover = "img/og.png"
 - [babylon.js; A 3D engine with WebGPU and WebGL2 support: https://doc.babylonjs.com/journey](https://doc.babylonjs.com/journey)
 - [ClojureScript; Clojure LISP dialect for Javascript: https://clojurescript.org](https://clojurescript.org)
 - [cube-test; Babylon CLJ VR game example: https://github.com/vt5491/cube-test](https://github.com/vt5491/cube-test)
+### Game Development 
+- [Isometric Projection in Game Development https://pikuma.com/blog/isometric-projection-in-games](https://pikuma.com/blog/isometric-projection-in-games)
 ## Art
 - [Ultimate Oldschool PC font pack: https://int10h.org/oldschool-pc-fonts/readme/](https://int10h.org/oldschool-pc-fonts/readme/)
 - [ASCII Blaster: https://asdf.us/asciiblaster/](https://asdf.us/asciiblaster/)

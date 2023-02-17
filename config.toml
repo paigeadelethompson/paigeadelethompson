@@ -94,3 +94,15 @@ paginate     = 8
   [[module.mounts]]
     source = "node_modules/formiojs/dist/"
     target = "static/formio"
+
+  [[module.mounts]]
+    source = "node_modules/traviso.js/dist/browser/"
+    target = "static/traviso"
+
+  [[module.mounts]]
+    source = "node_modules/pixi.js/dist/"
+    target = "static/pixi"
+
+  [[module.mounts]]
+    source = "static/traviso_example"
+    target = "static/traviso_example"

@@ -12,6 +12,7 @@ cover = "img/og.png"
         width:100%;
     }
 </style>
+
 Ideally I would rewrite this but just a a proof of concept, I was very pleased with the result given how easy it was so I decided to share it incase anybody has any interest in this sort of thing. I think at some point I'll use this as an example to create something
 unique for my header / banner.
 
