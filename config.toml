@@ -20,7 +20,7 @@ paginate     = 8
   custom_css           = ["/formio/formio.full.min.css", "/formio/formio.builder.min.css"]
   custom_js            = ["/formio/formio.full.min.js"]
   googleAnalyticsID    = "G-YG2468NJFV"
-  
+
 [params.twitter]
   creator = "IAmPaigeAT"
   site    = "IAmPaigeAT"
@@ -97,8 +97,7 @@ paginate     = 8
     target = "static/formio"
 
   [[module.mounts]]
-#    source = "node_modules/traviso.js/dist/browser/"
-    source = "/Users/paigethompson/traviso.js/dist/browser/"
+    source = "node_modules/traviso.js/dist/browser/"    
     target = "static/traviso"
 
   [[module.mounts]]
