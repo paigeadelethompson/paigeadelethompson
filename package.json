@@ -18,7 +18,7 @@
   "dependencies": {
     "emulators": "^0.73.8",
     "emulators-ui": "^0.73.9",
-    "formio": "^3.0.0",
+    "formio": "^0.9.1",
     "traviso.js": "^0.1.5",
     "webamp": "^1.5.0"
   },

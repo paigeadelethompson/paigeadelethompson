@@ -82,7 +82,7 @@ Traviso is an isometric game engine, with a map and assets engine of it's own. M
         var instanceConfig =
         {
             mapDataPath : "/traviso_example/map.json",
-            assetsToLoad: ["/traviso_example/assets_map.json", "/traviso_example/assets_characters.json"]
+            //assetsToLoad: ["/traviso_example/assets_map.json", "/traviso_example/assets_characters.json"]
         };
         var engine = TRAVISO.getEngineInstance(instanceConfig);
         pixiRoot.stage.addChild(engine);
@@ -103,9 +103,13 @@ I had this idea that it would be cool to use authentic computers as part of the 
 [German reunification](https://en.wikipedia.org/wiki/German_reunification) began approximately on the 9th of November 1989. This game would propose an alternative reality in which this was prevented. Game play persists beyond this date. I have a beginning date in mind between 1975 and 1989.
 
 ### Generating an open world
-A good source of open / 3D map data is difficult to acquire in it's entirety. I want to start by developing a game focused around the East Berlin area. A lot could be interpreted from old maps: 
+A good source of open / 3D map data is difficult to acquire in it's entirety. I want to start by developing a game focused around the East Berlin area. A lot could be interpreted from old maps:
 
 ![Berlin](http://www.tundria.com/trams/DEU/Berlin-1980.png)
+
+Traviso likely have to be modified to cache map tiles rather than storing the entire map in an array all at once. The math for this notebook is way off, and I'm still trying to work through this a bit but in terms of generating maps I came 
+<script src="https://gist.github.com/paigeadelethompson/9c8c8476da87ce6c379b72538b7049b7.js"></script>
+
 
 
 <style>
@@ -113,3 +117,4 @@ A good source of open / 3D map data is difficult to acquire in it's entirety. I 
         max-width:768px;
     }
 </style>
+

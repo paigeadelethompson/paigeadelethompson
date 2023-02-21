@@ -5,8 +5,17 @@
 <meta name="robots" content="noodp" />
 <link rel="canonical" href="{{ .Permalink }}" />
 
-{{ template "_internal/google_analytics.html" . }}
+<script type="application/javascript" async src="https://www.googletagmanager.com/gtag/js?id={{ $.Site.Params.googleAnalyticsID }}"></script>
 
+<script type="application/javascript">
+  document.addEventListener("DOMContentLoaded", function(event) { 
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', '{{ $.Site.Params.googleAnalyticsID }}');
+});
+</script>
 
 {{ $sass := resources.Get "css/style.scss" }}
 {{ $style := $sass | resources.ToCSS | resources.Fingerprint }}
