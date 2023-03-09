@@ -40,3 +40,4 @@ cover = "img/og.png"
 ## Politics 
 - [United States Pirate Party](https://uspirates.org/about/)
 - [Cascadia Dept of Bioregion](https://cascadiabioregion.org)
+- [Texas v. White: https://supreme.justia.com/cases/federal/us/74/700/](https://supreme.justia.com/cases/federal/us/74/700/)
