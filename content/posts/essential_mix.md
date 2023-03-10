@@ -4,6 +4,7 @@ Date = "2023-01-18T18:00:20-0800"
 Author = "Paige"
 Description = "A collection of Essential Mixes in WebAmp"
 cover = "img/og.png"
+tags = ["Music"]
 +++
 
 > What about mobile support?

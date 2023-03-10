@@ -368,6 +368,21 @@ blockquote p {
   visibility: visible;
 }
 
+.post-tag-wrapper {
+  height: auto;
+  width: auto;
+}
+.post-tags {
+  div {
+    float: left;
+    margin-left: 12px;
+    padding: 8px;
+    background-color: #343A40;
+    box-shadow: 8px 9px 0 0 #212529;
+    margin-bottom:8px;
+  }
+}
+
 .content-container {
     margin-top: 0;
     margin-left:16px;
@@ -382,6 +397,7 @@ blockquote p {
       margin-top: 2px;
       overflow: hidden;
       width:208px;
+      margin-bottom: 24px;
     }
 }
 
@@ -396,6 +412,7 @@ blockquote p {
   padding: 8px;
   margin-right: 8px;
   margin-left: 8px;
+  margin-top: 14px;
   float: left;
   position: fixed;
 }

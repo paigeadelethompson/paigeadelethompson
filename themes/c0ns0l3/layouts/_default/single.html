@@ -33,16 +33,19 @@
         {{ end }}
 
     </div>
-    <br style="clear: both" />
+
     {{ if .Params.tags }}
-
-    <span class="post-tags">
-        {{ range .Params.tags }}
-        #<a href="{{ (urlize (printf "tags/%s/" .)) | absLangURL }}">{{ . }}</a>&nbsp;
-        {{ end }}
-    </span>
-
+        <br style="clear: both" />
+        <div class="post-tag-wrapper">
+        <span class="post-tags">
+            {{ range .Params.tags }}
+            <div>#&nbsp;<a href="{{ (urlize (printf "tags/%s/" .)) | absLangURL }}">{{ . }}</a>&nbsp;</div>
+            {{ end }}
+        </span>
+        </div>
     {{ end }}
+    
+    <br style="clear: both" />
     
     {{ if (.Params.Toc | default .Site.Params.Toc) }}
     <div class="table-of-contents" {{ if eq (strings.Count "<li>" .TableOfContents) 0}} style="padding: 0;" {{end}} >

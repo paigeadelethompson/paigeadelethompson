@@ -4,6 +4,7 @@ Date = "2023-01-26T09:58:20-0800"
 Author = "Paige"
 Description = "Nobody listens to techno"
 cover = "img/og.png"
+tags = ["Music"]
 +++
 
 I haven't put anything here that didn't speak to me, everything here is exceptionally good or it's not in this list.

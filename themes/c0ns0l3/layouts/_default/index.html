@@ -47,22 +47,6 @@
 
         </div>
 
-        {{ if .Params.tags }}
-
-        <span class="post-tags">
-
-            {{ range .Params.tags }}
-
-            #<a href="{{ (urlize (printf "tags/%s/" . )) | absLangURL }}">
-            {{- . -}}
-            </a>&nbsp;
-
-            {{ end }}
-
-        </span>
-
-        {{ end }}
-        
         <div class="post-content-preview">
 
             {{ if .Params.showFullContent }}
@@ -74,8 +58,18 @@
             {{ end }}
 
         </div>
+        {{ if .Params.tags }}
+            <br style="clear: both" />
+            <div class="post-tag-wrapper">
+            <span class="post-tags">
+                {{ range .Params.tags }}
+                <div>#&nbsp;<a href="{{ (urlize (printf "tags/%s/" .)) | absLangURL }}">{{ . }}</a>&nbsp;</div>
+                {{ end }}
+            </span>
+            </div>
+        {{ end }}        
     </article>
-    <br />
+    <br style="clear: both" />
     {{ end }}
 
     {{ partial "pagination.html" . }}

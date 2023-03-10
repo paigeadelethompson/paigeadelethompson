@@ -4,6 +4,7 @@ Date = "2023-01-22T23:20:20-0800"
 Author = "Paige"
 Description = "Setting up NFTables"
 cover = "img/og.png"
+tags = ["Security", "NFTables"]
 +++
 
 ## Intro 

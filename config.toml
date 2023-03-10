@@ -107,3 +107,7 @@ paginate     = 8
   [[module.mounts]]
     source = "static/traviso_example"
     target = "static/traviso_example"
+
+  [taxonomies]
+  tag = "tags"
+  category = "categories"

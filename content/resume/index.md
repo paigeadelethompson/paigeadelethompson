@@ -4,6 +4,8 @@ date = "2023-01-13T09:58:20-0800"
 author = "Paige"
 description = "Perhaps there is a way to embed passport.mid after all"
 cover = "img/og.png"
+Keywords = ["Paige Thompson", "Seattle", "Amazon", "Hacker", "Resume", "CV", "talent acquisition pseudo-profession", "Programmer"]
+Tags = ["Projects", "Resume", "Paige Thompson", "CV"]
 +++
 
 ```                                                                                         
@@ -37,7 +39,7 @@ cover = "img/og.png"
 ![Stats](https://github-readme-stats.vercel.app/api?username=paigeadelethompson&show_icons=true)
 
 ## Abandoned project adoption
-I've recently gone through GitHub a bit and located a few projects which are abandoned. I've been restoring some of these projects to a working state, setting up CI, and packaging them.
+I've recently gone through GitHub a bit and located a few projects which are abandoned. I've been restoring some of these projects to a working state, setting up CI, and packaging them. I've been having problems with people turning me down for jobs that I would actually be really good at, so I've decided to take on some projects that I can use to demonstrate my familiarity with CI and web development.
  
 ### django-personal-finance 
 - [![PyPI version](https://badge.fury.io/py/django-personal-finance.svg)](https://badge.fury.io/py/django-personal-finance)
@@ -90,10 +92,10 @@ root@9cdba5cab7a0:/#
 <img src="/img/snort.svg"  width="64" height="64">
 
 Get it? because it downloads Snort rules and their project mascot is this pig and ... nevermind its a bad joke and I shouldn't have done this.
- 
-- browz [![PyPI version](https://badge.fury.io/py/browz.svg)](https://badge.fury.io/py/browz)
 
 ### jquery-circular-carousel
+This is a 3D-like image carousel written by [Sam Brown](https://sgb.io/). It has some fantastic qualities and it seems to work fine, although it struggles to play nice with the rest of my CSS and I had to load it as an iframe here. Still, it seems useful, and it does a great job of demonstrating my cat, so I packaged it and published it to NPM for the world to enjoy.
+
 <style>
   .carousel {
     width: 1092px;
@@ -274,6 +276,4 @@ This doesn't really count as part of my resume, but browser MIDI support (playin
     emulators.pathPrefix = "/emulators/";
     Dos(document.getElementById("dosbox")).run("/jsdos/bundle.zip");
   });
-</script>
-
-You have to admit, though. This is pretty cool, right? 
+</script> 
