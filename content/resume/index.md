@@ -37,7 +37,8 @@ cover = "img/og.png"
 ![Stats](https://github-readme-stats.vercel.app/api?username=paigeadelethompson&show_icons=true)
 
 ## Abandoned project adoption
-I've recently gone through GitHub a bit and located a few projects which are abandoned. I've been restoring some of these projects to a working state, setting up CI, and packaging them. Evidently I needed the "experience" to prove my worth to employers, what more can you ask for?
+I've recently gone through GitHub a bit and located a few projects which are abandoned. I've been restoring some of these projects to a working state, setting up CI, and packaging them.
+
 ### PyPI packages 
 - django-personal-finance [![PyPI version](https://badge.fury.io/py/django-personal-finance.svg)](https://badge.fury.io/py/django-personal-finance)
 - ruledownloader [![PyPI version](https://badge.fury.io/py/ruledownloader.svg)](https://badge.fury.io/py/ruledownloader)
