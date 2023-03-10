@@ -16,19 +16,19 @@
     }
   },
   "dependencies": {
-    "emulators": "^0.73.8",
-    "emulators-ui": "^0.73.9",
-    "formio": "^0.9.1",
-    "traviso.js": "^0.1.5",
-    "webamp": "^1.5.0"
+    "emulators": "*",
+    "emulators-ui": "*",
+    "formio": "*",
+    "traviso.js": "*",
+    "webamp": "*"
   },
   "description": "Paige's Homepage",
   "devDependencies": {
-    "autoprefixer": "^10.4.13",
-    "hugo-bin": "^0.98.0",
-    "hugo-extended": "^0.110.0",
-    "postcss": "^8.4.21",
-    "postcss-cli": "^10.1.0"
+    "autoprefixer": "*",
+    "hugo-bin": "*",
+    "hugo-extended": "*",
+    "postcss": "*",
+    "postcss-cli": "*"
   },
   "homepage": "https://paige.bio",
   "license": "UNLICENSED",
