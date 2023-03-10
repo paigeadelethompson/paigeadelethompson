@@ -14,26 +14,22 @@
     padding-top: 0px; 
     padding-bottom: 0px;
     cursor: default;  
-
     ::-webkit-scrollbar {
-      width: 8px;
+      width: 16px;
+      height:16px;
     }
-    
     ::-webkit-scrollbar-track {
       background: black;
-    }
-    
+    }    
     ::-webkit-scrollbar-thumb:vertical {
       background: linear-gradient(to bottom, rgb(61, 249, 61), rgb(0, 238, 255), rgb(255, 255, 255), rgb(217, 0, 255));
-    }
-    
+    }    
     ::-webkit-scrollbar-thumb:vertical:hover {
       background:linear-gradient(to bottom,rgb(217, 0, 255), rgb(255, 255, 255), rgb(0, 238, 255), rgb(61, 249, 61));
     }
     ::-webkit-scrollbar-thumb:horizontal {
       background: linear-gradient(to right, rgb(61, 249, 61), rgb(0, 238, 255), rgb(255, 255, 255), rgb(217, 0, 255));
-    }
-    
+    }    
     ::-webkit-scrollbar-thumb:horizontal:hover {
       background:linear-gradient(to right,rgb(217, 0, 255), rgb(255, 255, 255), rgb(0, 238, 255), rgb(61, 249, 61));
     }
@@ -374,6 +370,7 @@ blockquote p {
 
 .content-container {
     margin-top: 0;
+    margin-left:16px;
     background-color:#433a3a;
     
     ul {
