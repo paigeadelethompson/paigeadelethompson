@@ -24,11 +24,11 @@
     }
     
     ::-webkit-scrollbar-thumb {
-      background: #DEE2E6; 
+      background: linear-gradient(to bottom, rgb(61, 249, 61), rgb(0, 238, 255), rgb(255, 255, 255), rgb(217, 0, 255));
     }
     
     ::-webkit-scrollbar-thumb:hover {
-      background: #433a3a; 
+      background:linear-gradient(to bottom,rgb(217, 0, 255), rgb(255, 255, 255), rgb(0, 238, 255), rgb(61, 249, 61));
     }
 }
 
@@ -81,12 +81,12 @@ h3,
 h4,
 h5,
 h6 {    
-    box-shadow: 4px 4px 0 0 #212529;
+    box-shadow: 8px 9px 0 0 #212529;
     text-align: center;
     display: block;
     padding: 16px;
     width: 128px;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     a {      
       margin-left: 8px;
       color: #212529; 
@@ -162,7 +162,7 @@ br {
 code { 
   background-color: #343A40;
   color: white;
-  box-shadow: 2px 2px 0 0 #212529;
+  box-shadow: 8px 9px 0 0 #212529;
   padding-left: 4px;
   padding-right: 4px; 
   padding-top:2px;
@@ -178,11 +178,12 @@ pre {
     margin: unset;
     color: unset;
   }
-  box-shadow: 4px 4px 0 0 #212529;
+  box-shadow: 8px 9px 0 0 #212529;
   display: block;
   padding: 8px;
-  margin-bottom: 12px;
-  background-color: #242423;
+  margin-bottom: 24px;
+  margin-right:8px;
+  background-color: #000000;
   color: limegreen;
   overflow: auto;
 }
@@ -402,8 +403,8 @@ blockquote p {
 }
 
 .table-of-contents {
-  box-shadow: 4px 4px 0 0 #212529;
-  background-color: #242423;
+  box-shadow: 8px 9px 0 0 #212529;
+  background-color: #DEE2E6;
   padding: 8px;
   margin-right: 8px;
   float: left;
@@ -415,7 +416,7 @@ blockquote p {
   overflow: hidden;
   
   a {
-    color: white;    
+    color: #212529;
   }
   li {
     margin: 0;   
@@ -467,19 +468,15 @@ blockquote p {
 }
 
 .copy-code-button {
-  box-shadow: 4px 4px 0 0 #212529;
+  box-shadow: 8px 9px 0 0 #212529;
   background-color: #272822;
   color: white;
   display: block;
   padding-left: 8px;
   padding-right: 8px;
-  margin-bottom: 8px;
-  margin-top: -8px;
-  //position: absolute; 
-  margin-left: 6px;
-  //margin-top: 4px;
-  float: right;
+  margin-bottom: 16px;
   width: 48px;
+  height: 48px;
   
 }
 
@@ -499,7 +496,7 @@ blockquote p {
 }
 
 .highlight pre {
-  
+
 }
 
 .highlight {
@@ -514,7 +511,7 @@ blockquote p {
 .post-meta {
   margin-right: 12px;
   background-color: #242423;
-  box-shadow: 4px 4px 0 0 #212529;
+  box-shadow: 8px 9px 0 0 #212529;
   padding: 16px;
   float: right;
   align-items: right;
@@ -559,6 +556,7 @@ blockquote p {
 }
 .post-inner {
   max-width: 100%;
+  padding-top: 8px;
 }
 
 .post-content {
@@ -575,6 +573,15 @@ blockquote p {
   li {
     margin-bottom: 12px;
     line-height: 24px;
+    code { 
+      background-color: #343A40;
+      color: white;
+      box-shadow: 2px 2px 0 0 #212529;
+      padding: 0;
+    }
+    img {
+      padding: 0;
+    }
   }
   
   ul { 
@@ -600,14 +607,24 @@ blockquote p {
     img { 
       max-width:768px;
     }
+    code { 
+      background-color: #343A40;
+      color: white;
+      box-shadow: 2px 2px 0 0 #212529;
+      padding: 0;
+    }
   }
 }
 
 .posts {
   article { 
     background-color: #393131;
+    width: 96%;
     padding: 16px;
     box-shadow: 4px 4px 0 0 #212529;
+    h1 {
+      margin-right:8px;
+    }
   }
   
   hr {
@@ -621,10 +638,7 @@ blockquote p {
   display: block;
   padding: 0;
   height:44px;
-  margin-bottom: 12px;
-  margin-left: 12px;
-  min-width: 384px;
-  max-width: 512px;
+  margin-bottom: 16px;
   color: antiquewhite;
   padding-top: 4px;
   padding-left: 8px;
@@ -648,19 +662,21 @@ blockquote p {
     float: right;
 }
 
-.pagination { 
-  h1 { 
+.pagination {
+  h1 {
     margin-left: 2px;
     color: black;
+    cursor: pointer;
   }
 }
 
 .pagination__buttons {
-  h6 { 
+  h6 {
     margin-left: unset;
     float: left;
     margin-right: 12px;
     width: auto;
+    cursor: pointer;
   }
 }
 

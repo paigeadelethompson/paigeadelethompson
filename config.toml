@@ -29,9 +29,9 @@ paginate     = 8
   [languages.en]
     languageName           = "English"
     title                  = "paige.bio"
-    subtitle               = "Personal home page"
+    subtitle               = "Paige's home page"
     owner                  = "Paige Thompson"
-    keywords               = "Computers, Programming, Paige Thompson"
+    keywords               = "Computers, Programming, Paige Thompson, Seattle, Art"
     copyright              = "2023"
     menuMore               = "Show more"
     readMore               = "Read more"

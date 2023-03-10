@@ -20,6 +20,12 @@ cover = "img/og.png"
 - [ASCII Blaster: https://asdf.us/asciiblaster/](https://asdf.us/asciiblaster/)
 - [vx-underground: https://www.vx-underground.org](https://www.vx-underground.org)
 - [ACiD Productions: https://www.acid.org/whatsnew/whatsnew.html](https://www.acid.org/whatsnew/whatsnew.html)
+- [LHOHQ http://lhohq.info](http://lhohq.info)
+- [yyyyyyy (y7) http://yyyyyyy.info](http://yyyyyyy.info)
+- [Yvette's Bridal Formal https://yvettesbridalformal.p1r8.net](https://yvettesbridalformal.p1r8.net)
+- [Textfiles Art Scene - http://artscene.textfiles.com/ansi/](http://artscene.textfiles.com/ansi/)
+- [ASCII Art Generator - https://www.ascii-art-generator.org](https://www.ascii-art-generator.org)
+- [ASCII Bird - https://github.com/birdneststream/asciibird](https://github.com/birdneststream/asciibird)
 ## Podcasts
 - [OffTheHook: https://www.2600.com/offthehook/](https://www.2600.com/offthehook/)
 - [Hacker and the Fed: https://podcasts.apple.com/us/podcast/hacker-and-the-fed/id1649541362](https://podcasts.apple.com/us/podcast/hacker-and-the-fed/id1649541362)
@@ -37,6 +43,10 @@ cover = "img/og.png"
 - [Groove Salad SomaFM https://somafm.com/groovesalad/](https://somafm.com/groovesalad/)
 ## Audio Production 
 - [Adlib Tracker II http://www.adlibtracker.net](http://www.adlibtracker.net)
+- [Mixxx https://mixxx.org](https://mixxx.org)
+## Unsorted
+- [insecam - live public camera streams http://www.insecam.org/](http://www.insecam.org/)
+- [nexpo - internet detective https://nexpo.page](https://nexpo.page)
 ## Politics 
 - [United States Pirate Party](https://uspirates.org/about/)
 - [Cascadia Dept of Bioregion](https://cascadiabioregion.org)
