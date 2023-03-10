@@ -4,6 +4,7 @@ Date = "2023-01-16T01:22:20-0800"
 Author = "Paige"
 Description = "A chess UI that I made (needs a chess backend still)"
 cover = "img/og.png"
+tags = ["HTML/CSS Testing", "CSS", "Javascript"]
 +++
 
 # Backend 

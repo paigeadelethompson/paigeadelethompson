@@ -4,6 +4,8 @@ date = "2023-01-13T09:58:20-0800"
 author = "Paige"
 description = "Perhaps there is a way to embed passport.mid after all"
 cover = "img/og.png"
+Keywords = ["Paige Thompson", "Seattle", "Amazon", "Hacker", "Resume", "CV", "talent acquisition pseudo-profession", "Programmer"]
+Tags = ["Projects", "Resume", "Paige Thompson", "CV"]
 +++
 
 ```                                                                                         
@@ -37,7 +39,7 @@ cover = "img/og.png"
 ![Stats](https://github-readme-stats.vercel.app/api?username=paigeadelethompson&show_icons=true)
 
 ## Abandoned project adoption
-I've recently gone through GitHub a bit and located a few projects which are abandoned. I've been restoring some of these projects to a working state, setting up CI, and packaging them.
+I've recently gone through GitHub a bit and located a few projects which are abandoned. I've been restoring some of these projects to a working state, setting up CI, and packaging them. I've been having problems with people turning me down for jobs that I would actually be really good at, so I've decided to take on some projects that I can use to demonstrate my familiarity with CI and web development.
  
 ### django-personal-finance 
 - [![PyPI version](https://badge.fury.io/py/django-personal-finance.svg)](https://badge.fury.io/py/django-personal-finance)
@@ -90,10 +92,10 @@ root@9cdba5cab7a0:/#
 <img src="/img/snort.svg"  width="64" height="64">
 
 Get it? because it downloads Snort rules and their project mascot is this pig and ... nevermind its a bad joke and I shouldn't have done this.
- 
-- browz [![PyPI version](https://badge.fury.io/py/browz.svg)](https://badge.fury.io/py/browz)
 
 ### jquery-circular-carousel
+This is a 3D-like image carousel written by [Sam Brown](https://sgb.io/). It has some fantastic qualities and it seems to work fine, although it struggles to play nice with the rest of my CSS and I had to load it as an iframe here. Still, it seems useful, and it does a great job of demonstrating my cat, so I packaged it and published it to NPM for the world to enjoy.
+
 <style>
   .carousel {
     width: 1092px;
@@ -118,7 +120,7 @@ That actually works and interfaces with the real world?
 - [paigeadelethompson/pscr_core ![paigeadelethompson/pscr_core](https://badge.fury.io/ph/paigeadelethompson%2Fpscr_core.svg)](https://badge.fury.io/ph/paigeadelethompson%2Fpscr_core)
 - [paigeadelethompson/pscr_content ![paigeadelethompson/pscr_content](https://badge.fury.io/ph/paigeadelethompson%2Fpscr_content.svg)](https://badge.fury.io/ph/paigeadelethompson%2Fpscr_content)
 
-What a stupid name right? Yeah well I was about 19 (2007?) when I wrote it and by the time I got around to rewriting it in 2018 I really just wanted to see how much I would like working in Jetbrains PHPStorm. Well, I liked it so much that I suddenly remembered how much I really believed in this idea of using pure object oriented programming to make web pages back in 2007. Over the years I collectively realized that the existential approach I took to just trying to make something, just trying to make anything in order to get really good at programming ultimately landed me on the doorstep of MVC web design. 
+I'm sorry that the name sucks, I wrote it when I was 19. By the time I got around to rewriting it in 2018 I really just wanted to see how much I would like working in Jetbrains PHPStorm and I didn't really care about the name because I knew it wouldn't matter. I suddenly remembered how much I really believed in this idea of using pure object oriented programming to make web pages back in 2007. Over the years I collectively realized that the existential approach I took to just trying to make something, just trying to make anything in order to get really good at programming ultimately landed me on the doorstep of MVC web design. 
 
 ![screenshot](https://github.com/paigeadelethompson/pscr_demo/blob/master/screenshots/1.png?raw=true)
 
@@ -238,20 +240,21 @@ The next step after the controller initializes the page object is to [transpose 
         </div>
         <div id="sidebar-button" onclick="w3_open();">☰</div>
       </div>
+      <!-- this is incomplete output -->
 {{< / highlight >}}
 
-And this is all verifiable by Docker:
-
+You can check the complete output with docker if you want:
 ```
 docker build -t pscr_demo -t pscr_demo:latest .
-docker run -t --rm -d pscr_demo
-docker exec -it 5872a51ab5 curl localhost | head -n 5
+docker run -t --rm --name pscr -d pscr_demo
+docker exec -it pscr curl localhost | head -n 5
 <!DOCTYPE html>
 <html>
   <head>
     <title>PSCR Default Install Page</title>
     <link href="css/style.css" type="text/css" rel="stylesheet">
 ```
+just remove the `| head -n 5`.
 
 Feel free to download [pscr_demo](https://github.com/paigeadelethompson/pscr_demo) and try it out for yourself, but I totally understand if this is not your thing. But, not bad for a silly existential idea I came up with in like 2007, in my honest opinion. The main difference between the rewrite and the original is that the rewrite uses `PSR-4` and that didn't exist back then.
 
@@ -263,7 +266,7 @@ Feel free to download [pscr_demo](https://github.com/paigeadelethompson/pscr_dem
 ## passport.mid
 This doesn't really count as part of my resume, but browser MIDI support (playing .MID files) is kind of a thing of the distant past, and getting it to work with any particular browser... didn't have much luck. And I am totally one of those idiots from the 90s who would embed music in a page just to be obnoxious. Luckily, modern browsers are powerful enough to run emulators. Unfortunately at least in Safari the sound won't work unless the user clicks somewhere in the page to prevent pages from automatically playing unwanted sound. I don't really like that. Not only can I not annoy people with `passport.mid` now, but it makes the assumption that I don't want to be a little annoyed myself [by default](https://memrise.zendesk.com/hc/en-us/articles/360015889117-How-can-I-allow-audio-to-auto-play-on-Safari-). If you agree with me, consider [reporting this to apple](https://www.apple.com/feedback/safari.html) as a bug.
 <link rel="stylesheet" href="/emulators-ui/emulators-ui.css">
-<div id="dosbox-wrapper" style="width: 989px;">
+<div id="dosbox-wrapper" style="width: 96%">
 <div id="dosbox"></div>
 </div>
 <script src="/emulators/emulators.js"></script>
@@ -273,6 +276,4 @@ This doesn't really count as part of my resume, but browser MIDI support (playin
     emulators.pathPrefix = "/emulators/";
     Dos(document.getElementById("dosbox")).run("/jsdos/bundle.zip");
   });
-</script>
-
-You have to admit, though. This is pretty cool, right? 
+</script> 

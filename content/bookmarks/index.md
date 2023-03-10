@@ -4,6 +4,7 @@ Date = "2023-01-13T09:58:20-0800"
 Author = "Paige"
 Description = "Links"
 cover = "img/og.png"
+tags = ["Bookmarks"]
 +++
 ## Programming
 - [The Rust programming language - Lise Henry: https://lise-henry.github.io/books/trpl2.pdf](https://lise-henry.github.io/books/trpl2.pdf)

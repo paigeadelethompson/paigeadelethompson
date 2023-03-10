@@ -5,6 +5,7 @@ Date = "2023-02-16T07:27:20-0800"
 Author = "Paige"
 Description = "Some simple javascript text effect / animation I made as a demo using plain old JQuery (embedded from jsfiddle)"
 cover = "img/og.png"
+tags = ["Code", "Javascript", "Art"]
 +++
 
 <style>

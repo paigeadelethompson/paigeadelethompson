@@ -4,6 +4,7 @@ Date = "2023-01-15T23:20:20-0800"
 Author = "Paige"
 Description = "Some thoughts on my experiences and in response to shouldiblockicmp.com"
 cover = "img/og.png"
+tags = ["Security", "scapy", "IDS DoS", "Spoofing"]
 +++
 
 > Yes!

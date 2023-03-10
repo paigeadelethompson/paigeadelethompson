@@ -5,6 +5,7 @@ Date = "2023-02-16T07:27:20-0800"
 Author = "Paige"
 Description = "Testing to see what an embedded iPython Notebook looks like"
 cover = "img/og.png"
+tags = ["HTML/CSS Testing", "IPython", "scapy"]
 +++
 
 <style>

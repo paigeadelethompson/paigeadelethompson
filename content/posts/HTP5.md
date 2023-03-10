@@ -4,6 +4,7 @@ Date = "2013-05-08T23:20:20-0800"
 Author = "HTP & ACiD"
 Description = "2013 - HTP (Hack the planet) ezine-view test page"
 cover = "img/og.png"
+tags = ["HTML/CSS Testing", "Art"]
 +++
 <style>
     * {

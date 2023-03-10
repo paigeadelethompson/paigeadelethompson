@@ -4,6 +4,7 @@ Date = "2023-01-14T07:27:20-0800"
 Author = "Paige"
 Description = "ACiDDraw for DOS; running on JS-DOS"
 cover = "img/og.png"
+tags = ["Art", "DOS", "Projects", "Emulators", "Links"]
 +++
 
 <link rel="stylesheet" href="/emulators-ui/emulators-ui.css">

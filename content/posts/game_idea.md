@@ -4,6 +4,7 @@ Date = "2023-02-16T23:27:20-0800"
 Author = "Paige"
 Description = "I've been wanting to make a game for a long time now..."
 cover = "img/og.png"
+tags = ["Games", "Javascript", "traviso.js"]
 +++
 
 <script src="https://www.travisojs.com/examples/js/pixi.min.js"></script>

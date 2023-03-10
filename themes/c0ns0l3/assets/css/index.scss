@@ -14,27 +14,30 @@
     padding-top: 0px; 
     padding-bottom: 0px;
     cursor: default;  
-
     ::-webkit-scrollbar {
-      width: 8px;
+      width: 16px;
+      height:16px;
     }
-    
     ::-webkit-scrollbar-track {
       background: black;
-    }
-    
-    ::-webkit-scrollbar-thumb {
+    }    
+    ::-webkit-scrollbar-thumb:vertical {
       background: linear-gradient(to bottom, rgb(61, 249, 61), rgb(0, 238, 255), rgb(255, 255, 255), rgb(217, 0, 255));
-    }
-    
-    ::-webkit-scrollbar-thumb:hover {
+    }    
+    ::-webkit-scrollbar-thumb:vertical:hover {
       background:linear-gradient(to bottom,rgb(217, 0, 255), rgb(255, 255, 255), rgb(0, 238, 255), rgb(61, 249, 61));
+    }
+    ::-webkit-scrollbar-thumb:horizontal {
+      background: linear-gradient(to right, rgb(61, 249, 61), rgb(0, 238, 255), rgb(255, 255, 255), rgb(217, 0, 255));
+    }    
+    ::-webkit-scrollbar-thumb:horizontal:hover {
+      background:linear-gradient(to right,rgb(217, 0, 255), rgb(255, 255, 255), rgb(0, 238, 255), rgb(61, 249, 61));
     }
 }
 
 body {
     background-color: black;
-    min-width: 1024px;
+    min-width: 767px;
 }
 
 time {
@@ -285,7 +288,6 @@ blockquote p {
   margin:0;
   margin-left: 8px;
   width: 294px;
-  
   @media (max-width: 767px) {
     display: none;
   }
@@ -312,12 +314,13 @@ blockquote p {
   width:100%;
   padding: 0;
   margin: 0;
-  
   a {
     text-decoration: none;
   }
-
   float: left;
+  @media (max-width: 767px) {
+    width: unset;
+  }
 }
 
 .menu__trigger {
@@ -348,6 +351,9 @@ blockquote p {
 .menu-item { 
   float: left;
   margin-right: 64px;
+  @media (max-width: 375px) {
+    margin-right: 96px;
+  }
 }
 
 .menu {
@@ -362,8 +368,24 @@ blockquote p {
   visibility: visible;
 }
 
+.post-tag-wrapper {
+  height: auto;
+  width: auto;
+}
+.post-tags {
+  div {
+    float: left;
+    margin-left: 12px;
+    padding: 8px;
+    background-color: #343A40;
+    box-shadow: 8px 9px 0 0 #212529;
+    margin-bottom:8px;
+  }
+}
+
 .content-container {
     margin-top: 0;
+    margin-left:16px;
     background-color:#433a3a;
     
     ul {
@@ -375,33 +397,32 @@ blockquote p {
       margin-top: 2px;
       overflow: hidden;
       width:208px;
-    }
-
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: black; 
-    }
-    
-    ::-webkit-scrollbar-thumb {
-      background:  darkgreen;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: limegreen;
+      margin-bottom: 24px;
     }
 }
 
 .table-of-contents {
+  nav {
+    display: none;
+  }
+  height: 16px;
+  width: 16px;
   box-shadow: 8px 9px 0 0 #212529;
   background-color: #DEE2E6;
   padding: 8px;
   margin-right: 8px;
   margin-left: 8px;
+  margin-top: 14px;
   float: left;
+  position: fixed;
+}
+
+.table-of-contents:hover {
+  nav {
+    display: block;
+  }
+  width: 512px;
+  height: unset;
 }
 
 #TableOfContents {
@@ -525,24 +546,6 @@ blockquote p {
 }
 
 .highlight { 
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: #433a3a;
-  }
-  
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: #343A40;
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: #CED4DA;
-  }
   span { 
     white-space: unset;
     line-break: unset;
@@ -551,6 +554,7 @@ blockquote p {
 .post-inner {
   max-width: 100%;
   padding-top: 8px;
+  margin-left: 48px;
 }
 
 .post-content {
@@ -599,7 +603,8 @@ blockquote p {
     }
 
     img { 
-      max-width:768px;
+      max-width:100%;
+      padding-bottom: 8px;
     }
     code { 
       background-color: #343A40;
