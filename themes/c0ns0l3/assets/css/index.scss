@@ -41,7 +41,7 @@
 
 body {
     background-color: black;
-    min-width: 1024px;
+    min-width: 767px;
 }
 
 time {
@@ -292,7 +292,6 @@ blockquote p {
   margin:0;
   margin-left: 8px;
   width: 294px;
-  
   @media (max-width: 767px) {
     display: none;
   }
@@ -319,12 +318,13 @@ blockquote p {
   width:100%;
   padding: 0;
   margin: 0;
-  
   a {
     text-decoration: none;
   }
-
   float: left;
+  @media (max-width: 767px) {
+    width: unset;
+  }
 }
 
 .menu__trigger {
@@ -355,6 +355,9 @@ blockquote p {
 .menu-item { 
   float: left;
   margin-right: 64px;
+  @media (max-width: 375px) {
+    margin-right: 96px;
+  }
 }
 
 .menu {

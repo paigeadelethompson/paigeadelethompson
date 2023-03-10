@@ -238,20 +238,21 @@ The next step after the controller initializes the page object is to [transpose 
         </div>
         <div id="sidebar-button" onclick="w3_open();">☰</div>
       </div>
+      <!-- this is incomplete output -->
 {{< / highlight >}}
 
-And this is all verifiable by Docker:
-
+You can check the complete output with docker if you want:
 ```
 docker build -t pscr_demo -t pscr_demo:latest .
-docker run -t --rm -d pscr_demo
-docker exec -it 5872a51ab5 curl localhost | head -n 5
+docker run -t --rm --name pscr -d pscr_demo
+docker exec -it pscr curl localhost | head -n 5
 <!DOCTYPE html>
 <html>
   <head>
     <title>PSCR Default Install Page</title>
     <link href="css/style.css" type="text/css" rel="stylesheet">
 ```
+just remove the `| head -n 5`.
 
 Feel free to download [pscr_demo](https://github.com/paigeadelethompson/pscr_demo) and try it out for yourself, but I totally understand if this is not your thing. But, not bad for a silly existential idea I came up with in like 2007, in my honest opinion. The main difference between the rewrite and the original is that the rewrite uses `PSR-4` and that didn't exist back then.
 
