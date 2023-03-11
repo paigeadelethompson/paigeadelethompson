@@ -1,10 +1,25 @@
 +++
-title = "Paige's Resume"
+title = "Resume for Paige Thompson"
 date = "2023-01-13T09:58:20-0800"
-author = "Paige"
-description = "Perhaps there is a way to embed passport.mid after all"
+author = "Paige Thompson"
+description = "Software Engineer / Systems Engineer; available for hire"
 cover = "img/og.png"
-Keywords = ["Paige Thompson", "Seattle", "Amazon", "Hacker", "Resume", "CV", "talent acquisition pseudo-profession", "Programmer"]
+Keywords = [
+  "Seattle", 
+  "Resume", 
+  "CV", 
+  "talent acquisition", 
+  "Programmer", 
+  "Systems Engineer","Systems Administrator", 
+  "Software Developer",
+  "DevOps Engineer", 
+  "Neurodiverse", 
+  "Hacker", 
+  "Python", 
+  "PHP", 
+  "C#",
+  "Linux",
+  "AWS"]
 Tags = ["Projects", "Resume", "Paige Thompson", "CV"]
 +++
 
@@ -87,11 +102,6 @@ root@9cdba5cab7a0:/# ls et-open-290/latest
 emerging.rules.tar.gz  emerging.rules.tar.gz.md5
 root@9cdba5cab7a0:/#
 ```
- and I resurrected it mainly because it was an abandoned project and I wanted to say that I "just put lipstick on a pig" which is dully true. In case you don't get the reference, I'm actually talking about this pig: 
-
-<img src="/img/snort.svg"  width="64" height="64">
-
-Get it? because it downloads Snort rules and their project mascot is this pig and ... nevermind its a bad joke and I shouldn't have done this.
 
 ### jquery-circular-carousel
 <style>
@@ -106,7 +116,7 @@ Get it? because it downloads Snort rules and their project mascot is this pig an
 </style>
 <iframe class="carousel" style="z-index:-99; overflow: hidden; margin-bottom: 12px;" src="https://jquery-circular-carousel.paige.bio"></iframe>
 
-This is a 3D-like image carousel written by [Sam Brown](https://sgb.io/). It has some fantastic qualities and it seems to work fine, although it struggles to play nice with the rest of my CSS and I had to load it as an iframe here. Still, it seems useful, and it does a great job of demonstrating my cat, so I packaged it and published it to NPM for the world to enjoy.
+This is a 3D-like image carousel written by [Sam Brown](https://sgb.io/). It has some fantastic qualities and it seems to work fine, although it struggles to play nice with the rest of my CSS and I had to load it as an iframe here. It demonstrates my cat well, so I packaged it and published it to NPM for the world to enjoy.
 
 - [![npm version](https://badge.fury.io/js/jquery-circular-carousel.svg)](https://badge.fury.io/js/jquery-circular-carousel) [Live demo external page](https://jquery-circular-carousel.paige.bio)
 
@@ -119,11 +129,11 @@ That actually works and interfaces with the real world?
 - [paigeadelethompson/pscr_core ![paigeadelethompson/pscr_core](https://badge.fury.io/ph/paigeadelethompson%2Fpscr_core.svg)](https://badge.fury.io/ph/paigeadelethompson%2Fpscr_core)
 - [paigeadelethompson/pscr_content ![paigeadelethompson/pscr_content](https://badge.fury.io/ph/paigeadelethompson%2Fpscr_content.svg)](https://badge.fury.io/ph/paigeadelethompson%2Fpscr_content)
 
-I'm sorry that the name sucks, I wrote it when I was 19. By the time I got around to rewriting it in 2018 I really just wanted to see how much I would like working in Jetbrains PHPStorm and I didn't really care about the name because I knew it wouldn't matter. I suddenly remembered how much I really believed in this idea of using pure object oriented programming to make web pages back in 2007. Over the years I collectively realized that the existential approach I took to just trying to make something, just trying to make anything in order to get really good at programming ultimately landed me on the doorstep of MVC web design. 
+I'm sorry that the name sucks, I wrote it when I was 19. By the time I got around to rewriting it in 2018 I really just wanted to see how much I would like working in Jetbrains PHPStorm and I didn't really care about renaming it. I suddenly remembered how much I really believed in this idea of using pure object oriented programming to make web pages back in 2007. The existential approach that I took to just trying to make anything in order to get better at programming eventually led to an appreciation for MVC. 
 
 ![screenshot](https://github.com/paigeadelethompson/pscr_demo/blob/master/screenshots/1.png?raw=true)
 
-And so it's an MVC framework web development framework which for all intents and purposes doesn't really matter because nobody uses it. When combined, the above dependencies in a [compose file](https://github.com/paigeadelethompson/pscr_demo/blob/master/composer.json#L1) pages can be created using a pure object oriented language that primarily follows a factory pattern: 
+And so it's an MVC framework web development framework. When combined, the above dependencies from above are meant to be used in a [compose file](https://github.com/paigeadelethompson/pscr_demo/blob/master/composer.json#L1). Pages can be created using a pure object oriented language that primarily follows a factory pattern: 
 
 {{< highlight php >}}
 class index extends pscr_content {
@@ -202,9 +212,9 @@ class index extends pscr_content {
 }
 {{< / highlight >}}
 
-The [full example](https://github.com/paigeadelethompson/pscr_home/blob/master/apps/home/index.php) might be somewhat more interesting to you. It's ok if it's not because I'm neurodiverse and I'm having trouble maintaining interest myself. I wrote this with blatant disregard for what else might exist besides what to me was all (smarty templates, really bad inline custom PHP websites, and Wordpress.) I never bothered to learn about things like Sugar CRM, Drupal, and that one Artisan PHP framework, what's it called? I can't think of the name. When I said existential I really meant it; I didn't see any value in doing this any other way. 
+The [full example](https://github.com/paigeadelethompson/pscr_home/blob/master/apps/home/index.php) might be somewhat more interesting to you, but that's ok if it's not. I don't really consider this very interesting, personally, and I can't think of much else I would add.
 
-The next step after the controller initializes the page object is to [transpose to it to a properly formattted HTML document](https://github.com/paigeadelethompson/pscr_content/blob/master/extensions/pscr_content/pscr_content.php#L119). And it does just that: 
+The next step after the controller initializes the page object is to [converted to HTML](https://github.com/paigeadelethompson/pscr_content/blob/master/extensions/pscr_content/pscr_content.php#L119): 
 
 {{< highlight html >}}
 <!DOCTYPE html>
@@ -255,7 +265,9 @@ docker exec -it pscr curl localhost | head -n 5
 ```
 just remove the `| head -n 5`.
 
-Feel free to download [pscr_demo](https://github.com/paigeadelethompson/pscr_demo) and try it out for yourself, but I totally understand if this is not your thing. But, not bad for a silly existential idea I came up with in like 2007, in my honest opinion. The main difference between the rewrite and the original is that the rewrite uses `PSR-4` and that didn't exist back then.
+Please clone [pscr_demo](https://github.com/paigeadelethompson/pscr_demo) and try it out if it speaks to you. I'm not as interested in the framework itself as much as I am what I can do with it; that said I can think of better things to use already. 
+
+The main difference between the rewrite and the original is that the rewrite uses `PSR-4` and that didn't exist back then, but the idea is still the same as it always was, it spoke to me, I think there is still something to this worth considering but it doesn't interest me anymore. 
 
 #### Fun facts about PSCR
 - The [PSCR content extension](https://github.com/paigeadelethompson/pscr_content) implements a class for every HTML tag, most of which currently have few or no overridden members; a few examples of where members would be overridden is the [forms](https://github.com/paigeadelethompson/pscr_content/blob/master/extensions/pscr_content/html/form.php) and [javascript](https://github.com/paigeadelethompson/pscr_content/blob/master/extensions/pscr_content/html/javascript.php) classes. 
@@ -263,8 +275,7 @@ Feel free to download [pscr_demo](https://github.com/paigeadelethompson/pscr_dem
 
 
 ## passport.mid
-Since `<embed>` isn't available anymore I came up with an alternative; use JS-DOS to run DOSMIDI and Windows 3.11 / Creative MIDI player to play passport.mid. I understand that I don't *really* need to do this, but I am really fond of the idea of using `asm.js` to [solve real world problems](https://webrtchacks.com/zoom-avoids-using-webrtc/). Safari does not allow sound to play automatically [by default](https://memrise.zendesk.com/hc/en-us/articles/360015889117-How-can-I-allow-audio-to-auto-play-on-Safari-). Apparently the point is to prevent web pages from automatically being annoying but I don't think that this should be a default; I should decide for myself whether or not to be annoyed and If you agree with me, consider [reporting this to apple](https://www.apple.com/feedback/safari.html) as a bug. 
-
+Since `<embed>` isn't available anymore I came up with an alternative; use JS-DOS to run DOSMIDI and Windows 3.11 / Creative MIDI player to play passport.mid. I came up with this idea because I am really fond of the idea of using `asm.js` to [solve real world problems](https://webrtchacks.com/zoom-avoids-using-webrtc/). This works well but Safari doesn't allow sound to play automatically [by default](https://memrise.zendesk.com/hc/en-us/articles/360015889117-How-can-I-allow-audio-to-auto-play-on-Safari-).
 
 *Note:* The work around requires you to click on the JS-DOS container in order to enjoy the MIDI song. If you would like to skip the DOSMIDI version, click to focus on the JS-DOS container then hit escape.
 <link rel="stylesheet" href="/emulators-ui/emulators-ui.css">
@@ -274,7 +285,7 @@ Since `<embed>` isn't available anymore I came up with an alternative; use JS-DO
 <script src="/emulators/emulators.js"></script>
 <script src="/emulators-ui/emulators-ui.js"></script>
 <script>
-  document.addEventListener("DOMContentLoaded", function(event) { 
+  document.addEventListener("DOMContentLoaded", function(event) {
     emulators.pathPrefix = "/emulators/";
     Dos(document.getElementById("dosbox")).run("/jsdos/bundle.zip");
   });
