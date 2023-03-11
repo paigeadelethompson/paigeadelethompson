@@ -94,8 +94,6 @@ root@9cdba5cab7a0:/#
 Get it? because it downloads Snort rules and their project mascot is this pig and ... nevermind its a bad joke and I shouldn't have done this.
 
 ### jquery-circular-carousel
-This is a 3D-like image carousel written by [Sam Brown](https://sgb.io/). It has some fantastic qualities and it seems to work fine, although it struggles to play nice with the rest of my CSS and I had to load it as an iframe here. Still, it seems useful, and it does a great job of demonstrating my cat, so I packaged it and published it to NPM for the world to enjoy.
-
 <style>
   .carousel {
     width: 1092px;
@@ -105,9 +103,10 @@ This is a 3D-like image carousel written by [Sam Brown](https://sgb.io/). It has
     margin-bottom: -256px;
     overflow: hidden;
   }
-
 </style>
 <iframe class="carousel" style="z-index:-99; overflow: hidden; margin-bottom: 12px;" src="https://jquery-circular-carousel.paige.bio"></iframe>
+
+This is a 3D-like image carousel written by [Sam Brown](https://sgb.io/). It has some fantastic qualities and it seems to work fine, although it struggles to play nice with the rest of my CSS and I had to load it as an iframe here. Still, it seems useful, and it does a great job of demonstrating my cat, so I packaged it and published it to NPM for the world to enjoy.
 
 - [![npm version](https://badge.fury.io/js/jquery-circular-carousel.svg)](https://badge.fury.io/js/jquery-circular-carousel) [Live demo external page](https://jquery-circular-carousel.paige.bio)
 
@@ -264,7 +263,10 @@ Feel free to download [pscr_demo](https://github.com/paigeadelethompson/pscr_dem
 
 
 ## passport.mid
-This doesn't really count as part of my resume, but browser MIDI support (playing .MID files) is kind of a thing of the distant past, and getting it to work with any particular browser... didn't have much luck. And I am totally one of those idiots from the 90s who would embed music in a page just to be obnoxious. Luckily, modern browsers are powerful enough to run emulators. Unfortunately at least in Safari the sound won't work unless the user clicks somewhere in the page to prevent pages from automatically playing unwanted sound. I don't really like that. Not only can I not annoy people with `passport.mid` now, but it makes the assumption that I don't want to be a little annoyed myself [by default](https://memrise.zendesk.com/hc/en-us/articles/360015889117-How-can-I-allow-audio-to-auto-play-on-Safari-). If you agree with me, consider [reporting this to apple](https://www.apple.com/feedback/safari.html) as a bug.
+Since `<embed>` isn't available anymore I came up with an alternative; use JS-DOS to run DOSMIDI and Windows 3.11 / Creative MIDI player to play passport.mid. I understand that I don't *really* need to do this, but I am really fond of the idea of using `asm.js` to [solve real world problems](https://webrtchacks.com/zoom-avoids-using-webrtc/). Safari does not allow sound to play automatically [by default](https://memrise.zendesk.com/hc/en-us/articles/360015889117-How-can-I-allow-audio-to-auto-play-on-Safari-). Apparently the point is to prevent web pages from automatically being annoying but I don't think that this should be a default; I should decide for myself whether or not to be annoyed and If you agree with me, consider [reporting this to apple](https://www.apple.com/feedback/safari.html) as a bug. 
+
+
+*Note:* The work around requires you to click on the JS-DOS container in order to enjoy the MIDI song. If you would like to skip the DOSMIDI version, click to focus on the JS-DOS container then hit escape.
 <link rel="stylesheet" href="/emulators-ui/emulators-ui.css">
 <div id="dosbox-wrapper" style="width: 96%">
 <div id="dosbox"></div>
