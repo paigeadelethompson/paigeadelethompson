@@ -1,10 +1,25 @@
 +++
-title = "Paige's Resume"
+title = "Resume for Paige Thompson"
 date = "2023-01-13T09:58:20-0800"
-author = "Paige"
-description = "Perhaps there is a way to embed passport.mid after all"
+author = "Paige Thompson"
+description = "Software Engineer / Systems Engineer; available for hire"
 cover = "img/og.png"
-Keywords = ["Paige Thompson", "Seattle", "Resume", "CV", "talent acquisition", "pseudo-profession", "Programmer", "Cynicism", "Head Hunter", "Cold Calling", "Culture of narcissism", "People who have no thoughts of their own", "Competitive", "Intolerable"]
+Keywords = [
+  "Seattle", 
+  "Resume", 
+  "CV", 
+  "talent acquisition", 
+  "Programmer", 
+  "Systems Engineer","Systems Administrator", 
+  "Software Developer",
+  "DevOps Engineer", 
+  "Neurodiverse", 
+  "Hacker", 
+  "Python", 
+  "PHP", 
+  "C#",
+  "Linux",
+  "AWS"]
 Tags = ["Projects", "Resume", "Paige Thompson", "CV"]
 +++
 
