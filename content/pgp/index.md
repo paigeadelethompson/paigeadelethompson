@@ -4,6 +4,7 @@ date = "2023-01-13T09:58:20-0800"
 author = "Paige"
 description = "My PGP key"
 cover = "img/og.png"
+tags = ["PGP", "Security", "Encryption"]
 +++
 
 # Disclaimer
