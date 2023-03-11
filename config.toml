@@ -28,10 +28,30 @@ paginate     = 8
 [languages]
   [languages.en]
     languageName           = "English"
-    title                  = "paige.bio"
-    subtitle               = "Paige's home page"
+    title                  = "Paige Thompson's official web site and blog - paige.bio"
+    subtitle               = "News / Contact Info / Projects / Free Information"
     owner                  = "Paige Thompson"
-    keywords               = "Computers, Programming, Paige Thompson, Seattle, Art"
+    keywords               = [
+      "Computers", 
+      "Programming", 
+      "Seattle", 
+      "Internet Art", 
+      "Information Security",
+      "Defcon",
+      "Hushcon",
+      "ANSI",
+      "Consulting", 
+      "Networking", 
+      "Coaching", 
+      "Reviews", 
+      "Electronics", 
+      "Wireless",
+      "Cryptography",
+      "Development",
+      "Good faith hacking",
+      "Social Networking", 
+      "Cycling",
+      "Hobbies"]
     copyright              = "2023"
     menuMore               = "Show more"
     readMore               = "Read more"
