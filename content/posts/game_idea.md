@@ -108,7 +108,8 @@ A good source of open / 3D map data is difficult to acquire in it's entirety. I 
 
 ![Berlin](http://www.tundria.com/trams/DEU/Berlin-1980.png)
 
-Traviso likely have to be modified to cache map tiles rather than storing the entire map in an array all at once. The math for this notebook is way off, and I'm still trying to work through this a bit but in terms of generating maps I came 
+Traviso likely have to be modified to cache map tiles rather than storing the entire map in an array all at once. The math for this notebook is way off, and I'm still trying to work 
+through this a bit but in terms of generating maps I came up with this:
 <script src="https://gist.github.com/paigeadelethompson/9c8c8476da87ce6c379b72538b7049b7.js"></script>
 
 
