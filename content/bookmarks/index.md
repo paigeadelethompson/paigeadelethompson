@@ -27,6 +27,7 @@ tags = ["Bookmarks", "Links"]
 - [Textfiles Art Scene - http://artscene.textfiles.com/ansi/](http://artscene.textfiles.com/ansi/)
 - [ASCII Art Generator - https://www.ascii-art-generator.org](https://www.ascii-art-generator.org)
 - [ASCII Bird - https://github.com/birdneststream/asciibird](https://github.com/birdneststream/asciibird)
+- [A Strange collection of fake, uncanny interpol warrants made on what seems to be limited functioning capacity for thought... 🤔](https://archive.org/details/@interpol_warrants)
 ## Podcasts
 - [OffTheHook: https://www.2600.com/offthehook/](https://www.2600.com/offthehook/)
 - [Hacker and the Fed: https://podcasts.apple.com/us/podcast/hacker-and-the-fed/id1649541362](https://podcasts.apple.com/us/podcast/hacker-and-the-fed/id1649541362)
