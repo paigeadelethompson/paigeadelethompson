@@ -27,21 +27,10 @@ default:
     - wget -O /tmp/d.tar.gz https://github.com/sass/dart-sass-embedded/releases/download/1.62.0/sass_embedded-1.62.0-linux-x64.tar.gz && tar -xzvf /tmp/d.tar.gz && sudo cp sass_embedded/dart-sass-embedded /usr/bin 
     - git submodule update --init --recursive
     - "[[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true"
-    - hugo --minify
-
-test:
-  script:
-    - hugo
-  rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 pages:
   script:
-    - hugo
+    - hugo --minify --baseURL "https://iampaigeat.gitlab.io/paigeadelethompson/"
   artifacts:
     paths:
       - public
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-
-
